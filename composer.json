@@ -1,0 +1,42 @@
+{
+    "name": "garrettmassey/analytics",
+    "description": ":package_description",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Author Name",
+            "email": "author@email.com",
+            "homepage": "http://author.com"
+        }
+    ],
+    "homepage": "https://github.com/garrettmassey/analytics",
+    "keywords": ["Laravel", "Analytics"],
+    "require": {
+        "illuminate/support": "~9",
+        "nesbot/carbon": "^2.63"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~9.0",
+        "orchestra/testbench": "~7"
+    },
+    "autoload": {
+        "psr-4": {
+            "GarrettMassey\\Analytics\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GarrettMassey\\Analytics\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "GarrettMassey\\Analytics\\AnalyticsServiceProvider"
+            ],
+            "aliases": {
+                "Analytics": "GarrettMassey\\Analytics\\Facades\\Analytics"
+            }
+        }
+    }
+}
