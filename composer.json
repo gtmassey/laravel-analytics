@@ -17,7 +17,7 @@
         "google/analytics-data": "^0.9.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~9.0",
+        "phpunit/phpunit": "^9.5",
         "orchestra/testbench": "~7"
     },
     "autoload": {
