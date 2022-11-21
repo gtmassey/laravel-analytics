@@ -15,15 +15,49 @@ Via Composer
 $ composer require garrettmassey/analytics
 ```
 
+## Setup
+
 To use this package, you must have a Google Cloud Service Accounts Credential.
 
-Go to the [Google Cloud Console](https://console.cloud.google.com/apis/credentials/), create a new project, and enable the Google Analytics API.
+If you do not have a project set up on Google Cloud Platform, visit [console.cloud.google.com/projectcreate](https://console.cloud.google.com/projectcreate) to create a new project.
 
-On the top of the screen, there is a button to create a new service account key. Create a new `json` key and download it.
+Once you have a project, make sure you have selected that project in the top left corner of the console.
 
-Once downloaded, upload the key to the `app/analyticsAPI` directory in your Laravel project.
+//PIC
 
-Finally, copy the Google Analytics Property ID and set the environment variables:
+Select APIs & Services from the quick access cards on the dashboard.
+
+//PIC
+
+Make sure you have Google Analytics Data API enabled. NOTE: this is NOT the same API as Google Analytics API. The Data API is the required API for this package.
+
+//PIC
+
+Once enabled, select the Google Analytics Data API from the list of APIs, and click the Credentials tab. 
+
+//PIC
+
+Click the Create Credentials button, and select Service Account.
+
+//PIC
+
+Select the role you want to assign to the service account. For this package, the minimum role is the Viewer role.
+
+//PIC
+
+Once the service account is created, add a new key to the service account. Select JSON as the key type.
+
+Once the key is created, download the JSON file and save it somewhere safe. You will need this file to use this package. If you lose this file, you will have to create a new service account. Google does not let you re-issue keys.
+
+Move the `JSON` key file to your project's `root/analyticsAPI` directory. Name the file `credentials.json`. 
+
+//PIC
+
+Finally, open Google Analytics, and copy the property ID for the property you want to query. You will need this ID to use this package.
+
+//PIC
+
+Set the property ID in your `.env` file, along with the year type (either fiscal or calendar).
 
 ``` bash
 ANALYTICS_YEAR_TYPE="fiscal|calendar"
@@ -32,7 +66,7 @@ ANALYTICS_PROPERTY_ID="XXXXXXXXX"
 
 where the year type is whether you consider Quarter 1 to be January-March (calendar) or July-September (fiscal).
 
-From there, you can use the `Analytics` facade to access the API.
+Now you're ready to start!
 
 ## Usage
 
