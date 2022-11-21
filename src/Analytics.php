@@ -45,6 +45,10 @@ class Analytics
         return new Analytics();
     }
 
+    /****************************************
+     * Pre-Built Reports and Queries
+     ****************************************/
+
     /**
      * return a collection of the top events for the last 30 days
      * along with the count of each event, ordered in descending order
@@ -144,12 +148,16 @@ class Analytics
         return $this;
     }
 
+    /****************************************
+     * Process and Run Query
+     ****************************************/
+
     public function run()
     {
-        return $this->buildQueryString();
+        return $this->buildQueryArray();
     }
 
-    private function buildQueryString()
+    private function buildQueryArray()
     {
         $dimensions = collect(['dimensions' => $this->dimensions]);
         $metrics = collect(['metrics' => $this->metrics]);
@@ -165,10 +173,12 @@ class Analytics
         $request = $request->merge($resource);
         //get the last error message from json
         //ddd($request->toArray());
-        //TODO: convert to collection, clean up data structure
-        return $this->client->runReport($request->toArray());
+        $results = $this->client->runReport($request->toArray());
+        return self::toCollection($results);
     }
 
+
+    //TODO: clean up the data structure of $results, convert to collection
     private static function toCollection($results)
     {
         dd($results);
