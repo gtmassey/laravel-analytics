@@ -11,8 +11,9 @@ use Illuminate\Support\Collection;
 
 class Analytics
 {
-
-    //public GoogleAnalyticsDataClient $client;
+    //TODO: clean up class, add comments
+    //TODO: add support for remaining metrics and dimensions
+    //TODO: add generic report generation (i.e. things like getUsersAndPageViews($period) )
     public string $viewId;
     public string $propertyID;
     public Collection $dimensions;
@@ -367,17 +368,7 @@ class Analytics
 
     public function run()
     {
-        //build the query in the following structure:
-        //object containing:
-        //  dimensions
-        //  metrics
-        //  dateRanges
-        //  dimensionFilter
-        //  metricFilter
-
         return $this->buildQueryString();
-
-        //run the query
     }
 
     private function buildQueryString()
@@ -392,10 +383,9 @@ class Analytics
                 )
             )
         );
-        //$resource->resource->push($dimensions->merge($metrics));
         $request = collect(['property' => 'properties/' . $this->propertyID]);
         $request = $request->merge($resource);
-        //ddd($request->toArray());
+        //TODO: convert to collection, clean up data structure
         return $this->client->runReport($request->toArray());
     }
 }

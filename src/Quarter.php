@@ -6,6 +6,8 @@ use Carbon\Carbon;
 
 class Quarter extends Period
 {
+    //TODO: write tests for quarter, make sure it works with fiscal and calendar years
+    //TODO: check that the Quarter class works as expected as an extension of Period for GA query
     public string $quarter;
     public string $year;
     public string $startMonth;
