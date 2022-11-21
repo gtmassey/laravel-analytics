@@ -5,7 +5,7 @@
 [![Build Status][ico-travis]][link-travis]
 [![StyleCI][ico-styleci]][link-styleci]
 
-This is where your description should go. Take a look at [contributing.md](contributing.md) to see a to do list.
+Build Google Analytics queries in Laravel with ease.
 
 ## Installation
 
@@ -15,13 +15,80 @@ Via Composer
 $ composer require garrettmassey/analytics
 ```
 
+To use this package, you must have a Google Cloud Service Accounts Credential.
+
+Go to the [Google Cloud Console](https://console.cloud.google.com/apis/credentials/), create a new project, and enable the Google Analytics API.
+
+On the top of the screen, there is a button to create a new service account key. Create a new `json` key and download it.
+
+Once downloaded, upload the key to the `app/analyticsAPI` directory in your Laravel project.
+
+Finally, copy the Google Analytics Property ID and set the environment variables:
+
+``` bash
+ANALYTICS_YEAR_TYPE="fiscal|calendar"
+ANALYTICS_PROPERTY_ID="XXXXXXXXX"
+```
+
+where the year type is whether you consider Quarter 1 to be January-March (calendar) or July-September (fiscal).
+
+From there, you can use the `Analytics` facade to access the API.
+
 ## Usage
+
+Once installation is complete, you can run Google Analytics Data API queries in your application.
+
+All Google Analytics Data API queries require a date range to be run. Use the `Period` or `Quarter` classes to generate a period of time for the query.
+
+You can use two approaches to add query parameters to the request. 
+
+### 1. Callbacks
+``` php
+use GarrettMassey\Analytics\Facades\Analytics;
+use GarrettMassey\Analytics\Period;
+
+$period = Period::create(
+    Carbon::create('2020', '01', '01'),
+    Carbon::create('2020', '01', '31')
+);
+
+$report = Analytics::query();
+$report->setMetrics(function ($q) {
+    $q->totalUsers();
+})->setDimensions(function ($q) {
+    $q->pagePath();
+})->forPeriod($period)->run();
+```
+
+This will return a collection of rows with additional fields for the metrics and dimensions.
+
+### 2. Arrays
+``` php
+use GarrettMassey\Analytics\Facades\Analytics;
+use GarrettMassey\Analytics\Period;
+
+$period = Period::create(
+    Carbon::create('2020', '01', '01'),
+    Carbon::create('2020', '01', '31')
+);
+
+$report = Analytics::query();
+$report->metrics([
+    'totalUsers'
+])->dimensions([
+    'pagePath'
+])->forPeriod($period)->run();
+```
+
+This will return the same collection as the callback example. The two methods exist as a way to help build different queries based on user preference.
 
 ## Change log
 
-Please see the [changelog](changelog.md) for more information on what has changed recently.
+To Be Completed
 
 ## Testing
+
+TODO: write tests
 
 ``` bash
 $ composer test
@@ -29,15 +96,15 @@ $ composer test
 
 ## Contributing
 
-Please see [contributing.md](contributing.md) for details and a todolist.
+To Be Completed
 
 ## Security
 
-If you discover any security related issues, please email author@email.com instead of using the issue tracker.
+If you discover any security related issues, please email contact@garrettmassey.net instead of using the issue tracker.
 
 ## Credits
 
-- [Author Name][link-author]
+- [Garrett Massey][https://www.garrettmassey.net/]
 - [All Contributors][link-contributors]
 
 ## License
