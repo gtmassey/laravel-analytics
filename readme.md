@@ -116,6 +116,20 @@ $report->metrics([
 
 This will return the same collection as the callback example. The two methods exist as a way to help build different queries based on user preference.
 
+### Provided Methods:
+
+#### getTopEvents()
+``` php
+$report = Analytics::getTopEvents();
+```
+
+this method returns a collection of the top 10 events in the last 30 days, ordered by event count in descending order.
+
+example output:
+```
+
+```
+
 ## Change log
 
 To Be Completed
