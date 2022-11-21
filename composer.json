@@ -13,7 +13,8 @@
     "keywords": ["Laravel", "Analytics"],
     "require": {
         "illuminate/support": "~9",
-        "nesbot/carbon": "^2.63"
+        "nesbot/carbon": "^2.63",
+        "google/analytics-data": "^0.9.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~9.0",
