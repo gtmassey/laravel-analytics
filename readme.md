@@ -5,7 +5,7 @@
 [![Build Status][ico-travis]][link-travis]
 [![StyleCI][ico-styleci]][link-styleci]
 
-This project is not ready for use and is still in development. Access to the repository is limited until an alpha or beta version is available.
+### This project is not ready for use and is still in development. Access to the repository is limited until an alpha or beta version is available.
 
 Build Google Analytics queries in Laravel with ease.
 
