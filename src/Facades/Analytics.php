@@ -4,15 +4,13 @@ namespace GarrettMassey\Analytics\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @see \GarrettMassey\Analytics\Analytics
+ */
 class Analytics extends Facade
 {
-    /**
-     * Get the registered name of the component.
-     *
-     * @return string
-     */
-    protected static function getFacadeAccessor(): string
+    protected static function getFacadeAccessor()
     {
-        return 'analytics';
+        return \GarrettMassey\Analytics\Analytics::class;
     }
 }

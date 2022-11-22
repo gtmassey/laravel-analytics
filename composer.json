@@ -1,24 +1,30 @@
 {
     "name": "garrettmassey/analytics",
-    "description": ":package_description",
+    "description": "Create and run Google Analytics Data API queries in Laravel",
     "license": "MIT",
     "authors": [
         {
-            "name": "Author Name",
-            "email": "author@email.com",
-            "homepage": "http://author.com"
+            "name": "Garrett Massey",
+            "email": "contact@garrettmassey.net",
+            "role": "Creator"
         }
     ],
-    "homepage": "https://github.com/garrettmassey/analytics",
-    "keywords": ["Laravel", "Analytics"],
+    "homepage": "https://github.com/gtmassey/Analytics",
+    "keywords": [
+        "Laravel",
+        "Analytics"
+    ],
     "require": {
+        "google/analytics-data": "^0.9.0",
         "illuminate/support": "~9",
         "nesbot/carbon": "^2.63",
-        "google/analytics-data": "^0.9.0"
+        "spatie/laravel-package-tools": "^1.13"
     },
     "require-dev": {
-        "phpunit/phpunit": "~9.0",
-        "orchestra/testbench": "~7"
+        "brianium/paratest": "^6.6",
+        "nunomaduro/collision": "^6.2",
+        "orchestra/testbench": "^7.13",
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
@@ -30,6 +36,14 @@
             "GarrettMassey\\Analytics\\Tests\\": "tests"
         }
     },
+    "scripts": {
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "analyze": "vendor/bin/phpstan analyse",
+        "test": "./vendor/bin/testbench package:test --parallel"
+    },
+    "config": {
+        "sort-packages": true
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -39,5 +53,7 @@
                 "Analytics": "GarrettMassey\\Analytics\\Facades\\Analytics"
             }
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
