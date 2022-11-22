@@ -2,7 +2,7 @@
 
 namespace GarrettMassey\Analytics;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use GarrettMassey\Analytics\Parameters\Dimensions;
 use GarrettMassey\Analytics\Parameters\Metrics;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
@@ -32,7 +32,7 @@ class Analytics
     public function __construct()
     {
         putenv('GOOGLE_APPLICATION_CREDENTIALS='.base_path().'/analyticsAPI/credentials.json');
-        $this->client = new BetaAnalyticsDataClient();
+        $this->client = resolve(BetaAnalyticsDataClient::class);
         $this->propertyID = config('analytics.property_id');
         $this->dimensions = collect([]);
         $this->metrics = collect([]);
@@ -64,12 +64,12 @@ class Analytics
             return $dimension->eventName();
         })->forPeriod(
             Period::create(
-                Carbon::now()->subDays(30),
-                Carbon::now()
+                CarbonImmutable::now()->subDays(30),
+                CarbonImmutable::now()
             )
         );
-        return $query->run();
 
+        return $query->run();
     }
 
     /****************************************
@@ -181,6 +181,7 @@ class Analytics
     //TODO: clean up the data structure of $results, convert to collection
     private static function toCollection($results)
     {
+		return $results;
         dd($results);
     }
 }

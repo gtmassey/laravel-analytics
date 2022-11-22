@@ -2,24 +2,22 @@
 
 namespace GarrettMassey\Analytics;
 
-use Carbon\Carbon;
-use GarrettMassey\Analytics\Exceptions\InvalidPeriodException;
-use DateTimeInterface;
+use Carbon\CarbonImmutable;
 use Google\Analytics\Data\V1beta\DateRange;
 
 class Period
 {
-    public Carbon $startDate;
-    public Carbon $endDate;
+    public CarbonImmutable $startDate;
+    public CarbonImmutable $endDate;
 
-    public function __construct(Carbon $startDate, Carbon $endDate)
+    public function __construct(CarbonImmutable $startDate, CarbonImmutable $endDate)
     {
         //construct period
         $this->startDate = $startDate;
         $this->endDate = $endDate;
     }
 
-    public static function create(DateTimeInterface $startDate, DateTimeInterface $endDate): self
+    public static function create(CarbonImmutable $startDate, CarbonImmutable $endDate): self
     {
         return new Period($startDate, $endDate);
     }
@@ -29,7 +27,7 @@ class Period
      */
     public static function week(): self
     {
-        return new Period(Carbon::today()->subDays(7), Carbon::today());
+        return new Period(CarbonImmutable::today()->subDays(7), CarbonImmutable::today());
     }
 
     /**
@@ -37,7 +35,7 @@ class Period
      */
     public static function month(): self
     {
-        return new Period(Carbon::today()->subDays(30), Carbon::today());
+        return new Period(CarbonImmutable::today()->subDays(30), CarbonImmutable::today());
     }
 
     /**
@@ -45,7 +43,7 @@ class Period
      */
     public static function year(): self
     {
-        return new Period(Carbon::today()->subDays(365), Carbon::today());
+        return new Period(CarbonImmutable::today()->subDays(365), CarbonImmutable::today());
     }
 
     /**
@@ -53,7 +51,7 @@ class Period
      */
     public static function days(int $days): self
     {
-        return new Period(Carbon::today()->subDays($days), Carbon::today());
+        return new Period(CarbonImmutable::today()->subDays($days), CarbonImmutable::today());
     }
 
     /**
@@ -61,7 +59,7 @@ class Period
      */
     public static function weeks(int $weeks): self
     {
-        return new Period(Carbon::today()->subWeeks($weeks), Carbon::today());
+        return new Period(CarbonImmutable::today()->subWeeks($weeks), CarbonImmutable::today());
     }
 
     /**
@@ -69,7 +67,7 @@ class Period
      */
     public static function months(int $months): self
     {
-        return new Period(Carbon::today()->subMonths($months), Carbon::today());
+        return new Period(CarbonImmutable::today()->subMonths($months), CarbonImmutable::today());
     }
 
     /**
@@ -77,7 +75,7 @@ class Period
      */
     public static function years(int $years): self
     {
-        return new Period(Carbon::today()->subYears($years), Carbon::today());
+        return new Period(CarbonImmutable::today()->subYears($years), CarbonImmutable::today());
     }
 
     public function getDateRanges()
