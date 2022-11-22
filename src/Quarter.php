@@ -9,11 +9,17 @@ class Quarter extends Period
     //TODO: write tests for quarter, make sure it works with fiscal and calendar years
     //TODO: check that the Quarter class works as expected as an extension of Period for GA query
     public string $quarter;
+
     public string $year;
+
     public string $startMonth;
+
     public string $endMonth;
+
     public CarbonImmutable $currentDate;
+
     public bool $useCalendarYear;
+
     public int $daysInQuarter;
 
     /**
@@ -76,21 +82,21 @@ class Quarter extends Period
         if ($date->month >= 1 && $date->month <= 3) {
             if ($yearType === 'calendar') {
                 return [
-                    'quarter'    => 'Q1',
-                    'year'       => $year,
-                    'startDate'  => CarbonImmutable::create($year, 1, 1),
-                    'endDate'    => CarbonImmutable::create($year, 3, 31),
+                    'quarter' => 'Q1',
+                    'year' => $year,
+                    'startDate' => CarbonImmutable::create($year, 1, 1),
+                    'endDate' => CarbonImmutable::create($year, 3, 31),
                     'startMonth' => 'January',
-                    'endMonth'   => 'March',
+                    'endMonth' => 'March',
                 ];
             } else {
                 return [
-                    'quarter'    => 'Q3',
-                    'year'       => $year,
-                    'startDate'  => CarbonImmutable::create($year, 01, 01),
-                    'endDate'    => CarbonImmutable::create($year, 03, 31),
+                    'quarter' => 'Q3',
+                    'year' => $year,
+                    'startDate' => CarbonImmutable::create($year, 01, 01),
+                    'endDate' => CarbonImmutable::create($year, 03, 31),
                     'startMonth' => 'January',
-                    'endMonth'   => 'March',
+                    'endMonth' => 'March',
                 ];
             }
         }
@@ -98,21 +104,21 @@ class Quarter extends Period
         if ($date->month >= 4 && $date->month <= 6) {
             if ($yearType === 'calendar') {
                 return [
-                    'quarter'    => 'Q2',
-                    'year'       => $year,
-                    'startDate'  => CarbonImmutable::create($year, 04, 01),
-                    'endDate'    => CarbonImmutable::create($year, 06, 30),
+                    'quarter' => 'Q2',
+                    'year' => $year,
+                    'startDate' => CarbonImmutable::create($year, 04, 01),
+                    'endDate' => CarbonImmutable::create($year, 06, 30),
                     'startMonth' => 'April',
-                    'endMonth'   => 'June',
+                    'endMonth' => 'June',
                 ];
             } else {
                 return [
-                    'quarter'    => 'Q4',
-                    'year'       => $year,
-                    'startDate'  => CarbonImmutable::create($year, 04, 01),
-                    'endDate'    => CarbonImmutable::create($year, 06, 30),
+                    'quarter' => 'Q4',
+                    'year' => $year,
+                    'startDate' => CarbonImmutable::create($year, 04, 01),
+                    'endDate' => CarbonImmutable::create($year, 06, 30),
                     'startMonth' => 'April',
-                    'endMonth'   => 'June',
+                    'endMonth' => 'June',
                 ];
             }
         }
@@ -120,21 +126,21 @@ class Quarter extends Period
         if ($date->month >= 7 && $date->month <= 9) {
             if ($yearType === 'calendar') {
                 return [
-                    'quarter'    => 'Q3',
-                    'year'       => $year,
-                    'startDate'  => CarbonImmutable::create($year, 07, 01),
-                    'endDate'    => CarbonImmutable::create($year, 9, 30),
+                    'quarter' => 'Q3',
+                    'year' => $year,
+                    'startDate' => CarbonImmutable::create($year, 07, 01),
+                    'endDate' => CarbonImmutable::create($year, 9, 30),
                     'startMonth' => 'July',
-                    'endMonth'   => 'September',
+                    'endMonth' => 'September',
                 ];
             } else {
                 return [
-                    'quarter'    => 'Q1',
-                    'year'       => $year,
-                    'startDate'  => CarbonImmutable::create($year - 1, 07, 01),
-                    'endDate'    => CarbonImmutable::create($year - 1, 9, 30),
+                    'quarter' => 'Q1',
+                    'year' => $year,
+                    'startDate' => CarbonImmutable::create($year - 1, 07, 01),
+                    'endDate' => CarbonImmutable::create($year - 1, 9, 30),
                     'startMonth' => 'July',
-                    'endMonth'   => 'September',
+                    'endMonth' => 'September',
                 ];
             }
         }
@@ -142,35 +148,34 @@ class Quarter extends Period
         if ($date->month >= 10 && $date->month <= 12) {
             if ($yearType === 'calendar') {
                 return [
-                    'quarter'    => 'Q4',
-                    'year'       => $year,
-                    'startDate'  => CarbonImmutable::create($year, 10, 01),
-                    'endDate'    => CarbonImmutable::create($year, 12, 31),
+                    'quarter' => 'Q4',
+                    'year' => $year,
+                    'startDate' => CarbonImmutable::create($year, 10, 01),
+                    'endDate' => CarbonImmutable::create($year, 12, 31),
                     'startMonth' => 'October',
-                    'endMonth'   => 'December',
+                    'endMonth' => 'December',
                 ];
             } else {
                 return [
-                    'quarter'    => 'Q2',
-                    'year'       => $year,
-                    'startDate'  => CarbonImmutable::create($year - 1, 10, 01),
-                    'endDate'    => CarbonImmutable::create($year - 1, 12, 31),
+                    'quarter' => 'Q2',
+                    'year' => $year,
+                    'startDate' => CarbonImmutable::create($year - 1, 10, 01),
+                    'endDate' => CarbonImmutable::create($year - 1, 12, 31),
                     'startMonth' => 'October',
-                    'endMonth'   => 'December',
+                    'endMonth' => 'December',
                 ];
             }
         }
         //a full year period if none of the above is true, somehow
         return [
-            'quarter'    => '',
-            'year'       => '',
-            'startDate'  => CarbonImmutable::create($year, 1, 1),
-            'endDate'    => CarbonImmutable::create($year, 12, 31),
+            'quarter' => '',
+            'year' => '',
+            'startDate' => CarbonImmutable::create($year, 1, 1),
+            'endDate' => CarbonImmutable::create($year, 12, 31),
             'startMonth' => 'January',
-            'endMonth'   => 'December',
+            'endMonth' => 'December',
         ];
     }
-
 
     private static function determineQuarterStartDate(CarbonImmutable $date, string $yearType)
     {
@@ -178,6 +183,7 @@ class Quarter extends Period
             $date = CarbonImmutable::now();
         }
         $quarter = self::determineQuarter($date, $yearType);
+
         return $quarter['startDate'];
     }
 
@@ -187,6 +193,7 @@ class Quarter extends Period
             $date = CarbonImmutable::now();
         }
         $quarter = self::determineQuarter($date, $year);
+
         return $quarter['endDate'];
     }
 
@@ -232,10 +239,11 @@ class Quarter extends Period
 
     /**
      * gets the quarter as a sentence string, i.e. "Quarter 2"
+     *
      * @return string
      */
     public function getQuarterString(): string
     {
-        return "Quarter ".substr($this->quarter, 1);
+        return 'Quarter '.substr($this->quarter, 1);
     }
 }

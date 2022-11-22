@@ -2,9 +2,9 @@
 
 namespace GarrettMassey\Analytics;
 
+use GarrettMassey\Analytics\Commands\AnalyticsCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use GarrettMassey\Analytics\Commands\AnalyticsCommand;
 
 class AnalyticsServiceProvider extends PackageServiceProvider
 {
