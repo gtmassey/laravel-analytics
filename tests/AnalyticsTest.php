@@ -3,7 +3,7 @@
 namespace GarrettMassey\Analytics\Tests;
 
 use Carbon\CarbonImmutable;
-use GarrettMassey\Analytics\Analytics;
+use GarrettMassey\Analytics\Facades\Analytics;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use Illuminate\Support\Facades\App;
 use Mockery;
