@@ -14,9 +14,10 @@ class AnalyticsTest extends TestCase {
 	/** @test */
 	public function getClient_returns_GAClient()
 	{
-		Analytics::shouldReceive('getClient')
-			->once()
-			->andReturn(Mockery::mock(BetaAnalyticsDataClient::class));
+		//create an instance of the analytics class
+		//then get the client using the method getClient()
+		//and assert that the client is an instance of the BetaAnalyticsDataClient
+		$this->assertInstanceOf(BetaAnalyticsDataClient::class, Analytics::query()->getClient());
 	}
 
 	/* public function test_get_top_events()
