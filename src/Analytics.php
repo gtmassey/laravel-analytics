@@ -45,7 +45,7 @@ class Analytics {
 		return new Analytics();
 	}
 
-	public function getClient()
+	public function getClient(): BetaAnalyticsDataClient
 	{
 		return $this->client;
 	}
