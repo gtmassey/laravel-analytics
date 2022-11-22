@@ -1,223 +1,426 @@
 <?php
 
-namespace Tests;
+namespace GarrettMassey\Analytics\Tests;
 
-use GarrettMassey\Analytics\Analytics;
+use Closure;
 use GarrettMassey\Analytics\Parameters\Metrics;
-use Orchestra\Testbench\TestCase as Orchestra;
+use Generator;
+use Google\Analytics\Data\V1beta\Metric;
+use Illuminate\Support\Collection;
 
-class MetricsTest extends Orchestra
+class MetricsTest extends TestCase
 {
-    /*
-    protected function setUp(): void
-    {
-        parent::setUp();
+	public function metricProvider(): Generator
+	{
+		yield 'active1DayUsers' => [
+			'method' => fn(Metrics $metrics) => $metrics->active1DayUsers(),
+			'metric' => 'active1DayUsers',
+		];
 
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'GarrettMassey\\Analytics\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
-    }
+		yield 'active28DayUsers' => [
+			'method' => fn(Metrics $metrics) => $metrics->active28DayUsers(),
+			'metric' => 'active28DayUsers',
+		];
 
-    protected function getPackageProviders($app)
-    {
-        return [
-            AnalyticsServiceProvider::class,
-        ];
-    }
+		yield 'active7DayUsers' => [
+			'method' => fn(Metrics $metrics) => $metrics->active7DayUsers(),
+			'metric' => 'active7DayUsers',
+		];
 
-    public function getEnvironmentSetUp($app)
-    {
-        config()->set('database.default', 'testing');
-    }
-    */
+		yield 'activeUsers' => [
+			'method' => fn(Metrics $metrics) => $metrics->activeUsers(),
+			'metric' => 'activeUsers',
+		];
 
-    /** @test */
-    public function assert_get_metrics_returns_collection()
-    {
-        $metrics = new Metrics();
-        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $metrics->getMetrics());
-    }
+		yield 'adUnitExposure' => [
+			'method' => fn(Metrics $metrics) => $metrics->adUnitExposure(),
+			'metric' => 'adUnitExposure',
+		];
 
-    /** @test */
-    public function assert_setting_methods_return_metrics_class()
-    {
-        $metrics = new Metrics();
-        //first create a new metric class
-        $metrics = new Metrics();
-        //then run all the methods on that class
-        $this->assertInstanceOf(Metrics::class, $metrics->active1DayUsers());
-        $this->assertInstanceOf(Metrics::class, $metrics->active28DayUsers());
-        $this->assertInstanceOf(Metrics::class, $metrics->active7DayUsers());
-        $this->assertInstanceOf(Metrics::class, $metrics->activeUsers());
-        $this->assertInstanceOf(Metrics::class, $metrics->adUnitExposure());
-        $this->assertInstanceOf(Metrics::class, $metrics->addToCarts());
-        $this->assertInstanceOf(Metrics::class, $metrics->advertiserAdClicks());
-        $this->assertInstanceOf(Metrics::class, $metrics->advertiserAdCost());
-        $this->assertInstanceOf(Metrics::class, $metrics->advertiserAdCostPerClick());
-        $this->assertInstanceOf(Metrics::class, $metrics->advertiserAdCostPerConversion());
-        $this->assertInstanceOf(Metrics::class, $metrics->advertiserAdImpressions());
-        $this->assertInstanceOf(Metrics::class, $metrics->averagePurchaseRevenue());
-        $this->assertInstanceOf(Metrics::class, $metrics->averagePurchaseRevenuePerPayingUser());
-        $this->assertInstanceOf(Metrics::class, $metrics->averagePurchaseRevenuePerUser());
-        $this->assertInstanceOf(Metrics::class, $metrics->averageRevenuePerUser());
-        $this->assertInstanceOf(Metrics::class, $metrics->averageSessionDuration());
-        $this->assertInstanceOf(Metrics::class, $metrics->bounceRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->cartToViewRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->checkouts());
-        $this->assertInstanceOf(Metrics::class, $metrics->cohortActiveUsers());
-        $this->assertInstanceOf(Metrics::class, $metrics->cohortTotalUsers());
-        $this->assertInstanceOf(Metrics::class, $metrics->conversions());
-        $this->assertInstanceOf(Metrics::class, $metrics->crashAffectedUsers());
-        $this->assertInstanceOf(Metrics::class, $metrics->crashFreeUsersRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->dauPerMau());
-        $this->assertInstanceOf(Metrics::class, $metrics->dauPerWau());
-        $this->assertInstanceOf(Metrics::class, $metrics->ecommercePurchases());
-        $this->assertInstanceOf(Metrics::class, $metrics->engagedSessions());
-        $this->assertInstanceOf(Metrics::class, $metrics->engagementRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->eventCount());
-        $this->assertInstanceOf(Metrics::class, $metrics->eventCountPerUser());
-        $this->assertInstanceOf(Metrics::class, $metrics->eventValue());
-        $this->assertInstanceOf(Metrics::class, $metrics->eventsPerSession());
-        $this->assertInstanceOf(Metrics::class, $metrics->firstTimePurchaserConversionRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->firstTimePurchasers());
-        $this->assertInstanceOf(Metrics::class, $metrics->firstTimePurchasersPerNewUser());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemListClickEvents());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemListClickThroughRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemListViewEvents());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemPromotionClickThroughRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemRevenue());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemViewEvents());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemsAddedToCart());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemsCheckedOut());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemsClickedInList());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemsClickedInPromotion());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemsPurchased());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemsViewed());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemsViewedInList());
-        $this->assertInstanceOf(Metrics::class, $metrics->itemsViewedInPromotion());
-        $this->assertInstanceOf(Metrics::class, $metrics->newUsers());
-        $this->assertInstanceOf(Metrics::class, $metrics->organicGoogleSearchAveragePosition());
-        $this->assertInstanceOf(Metrics::class, $metrics->organicGoogleSearchClickThroughRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->organicGoogleSearchClicks());
-        $this->assertInstanceOf(Metrics::class, $metrics->organicGoogleSearchImpressions());
-        $this->assertInstanceOf(Metrics::class, $metrics->promotionClicks());
-        $this->assertInstanceOf(Metrics::class, $metrics->promotionViews());
-        $this->assertInstanceOf(Metrics::class, $metrics->publisherAdClicks());
-        $this->assertInstanceOf(Metrics::class, $metrics->publisherAdImpressions());
-        $this->assertInstanceOf(Metrics::class, $metrics->purchaseRevenue());
-        $this->assertInstanceOf(Metrics::class, $metrics->purchaseToViewRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->purchaserConversionRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->returnOnAdSpend());
-        $this->assertInstanceOf(Metrics::class, $metrics->screenPageViews());
-        $this->assertInstanceOf(Metrics::class, $metrics->screenPageViewsPerSession());
-        $this->assertInstanceOf(Metrics::class, $metrics->sessionConversionRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->sessions());
-        $this->assertInstanceOf(Metrics::class, $metrics->sessionsPerUser());
-        $this->assertInstanceOf(Metrics::class, $metrics->shippingAmount());
-        $this->assertInstanceOf(Metrics::class, $metrics->taxAmount());
-        $this->assertInstanceOf(Metrics::class, $metrics->totalAdRevenue());
-        $this->assertInstanceOf(Metrics::class, $metrics->totalPurchasers());
-        $this->assertInstanceOf(Metrics::class, $metrics->totalRevenue());
-        $this->assertInstanceOf(Metrics::class, $metrics->totalUsers());
-        $this->assertInstanceOf(Metrics::class, $metrics->transactions());
-        $this->assertInstanceOf(Metrics::class, $metrics->transactionsPerPurchaser());
-        $this->assertInstanceOf(Metrics::class, $metrics->userConversionRate());
-        $this->assertInstanceOf(Metrics::class, $metrics->userEngagementDuration());
-        $this->assertInstanceOf(Metrics::class, $metrics->wauPerMau());
-    }
+		yield 'addToCarts' => [
+			'method' => fn(Metrics $metrics) => $metrics->addToCarts(),
+			'metric' => 'addToCarts',
+		];
 
-    /** @test */
-    public function metrics_class_property_only_contains_google_metrics_class()
-    {
-        //first create a new metric class
-        $metrics = new Metrics();
-        //then run all the methods on that class
-        $metrics->active1DayUsers();
-        $metrics->active28DayUsers();
-        $metrics->active7DayUsers();
-        $metrics->activeUsers();
-        $metrics->adUnitExposure();
-        $metrics->addToCarts();
-        $metrics->advertiserAdClicks();
-        $metrics->advertiserAdCost();
-        $metrics->advertiserAdCostPerClick();
-        $metrics->advertiserAdCostPerConversion();
-        $metrics->advertiserAdImpressions();
-        $metrics->averagePurchaseRevenue();
-        $metrics->averagePurchaseRevenuePerPayingUser();
-        $metrics->averagePurchaseRevenuePerUser();
-        $metrics->averageRevenuePerUser();
-        $metrics->averageSessionDuration();
-        $metrics->bounceRate();
-        $metrics->cartToViewRate();
-        $metrics->checkouts();
-        $metrics->cohortActiveUsers();
-        $metrics->cohortTotalUsers();
-        $metrics->conversions();
-        $metrics->crashAffectedUsers();
-        $metrics->crashFreeUsersRate();
-        $metrics->dauPerMau();
-        $metrics->dauPerWau();
-        $metrics->ecommercePurchases();
-        $metrics->engagedSessions();
-        $metrics->engagementRate();
-        $metrics->eventCount();
-        $metrics->eventCountPerUser();
-        $metrics->eventValue();
-        $metrics->eventsPerSession();
-        $metrics->firstTimePurchaserConversionRate();
-        $metrics->firstTimePurchasers();
-        $metrics->firstTimePurchasersPerNewUser();
-        $metrics->itemListClickEvents();
-        $metrics->itemListClickThroughRate();
-        $metrics->itemListViewEvents();
-        $metrics->itemPromotionClickThroughRate();
-        $metrics->itemRevenue();
-        $metrics->itemViewEvents();
-        $metrics->itemsAddedToCart();
-        $metrics->itemsCheckedOut();
-        $metrics->itemsClickedInList();
-        $metrics->itemsClickedInPromotion();
-        $metrics->itemsPurchased();
-        $metrics->itemsViewed();
-        $metrics->itemsViewedInList();
-        $metrics->itemsViewedInPromotion();
-        $metrics->newUsers();
-        $metrics->organicGoogleSearchAveragePosition();
-        $metrics->organicGoogleSearchClickThroughRate();
-        $metrics->organicGoogleSearchClicks();
-        $metrics->organicGoogleSearchImpressions();
-        $metrics->promotionClicks();
-        $metrics->promotionViews();
-        $metrics->publisherAdClicks();
-        $metrics->publisherAdImpressions();
-        $metrics->purchaseRevenue();
-        $metrics->purchaseToViewRate();
-        $metrics->purchaserConversionRate();
-        $metrics->returnOnAdSpend();
-        $metrics->screenPageViews();
-        $metrics->screenPageViewsPerSession();
-        $metrics->sessionConversionRate();
-        $metrics->sessions();
-        $metrics->sessionsPerUser();
-        $metrics->shippingAmount();
-        $metrics->taxAmount();
-        $metrics->totalAdRevenue();
-        $metrics->totalPurchasers();
-        $metrics->totalRevenue();
-        $metrics->totalUsers();
-        $metrics->transactions();
-        $metrics->transactionsPerPurchaser();
-        $metrics->userConversionRate();
-        $metrics->userEngagementDuration();
-        $metrics->wauPerMau();
+		yield 'advertiserAdClicks' => [
+			'method' => fn(Metrics $metrics) => $metrics->advertiserAdClicks(),
+			'metric' => 'advertiserAdClicks',
+		];
 
-        //now check that the $metrics property in
-        //$metrics class is a collection of ONLY
-        //\Google\Analytics\Data\V1beta\Metric objects
-        $allMetrics = $metrics->getMetrics();
-        foreach ($allMetrics as $metric) {
-            $this->assertInstanceOf(\Google\Analytics\Data\V1beta\Metric::class, $metric);
-        }
-    }
+		yield 'advertiserAdCost' => [
+			'method' => fn(Metrics $metrics) => $metrics->advertiserAdCost(),
+			'metric' => 'advertiserAdCost',
+		];
+
+		yield 'advertiserAdCostPerClick' => [
+			'method' => fn(Metrics $metrics) => $metrics->advertiserAdCostPerClick(),
+			'metric' => 'advertiserAdCostPerClick',
+		];
+
+		yield 'advertiserAdCostPerConversion' => [
+			'method' => fn(Metrics $metrics) => $metrics->advertiserAdCostPerConversion(),
+			'metric' => 'advertiserAdCostPerConversion',
+		];
+
+		yield 'advertiserAdImpressions' => [
+			'method' => fn(Metrics $metrics) => $metrics->advertiserAdImpressions(),
+			'metric' => 'advertiserAdImpressions',
+		];
+
+		yield 'averagePurchaseRevenue' => [
+			'method' => fn(Metrics $metrics) => $metrics->averagePurchaseRevenue(),
+			'metric' => 'averagePurchaseRevenue',
+		];
+
+		yield 'averagePurchaseRevenuePerPayingUser' => [
+			'method' => fn(Metrics $metrics) => $metrics->averagePurchaseRevenuePerPayingUser(),
+			'metric' => 'averagePurchaseRevenuePerPayingUser',
+		];
+
+		yield 'averagePurchaseRevenuePerUser' => [
+			'method' => fn(Metrics $metrics) => $metrics->averagePurchaseRevenuePerUser(),
+			'metric' => 'averagePurchaseRevenuePerUser',
+		];
+
+		yield 'averageRevenuePerUser' => [
+			'method' => fn(Metrics $metrics) => $metrics->averageRevenuePerUser(),
+			'metric' => 'averageRevenuePerUser',
+		];
+
+		yield 'averageSessionDuration' => [
+			'method' => fn(Metrics $metrics) => $metrics->averageSessionDuration(),
+			'metric' => 'averageSessionDuration',
+		];
+
+		yield 'bounceRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->bounceRate(),
+			'metric' => 'bounceRate',
+		];
+
+		yield 'cartToViewRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->cartToViewRate(),
+			'metric' => 'cartToViewRate',
+		];
+
+		yield 'checkouts' => [
+			'method' => fn(Metrics $metrics) => $metrics->checkouts(),
+			'metric' => 'checkouts',
+		];
+
+		yield 'cohortActiveUsers' => [
+			'method' => fn(Metrics $metrics) => $metrics->cohortActiveUsers(),
+			'metric' => 'cohortActiveUsers',
+		];
+
+		yield 'cohortTotalUsers' => [
+			'method' => fn(Metrics $metrics) => $metrics->cohortTotalUsers(),
+			'metric' => 'cohortTotalUsers',
+		];
+
+		yield 'conversions' => [
+			'method' => fn(Metrics $metrics) => $metrics->conversions(),
+			'metric' => 'conversions',
+		];
+
+		yield 'crashAffectedUsers' => [
+			'method' => fn(Metrics $metrics) => $metrics->crashAffectedUsers(),
+			'metric' => 'crashAffectedUsers',
+		];
+
+		yield 'crashFreeUsersRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->crashFreeUsersRate(),
+			'metric' => 'crashFreeUsersRate',
+		];
+
+		yield 'dauPerMau' => [
+			'method' => fn(Metrics $metrics) => $metrics->dauPerMau(),
+			'metric' => 'dauPerMau',
+		];
+
+		yield 'dauPerWau' => [
+			'method' => fn(Metrics $metrics) => $metrics->dauPerWau(),
+			'metric' => 'dauPerWau',
+		];
+
+		yield 'ecommercePurchases' => [
+			'method' => fn(Metrics $metrics) => $metrics->ecommercePurchases(),
+			'metric' => 'ecommercePurchases',
+		];
+
+		yield 'engagedSessions' => [
+			'method' => fn(Metrics $metrics) => $metrics->engagedSessions(),
+			'metric' => 'engagedSessions',
+		];
+
+		yield 'engagementRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->engagementRate(),
+			'metric' => 'engagementRate',
+		];
+
+		yield 'eventCount' => [
+			'method' => fn(Metrics $metrics) => $metrics->eventCount(),
+			'metric' => 'eventCount',
+		];
+
+		yield 'eventCountPerUser' => [
+			'method' => fn(Metrics $metrics) => $metrics->eventCountPerUser(),
+			'metric' => 'eventCountPerUser',
+		];
+
+		yield 'eventValue' => [
+			'method' => fn(Metrics $metrics) => $metrics->eventValue(),
+			'metric' => 'eventValue',
+		];
+
+		yield 'eventsPerSession' => [
+			'method' => fn(Metrics $metrics) => $metrics->eventsPerSession(),
+			'metric' => 'eventsPerSession',
+		];
+
+		yield 'firstTimePurchaserConversionRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->firstTimePurchaserConversionRate(),
+			'metric' => 'firstTimePurchaserConversionRate',
+		];
+
+		yield 'firstTimePurchasers' => [
+			'method' => fn(Metrics $metrics) => $metrics->firstTimePurchasers(),
+			'metric' => 'firstTimePurchasers',
+		];
+
+		yield 'firstTimePurchasersPerNewUser' => [
+			'method' => fn(Metrics $metrics) => $metrics->firstTimePurchasersPerNewUser(),
+			'metric' => 'firstTimePurchasersPerNewUser',
+		];
+
+		yield 'itemListClickEvents' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemListClickEvents(),
+			'metric' => 'itemListClickEvents',
+		];
+
+		yield 'itemListClickThroughRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemListClickThroughRate(),
+			'metric' => 'itemListClickThroughRate',
+		];
+
+		yield 'itemListViewEvents' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemListViewEvents(),
+			'metric' => 'itemListViewEvents',
+		];
+
+		yield 'itemPromotionClickThroughRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemPromotionClickThroughRate(),
+			'metric' => 'itemPromotionClickThroughRate',
+		];
+
+		yield 'itemRevenue' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemRevenue(),
+			'metric' => 'itemRevenue',
+		];
+
+		yield 'itemViewEvents' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemViewEvents(),
+			'metric' => 'itemViewEvents',
+		];
+
+		yield 'itemsAddedToCart' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemsAddedToCart(),
+			'metric' => 'itemsAddedToCart',
+		];
+
+		yield 'itemsCheckedOut' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemsCheckedOut(),
+			'metric' => 'itemsCheckedOut',
+		];
+
+		yield 'itemsClickedInList' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemsClickedInList(),
+			'metric' => 'itemsClickedInList',
+		];
+
+		yield 'itemsClickedInPromotion' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemsClickedInPromotion(),
+			'metric' => 'itemsClickedInPromotion',
+		];
+
+		yield 'itemsPurchased' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemsPurchased(),
+			'metric' => 'itemsPurchased',
+		];
+
+		yield 'itemsViewed' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemsViewed(),
+			'metric' => 'itemsViewed',
+		];
+
+		yield 'itemsViewedInList' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemsViewedInList(),
+			'metric' => 'itemsViewedInList',
+		];
+
+		yield 'itemsViewedInPromotion' => [
+			'method' => fn(Metrics $metrics) => $metrics->itemsViewedInPromotion(),
+			'metric' => 'itemsViewedInPromotion',
+		];
+
+		yield 'newUsers' => [
+			'method' => fn(Metrics $metrics) => $metrics->newUsers(),
+			'metric' => 'newUsers',
+		];
+
+		yield 'organicGoogleSearchAveragePosition' => [
+			'method' => fn(Metrics $metrics) => $metrics->organicGoogleSearchAveragePosition(),
+			'metric' => 'organicGoogleSearchAveragePosition',
+		];
+
+		yield 'organicGoogleSearchClickThroughRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->organicGoogleSearchClickThroughRate(),
+			'metric' => 'organicGoogleSearchClickThroughRate',
+		];
+
+		yield 'organicGoogleSearchClicks' => [
+			'method' => fn(Metrics $metrics) => $metrics->organicGoogleSearchClicks(),
+			'metric' => 'organicGoogleSearchClicks',
+		];
+
+		yield 'organicGoogleSearchImpressions' => [
+			'method' => fn(Metrics $metrics) => $metrics->organicGoogleSearchImpressions(),
+			'metric' => 'organicGoogleSearchImpressions',
+		];
+
+		yield 'promotionClicks' => [
+			'method' => fn(Metrics $metrics) => $metrics->promotionClicks(),
+			'metric' => 'promotionClicks',
+		];
+
+		yield 'promotionViews' => [
+			'method' => fn(Metrics $metrics) => $metrics->promotionViews(),
+			'metric' => 'promotionViews',
+		];
+
+		yield 'publisherAdClicks' => [
+			'method' => fn(Metrics $metrics) => $metrics->publisherAdClicks(),
+			'metric' => 'publisherAdClicks',
+		];
+
+		yield 'publisherAdImpressions' => [
+			'method' => fn(Metrics $metrics) => $metrics->publisherAdImpressions(),
+			'metric' => 'publisherAdImpressions',
+		];
+
+		yield 'purchaseRevenue' => [
+			'method' => fn(Metrics $metrics) => $metrics->purchaseRevenue(),
+			'metric' => 'purchaseRevenue',
+		];
+
+		yield 'purchaseToViewRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->purchaseToViewRate(),
+			'metric' => 'purchaseToViewRate',
+		];
+
+		yield 'purchaserConversionRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->purchaserConversionRate(),
+			'metric' => 'purchaserConversionRate',
+		];
+
+		yield 'returnOnAdSpend' => [
+			'method' => fn(Metrics $metrics) => $metrics->returnOnAdSpend(),
+			'metric' => 'returnOnAdSpend',
+		];
+
+		yield 'screenPageViews' => [
+			'method' => fn(Metrics $metrics) => $metrics->screenPageViews(),
+			'metric' => 'screenPageViews',
+		];
+
+		yield 'screenPageViewsPerSession' => [
+			'method' => fn(Metrics $metrics) => $metrics->screenPageViewsPerSession(),
+			'metric' => 'screenPageViewsPerSession',
+		];
+
+		yield 'sessionConversionRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->sessionConversionRate(),
+			'metric' => 'sessionConversionRate',
+		];
+
+		yield 'sessions' => [
+			'method' => fn(Metrics $metrics) => $metrics->sessions(),
+			'metric' => 'sessions',
+		];
+
+		yield 'sessionsPerUser' => [
+			'method' => fn(Metrics $metrics) => $metrics->sessionsPerUser(),
+			'metric' => 'sessionsPerUser',
+		];
+
+		yield 'shippingAmount' => [
+			'method' => fn(Metrics $metrics) => $metrics->shippingAmount(),
+			'metric' => 'shippingAmount',
+		];
+
+		yield 'taxAmount' => [
+			'method' => fn(Metrics $metrics) => $metrics->taxAmount(),
+			'metric' => 'taxAmount',
+		];
+
+		yield 'totalAdRevenue' => [
+			'method' => fn(Metrics $metrics) => $metrics->totalAdRevenue(),
+			'metric' => 'totalAdRevenue',
+		];
+
+		yield 'totalPurchasers' => [
+			'method' => fn(Metrics $metrics) => $metrics->totalPurchasers(),
+			'metric' => 'totalPurchasers',
+		];
+
+		yield 'totalRevenue' => [
+			'method' => fn(Metrics $metrics) => $metrics->totalRevenue(),
+			'metric' => 'totalRevenue',
+		];
+
+		yield 'totalUsers' => [
+			'method' => fn(Metrics $metrics) => $metrics->totalUsers(),
+			'metric' => 'totalUsers',
+		];
+
+		yield 'transactions' => [
+			'method' => fn(Metrics $metrics) => $metrics->transactions(),
+			'metric' => 'transactions',
+		];
+
+		yield 'transactionsPerPurchaser' => [
+			'method' => fn(Metrics $metrics) => $metrics->transactionsPerPurchaser(),
+			'metric' => 'transactionsPerPurchaser',
+		];
+
+		yield 'userConversionRate' => [
+			'method' => fn(Metrics $metrics) => $metrics->userConversionRate(),
+			'metric' => 'userConversionRate',
+		];
+
+		yield 'userEngagementDuration' => [
+			'method' => fn(Metrics $metrics) => $metrics->userEngagementDuration(),
+			'metric' => 'userEngagementDuration',
+		];
+
+		yield 'wauPerMau' => [
+			'method' => fn(Metrics $metrics) => $metrics->wauPerMau(),
+			'metric' => 'wauPerMau',
+		];
+	}
+
+	/**
+	 * @param Closure(Metrics): Metrics $method
+	 * @param string $metric
+	 * @dataProvider metricProvider
+	 */
+	public function test_predefined_metrics(Closure $method, string $metric): void
+	{
+		$metrics = new Metrics();
+		$metrics = $method($metrics);
+
+		$this->assertEquals(1, $metrics->count());
+		$this->assertInstanceOf(Collection::class, $metrics->getMetrics());
+		$this->assertInstanceOf(Metric::class, $metrics->getMetrics()->first());
+		$this->assertEquals($metric, $metrics->getMetrics()->first()->getName());
+	}
 }

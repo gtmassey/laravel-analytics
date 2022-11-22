@@ -2,7 +2,7 @@
 
 namespace GarrettMassey\Analytics;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 
 class Quarter extends Period
 {
@@ -12,22 +12,22 @@ class Quarter extends Period
     public string $year;
     public string $startMonth;
     public string $endMonth;
-    public Carbon $currentDate;
+    public CarbonImmutable $currentDate;
     public bool $useCalendarYear;
     public int $daysInQuarter;
 
     /**
-     * @param  Carbon|null  $date
+     * @param  CarbonImmutable|null  $date
      * @param  string  $yearType
      */
-    public function __construct(Carbon $date = null, $yearType = 'calendar')
+    public function __construct(CarbonImmutable $date = null, $yearType = 'calendar')
     {
         //call the parent constructor
         $startDate = self::determineQuarterStartDate($date, $yearType);
         $endDate = self::determineQuarterEndDate($date, $yearType);
         parent::__construct($startDate, $endDate);
         if ($date === null) {
-            $date = Carbon::now();
+            $date = CarbonImmutable::now();
         }
         //determine what quarter we are in based on the current date
         $this->currentDate = $date;
@@ -40,10 +40,10 @@ class Quarter extends Period
     }
 
     /**
-     * @param  Carbon  $date
+     * @param  CarbonImmutable  $date
      * @return int
      */
-    private static function determineFiscalYear(Carbon $date): int
+    private static function determineFiscalYear(CarbonImmutable $date): int
     {
         //if the date is before July 1st, the fiscal year will be the current calendar year
         if ($date->month < 7) {
@@ -57,11 +57,11 @@ class Quarter extends Period
     /**
      * determines the quarter based on the date and the year type
      *
-     * @param  Carbon  $date
+     * @param  CarbonImmutable  $date
      * @param  string  $yearType
      * @return array
      */
-    private static function determineQuarter(Carbon $date, string $yearType): array
+    private static function determineQuarter(CarbonImmutable $date, string $yearType): array
     {
         //if the yearType is 'calendar', then $year is the year of $date
         //if the yearType is 'fiscal', then $year is the fiscal year of $date
@@ -78,8 +78,8 @@ class Quarter extends Period
                 return [
                     'quarter'    => 'Q1',
                     'year'       => $year,
-                    'startDate'  => Carbon::create($year, 1, 1),
-                    'endDate'    => Carbon::create($year, 3, 31),
+                    'startDate'  => CarbonImmutable::create($year, 1, 1),
+                    'endDate'    => CarbonImmutable::create($year, 3, 31),
                     'startMonth' => 'January',
                     'endMonth'   => 'March',
                 ];
@@ -87,8 +87,8 @@ class Quarter extends Period
                 return [
                     'quarter'    => 'Q3',
                     'year'       => $year,
-                    'startDate'  => Carbon::create($year, 01, 01),
-                    'endDate'    => Carbon::create($year, 03, 31),
+                    'startDate'  => CarbonImmutable::create($year, 01, 01),
+                    'endDate'    => CarbonImmutable::create($year, 03, 31),
                     'startMonth' => 'January',
                     'endMonth'   => 'March',
                 ];
@@ -100,8 +100,8 @@ class Quarter extends Period
                 return [
                     'quarter'    => 'Q2',
                     'year'       => $year,
-                    'startDate'  => Carbon::create($year, 04, 01),
-                    'endDate'    => Carbon::create($year, 06, 30),
+                    'startDate'  => CarbonImmutable::create($year, 04, 01),
+                    'endDate'    => CarbonImmutable::create($year, 06, 30),
                     'startMonth' => 'April',
                     'endMonth'   => 'June',
                 ];
@@ -109,8 +109,8 @@ class Quarter extends Period
                 return [
                     'quarter'    => 'Q4',
                     'year'       => $year,
-                    'startDate'  => Carbon::create($year, 04, 01),
-                    'endDate'    => Carbon::create($year, 06, 30),
+                    'startDate'  => CarbonImmutable::create($year, 04, 01),
+                    'endDate'    => CarbonImmutable::create($year, 06, 30),
                     'startMonth' => 'April',
                     'endMonth'   => 'June',
                 ];
@@ -122,8 +122,8 @@ class Quarter extends Period
                 return [
                     'quarter'    => 'Q3',
                     'year'       => $year,
-                    'startDate'  => Carbon::create($year, 07, 01),
-                    'endDate'    => Carbon::create($year, 9, 30),
+                    'startDate'  => CarbonImmutable::create($year, 07, 01),
+                    'endDate'    => CarbonImmutable::create($year, 9, 30),
                     'startMonth' => 'July',
                     'endMonth'   => 'September',
                 ];
@@ -131,8 +131,8 @@ class Quarter extends Period
                 return [
                     'quarter'    => 'Q1',
                     'year'       => $year,
-                    'startDate'  => Carbon::create($year - 1, 07, 01),
-                    'endDate'    => Carbon::create($year - 1, 9, 30),
+                    'startDate'  => CarbonImmutable::create($year - 1, 07, 01),
+                    'endDate'    => CarbonImmutable::create($year - 1, 9, 30),
                     'startMonth' => 'July',
                     'endMonth'   => 'September',
                 ];
@@ -144,8 +144,8 @@ class Quarter extends Period
                 return [
                     'quarter'    => 'Q4',
                     'year'       => $year,
-                    'startDate'  => Carbon::create($year, 10, 01),
-                    'endDate'    => Carbon::create($year, 12, 31),
+                    'startDate'  => CarbonImmutable::create($year, 10, 01),
+                    'endDate'    => CarbonImmutable::create($year, 12, 31),
                     'startMonth' => 'October',
                     'endMonth'   => 'December',
                 ];
@@ -153,8 +153,8 @@ class Quarter extends Period
                 return [
                     'quarter'    => 'Q2',
                     'year'       => $year,
-                    'startDate'  => Carbon::create($year - 1, 10, 01),
-                    'endDate'    => Carbon::create($year - 1, 12, 31),
+                    'startDate'  => CarbonImmutable::create($year - 1, 10, 01),
+                    'endDate'    => CarbonImmutable::create($year - 1, 12, 31),
                     'startMonth' => 'October',
                     'endMonth'   => 'December',
                 ];
@@ -164,27 +164,27 @@ class Quarter extends Period
         return [
             'quarter'    => '',
             'year'       => '',
-            'startDate'  => Carbon::create($year, 1, 1),
-            'endDate'    => Carbon::create($year, 12, 31),
+            'startDate'  => CarbonImmutable::create($year, 1, 1),
+            'endDate'    => CarbonImmutable::create($year, 12, 31),
             'startMonth' => 'January',
             'endMonth'   => 'December',
         ];
     }
 
 
-    private static function determineQuarterStartDate(Carbon $date, string $yearType)
+    private static function determineQuarterStartDate(CarbonImmutable $date, string $yearType)
     {
         if ($date === null) {
-            $date = Carbon::now();
+            $date = CarbonImmutable::now();
         }
         $quarter = self::determineQuarter($date, $yearType);
         return $quarter['startDate'];
     }
 
-    private static function determineQuarterEndDate(Carbon $date, string $year)
+    private static function determineQuarterEndDate(CarbonImmutable $date, string $year)
     {
         if ($date === null) {
-            $date = Carbon::now();
+            $date = CarbonImmutable::now();
         }
         $quarter = self::determineQuarter($date, $year);
         return $quarter['endDate'];
@@ -199,17 +199,17 @@ class Quarter extends Period
     }
 
     /**
-     * @return Carbon
+     * @return CarbonImmutable
      */
-    public function getQuarterStartDate(): Carbon
+    public function getQuarterStartDate(): CarbonImmutable
     {
         return $this->startDate;
     }
 
     /**
-     * @return Carbon
+     * @return CarbonImmutable
      */
-    public function getQuarterEndDate(): Carbon
+    public function getQuarterEndDate(): CarbonImmutable
     {
         return $this->endDate;
     }
