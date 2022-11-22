@@ -3,14 +3,23 @@
 namespace GarrettMassey\Analytics\Tests;
 
 use Carbon\CarbonImmutable;
-use GarrettMassey\Analytics\Facades\Analytics;
+use GarrettMassey\Analytics\Analytics;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
+use Illuminate\Support\Facades\App;
 use Mockery;
 use Mockery\MockInterface;
 
-class AnalyticsTest extends TestCase
-{
-	public function test_get_top_events()
+class AnalyticsTest extends TestCase {
+
+	/** @test */
+	public function getClient_returns_GAClient()
+	{
+		Analytics::shouldReceive('getClient')
+			->once()
+			->andReturn(Mockery::mock(BetaAnalyticsDataClient::class));
+	}
+
+	/* public function test_get_top_events()
 	{
 		CarbonImmutable::setTestNow(CarbonImmutable::create(2022, 11, 21));
 
@@ -38,5 +47,7 @@ class AnalyticsTest extends TestCase
 
 		//TODO: assert response
 		Analytics::getTopEvents();
-	}
+	} */
+
+
 }

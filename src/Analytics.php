@@ -45,6 +45,11 @@ class Analytics {
 		return new Analytics();
 	}
 
+	public function getClient()
+	{
+		return $this->client;
+	}
+
 	/****************************************
 	 * Pre-Built Reports and Queries
 	 ****************************************/
