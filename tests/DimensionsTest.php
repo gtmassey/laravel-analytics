@@ -1,13 +1,13 @@
 <?php
 
-namespace GarrettMassey\Analytics\Tests;
+namespace Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use GarrettMassey\Analytics\Parameters\Dimensions;
 use Orchestra\Testbench\TestCase as Orchestra;
-use GarrettMassey\Analytics\AnalyticsServiceProvider;
 
-class TestCase extends Orchestra
+class DimensionsTest extends Orchestra
 {
+    /*
     protected function setUp(): void
     {
         parent::setUp();
@@ -27,10 +27,14 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
-
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_analytics_table.php.stub';
-        $migration->up();
-        */
     }
+    */
+
+    /** @test */
+    public function assert_get_dimensions_returns_collection()
+    {
+        $dimensions = new Dimensions();
+        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $dimensions->getDimensions());
+    }
+
 }
