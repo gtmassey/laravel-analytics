@@ -17,9 +17,7 @@ class AnalyticsServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('analytics')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_analytics_table')
+            ->hasConfigFile('analytics')
             ->hasCommand(AnalyticsCommand::class);
     }
 }
