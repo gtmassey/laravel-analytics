@@ -19,7 +19,7 @@ class AnalyticsTest extends TestCase {
 
 
 
-	/* public function test_get_top_events()
+	public function test_get_top_events()
 	{
 		CarbonImmutable::setTestNow(CarbonImmutable::create(2022, 11, 21));
 
@@ -47,7 +47,7 @@ class AnalyticsTest extends TestCase {
 
 		//TODO: assert response
 		Analytics::getTopEvents();
-	} */
+	}
 
 
 }

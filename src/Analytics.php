@@ -30,7 +30,7 @@ class Analytics {
 
 	public function __construct()
 	{
-		putenv('GOOGLE_APPLICATION_CREDENTIALS=' . config('analytics.credentials_path') . config('analytics.credentials_file'));
+		putenv('GOOGLE_APPLICATION_CREDENTIALS=' . config('analytics.credentials_path'));
 		$this->client = resolve(BetaAnalyticsDataClient::class);
 		$this->propertyID = config('analytics.property_id');
 		$this->dimensions = collect([]);
