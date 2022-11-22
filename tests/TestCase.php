@@ -37,8 +37,7 @@ class TestCase extends Orchestra {
 
 		$credentialsPath = storage_path('/framework/testing/disks/testing-storage/');
 		config()->set('analytics.property_id', 'test123');
-		config()->set('analytics.credentials_path', $credentialsPath);
-		config()->set('analytics.credentials_file', 'test-credentials.json');
+		config()->set('analytics.credentials_path', $credentialsPath . 'test-credentials.json');
 	}
 
 	/**
