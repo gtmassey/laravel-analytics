@@ -97,9 +97,6 @@ ANALYTICS_CREDENTIALS_CLIENT_X509_CERT_URL=...
 > **Warning**
 > Package will always prioritize `GOOGLE_APPLICATION_CREDENTIALS` env value over other options. If you want to use a separate service account, make sure to set `ANALYTICS_CREDENTIALS_USE_ENV=false`.
 
-
-Move the `JSON` key file to your project's `root/analyticsAPI` directory. Name the file `credentials.json`.
-
 //PIC
 
 Finally, open Google Analytics, and copy the property ID for the property you want to query. You will need this ID to use this package.
