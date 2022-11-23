@@ -2,9 +2,10 @@
 
 namespace GarrettMassey\Analytics;
 
-use Carbon\CarbonImmutable;
+use GarrettMassey\Analytics\Exceptions\ReportException;
 use GarrettMassey\Analytics\Parameters\Dimensions;
 use GarrettMassey\Analytics\Parameters\Metrics;
+use GarrettMassey\Analytics\Reports\Reports;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use Illuminate\Support\Collection;
 
@@ -52,6 +53,32 @@ class Analytics
         $this->dateRanges = collect([]);
     }
 
+    /**
+     * @throws ReportException
+     */
+    public function __call($name, $arguments)
+    {
+        //if arguments is an empty array
+        if (empty($arguments)) {
+            //if the method exists in the Reports class
+            if (method_exists(Reports::class, $name)) {
+                //call the method and return the result
+                return Reports::$name(null);
+            } else {
+                //otherwise, throw an exception
+                throw ReportException::doesNotExist($name);
+            }
+        } else {
+            if (method_exists(Reports::class, $name)) {
+                //call the method and return the result
+                return Reports::$name($arguments);
+            } else {
+                //otherwise, throw an exception
+                throw ReportException::doesNotExist($name);
+            }
+        }
+    }
+
     public static function query(): Analytics
     {
         return new Analytics();
@@ -60,31 +87,6 @@ class Analytics
     public function getClient(): BetaAnalyticsDataClient
     {
         return $this->client;
-    }
-
-    /****************************************
-     * Pre-Built Reports and Queries
-     ****************************************/
-
-    /**
-     * return a collection of the top events for the last 30 days
-     * along with the count of each event, ordered in descending order
-     */
-    public static function getTopEvents()
-    {
-        $query = Analytics::query();
-        $query->setMetrics(function (Metrics $metric) {
-            return $metric->eventCount();
-        })->setDimensions(function (Dimensions $dimension) {
-            return $dimension->eventName();
-        })->forPeriod(
-            Period::create(
-                CarbonImmutable::now()->subDays(30),
-                CarbonImmutable::now()
-            )
-        );
-
-        return $query->run();
     }
 
     /****************************************
@@ -193,6 +195,7 @@ class Analytics
         $request = $request->merge($resource);
         //get the last error message from json
         //ddd($request->toArray());
+        dump($request->toArray());
         $results = $this->client->runReport($request->toArray());
 
         return self::toCollection($results);
@@ -201,6 +204,6 @@ class Analytics
     //TODO: clean up the data structure of $results, convert to collection
     private static function toCollection($results)
     {
-        return $results;
+        return [$results];
     }
 }

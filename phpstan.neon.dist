@@ -10,3 +10,5 @@ parameters:
 
     ignoreErrors:
             - '#Call to an undefined method Mockery\\ExpectationInterface|Mockery\\HigherOrderMessage::with\(\).#'
+            - '#Call to an undefined static method GarrettMassey\\Analytics\\Facades\\Analytics::\w+\(\).#'
+

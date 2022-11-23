@@ -3,7 +3,7 @@
 namespace GarrettMassey\Analytics\Tests;
 
 use Carbon\CarbonImmutable;
-use GarrettMassey\Analytics\Analytics;
+use GarrettMassey\Analytics\Facades\Analytics;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use Mockery;
 use Mockery\MockInterface;
@@ -79,6 +79,6 @@ class AnalyticsTest extends TestCase
         });
 
         //TODO: assert response
-        Analytics::query()->getTopEvents();
+        Analytics::getTopEvents();
     }
 }
