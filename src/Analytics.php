@@ -69,10 +69,8 @@ class Analytics
     /**
      * return a collection of the top events for the last 30 days
      * along with the count of each event, ordered in descending order
-     *
-     * @return Collection
      */
-    public static function getTopEvents(): Collection
+    public static function getTopEvents()
     {
         $query = Analytics::query();
         $query->setMetrics(function (Metrics $metric) {
