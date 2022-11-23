@@ -79,7 +79,7 @@ class Period
         return new Period(CarbonImmutable::today()->subYears($years), CarbonImmutable::today());
     }
 
-    public function getDateRanges()
+    public function getDateRanges(): DateRange
     {
         return new DateRange([
             'start_date' => $this->startDate->format('Y-m-d'),

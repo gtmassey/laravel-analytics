@@ -7,11 +7,12 @@ use Illuminate\Support\Collection;
 
 class Dimensions
 {
+    /** @var Collection<int, Dimension> */
     private Collection $dimensions;
 
     public function __construct()
     {
-        $this->dimensions = collect();
+        $this->dimensions = new Collection();
     }
 
     public function count(): int

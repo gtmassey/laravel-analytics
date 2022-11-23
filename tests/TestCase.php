@@ -2,10 +2,8 @@
 
 namespace GarrettMassey\Analytics\Tests;
 
+use Exception;
 use GarrettMassey\Analytics\AnalyticsServiceProvider;
-use Google\Analytics\Data\V1beta\DateRange;
-use Google\Analytics\Data\V1beta\Dimension;
-use Google\Analytics\Data\V1beta\Metric;
 use Illuminate\Support\Facades\Storage;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -18,11 +16,20 @@ class TestCase extends Orchestra
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function getEnvironmentSetUp($app)
     {
         $disk = Storage::fake('testing-storage');
 
-        $disk->put('test-credentials.json', json_encode($this->credentials()));
+        $encodedCredentials = json_encode($this->credentials());
+
+        if (! $encodedCredentials) {
+            throw new Exception('Failed to encode credentials');
+        }
+
+        $disk->put('test-credentials.json', $encodedCredentials);
         $credentialsFile = storage_path('/framework/testing/disks/testing-storage/test-credentials.json');
 
         config()->set('analytics.property_id', 'test123');
@@ -43,14 +50,5 @@ class TestCase extends Orchestra
             'auth_provider_x509_cert_url' => 'https://www.googleapis.com/oauth2/v1/certs',
             'client_x509_cert_url' => 'https://www.googleapis.com/robot/v1/metadata/x509/bogus-ser%40bogus-app.iam.gserviceaccount.com',
         ];
-    }
-
-    /**
-     * @param  array  $reportRequest
-     * @return array{property: string, dateRanges: DateRange[], dimensions: Dimension[], metrics: Metric[]}
-     */
-    protected function parseReportRequest(array $reportRequest): array
-    {
-        return $reportRequest;
     }
 }

@@ -3,8 +3,13 @@
 namespace GarrettMassey\Analytics\Tests;
 
 use Carbon\CarbonImmutable;
-use GarrettMassey\Analytics\Facades\Analytics;
+use GarrettMassey\Analytics\Analytics;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
+use Google\Analytics\Data\V1beta\DateRange;
+use Google\Analytics\Data\V1beta\Dimension;
+use Google\Analytics\Data\V1beta\Metric;
+use Google\Analytics\Data\V1beta\RunReportResponse;
+use Google\ApiCore\ApiException;
 use Mockery;
 use Mockery\MockInterface;
 
@@ -52,6 +57,9 @@ class AnalyticsTest extends TestCase
         $this->assertInstanceOf(BetaAnalyticsDataClient::class, Analytics::query()->getClient());
     }
 
+    /**
+     * @throws ApiException
+     */
     public function test_get_top_events(): void
     {
         CarbonImmutable::setTestNow(CarbonImmutable::create(2022, 11, 21));
@@ -59,23 +67,23 @@ class AnalyticsTest extends TestCase
         $this->mock(BetaAnalyticsDataClient::class, function (MockInterface $mock) {
             $mock->shouldReceive('runReport')
                 ->with(Mockery::on(function (array $reportRequest) {
-                    $parsedReportRequest = $this->parseReportRequest($reportRequest);
+                    /** @var array{property: string, dateRanges: DateRange[], dimensions: Dimension[], metrics: Metric[]} $reportRequest */
+                    $this->assertEquals('properties/'.'test123', $reportRequest['property']);
 
-                    $this->assertEquals('properties/'.'test123', $parsedReportRequest['property']);
+                    $this->assertCount(1, $reportRequest['dateRanges']);
+                    $this->assertEquals('2022-10-22', $reportRequest['dateRanges'][0]->getStartDate());
+                    $this->assertEquals('2022-11-21', $reportRequest['dateRanges'][0]->getEndDate());
 
-                    $this->assertCount(1, $parsedReportRequest['dateRanges']);
-                    $this->assertEquals('2022-10-22', $parsedReportRequest['dateRanges'][0]->getStartDate());
-                    $this->assertEquals('2022-11-21', $parsedReportRequest['dateRanges'][0]->getEndDate());
+                    $this->assertCount(1, $reportRequest['dimensions']);
+                    $this->assertEquals('eventName', $reportRequest['dimensions'][0]->getName());
 
-                    $this->assertCount(1, $parsedReportRequest['dimensions']);
-                    $this->assertEquals('eventName', $parsedReportRequest['dimensions'][0]->getName());
-
-                    $this->assertCount(1, $parsedReportRequest['metrics']);
-                    $this->assertEquals('eventCount', $parsedReportRequest['metrics'][0]->getName());
+                    $this->assertCount(1, $reportRequest['metrics']);
+                    $this->assertEquals('eventCount', $reportRequest['metrics'][0]->getName());
 
                     return true;
                 }))
-                ->once();
+                ->once()
+                ->andReturn(new RunReportResponse());
         });
 
         //TODO: assert response

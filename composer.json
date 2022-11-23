@@ -24,9 +24,12 @@
         "brianium/paratest": "^6.6",
         "laravel/pint": "^1.2",
         "nunomaduro/collision": "^6.2",
+        "nunomaduro/larastan": "^2.2",
         "orchestra/testbench": "^7.13",
-        "phpstan/phpstan": "^1.9",
+        "phpstan/extension-installer": "^1.2",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-mockery": "^1.1",
+        "phpstan/phpstan-phpunit": "^1.2",
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {
@@ -46,16 +49,16 @@
         "pint": "./vendor/bin/pint"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     },
     "extra": {
         "laravel": {
             "providers": [
                 "GarrettMassey\\Analytics\\AnalyticsServiceProvider"
-            ],
-            "aliases": {
-                "Analytics": "GarrettMassey\\Analytics\\Facades\\Analytics"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",

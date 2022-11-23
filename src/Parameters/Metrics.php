@@ -7,11 +7,12 @@ use Illuminate\Support\Collection;
 
 class Metrics
 {
+    /** @var Collection<int, Metric> */
     private Collection $metrics;
 
     public function __construct()
     {
-        $this->metrics = collect();
+        $this->metrics = new Collection();
     }
 
     public function count(): int

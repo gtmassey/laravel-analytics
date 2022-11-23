@@ -7,10 +7,19 @@ use GarrettMassey\Analytics\Analytics;
 use GarrettMassey\Analytics\Parameters\Dimensions;
 use GarrettMassey\Analytics\Parameters\Metrics;
 use GarrettMassey\Analytics\Period;
+use Google\Analytics\Data\V1beta\RunReportResponse;
+use Google\ApiCore\ApiException;
+use Illuminate\Support\Collection;
 
-class Reports
+trait Reports
 {
-    public static function getTopEvents(?Period $period)
+    /**
+     * @param  Period|null  $period
+     * @return Collection<int, RunReportResponse>
+     *
+     * @throws ApiException
+     */
+    public static function getTopEvents(?Period $period = null): Collection
     {
         //create analytics instance
         $query = Analytics::query();
