@@ -26,15 +26,18 @@ class Quarter extends Period
      * @param  CarbonImmutable|null  $date
      * @param  string  $yearType
      */
-    public function __construct(CarbonImmutable $date = null, $yearType = 'calendar')
+    public function __construct(?CarbonImmutable $date = null, $yearType = 'calendar')
     {
-        //call the parent constructor
-        $startDate = self::determineQuarterStartDate($date, $yearType);
-        $endDate = self::determineQuarterEndDate($date, $yearType);
-        parent::__construct($startDate, $endDate);
         if ($date === null) {
             $date = CarbonImmutable::now();
         }
+
+        //call the parent constructor
+        $startDate = self::determineQuarterStartDate($date, $yearType);
+        $endDate = self::determineQuarterEndDate($date, $yearType);
+
+        parent::__construct($startDate, $endDate);
+
         //determine what quarter we are in based on the current date
         $this->currentDate = $date;
         $this->quarter = self::determineQuarter($date, $yearType)['quarter'];
@@ -177,14 +180,14 @@ class Quarter extends Period
         ];
     }
 
-    private static function determineQuarterStartDate(CarbonImmutable $date, string $yearType)
+    private static function determineQuarterStartDate(CarbonImmutable $date, string $yearType): CarbonImmutable
     {
         $quarter = self::determineQuarter($date, $yearType);
 
         return $quarter['startDate'];
     }
 
-    private static function determineQuarterEndDate(CarbonImmutable $date, string $year)
+    private static function determineQuarterEndDate(CarbonImmutable $date, string $year): CarbonImmutable
     {
         $quarter = self::determineQuarter($date, $year);
 

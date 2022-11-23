@@ -144,7 +144,7 @@ This will return a collection of rows with additional fields for the metrics and
 
 ### 2. Arrays
 ```php
-use GarrettMassey\Analytics\Facades\Analytics;
+use GarrettMassey\Analytics\Analytics;
 use GarrettMassey\Analytics\Period;
 
 $period = Period::create(

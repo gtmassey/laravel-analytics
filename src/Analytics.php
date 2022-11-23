@@ -2,14 +2,22 @@
 
 namespace GarrettMassey\Analytics;
 
-use Carbon\CarbonImmutable;
+use Exception;
 use GarrettMassey\Analytics\Parameters\Dimensions;
 use GarrettMassey\Analytics\Parameters\Metrics;
+use GarrettMassey\Analytics\Reports\Reports;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
+use Google\Analytics\Data\V1beta\DateRange;
+use Google\Analytics\Data\V1beta\Dimension;
+use Google\Analytics\Data\V1beta\Metric;
+use Google\Analytics\Data\V1beta\RunReportResponse;
+use Google\ApiCore\ApiException;
 use Illuminate\Support\Collection;
 
 class Analytics
 {
+    use Reports;
+
     //TODO: clean up class, add comments
     //TODO: add support for remaining metrics and dimensions
     //TODO: add generic report generation (i.e. things like getUsersAndPageViews($period) )
@@ -17,10 +25,13 @@ class Analytics
 
     public string $propertyID;
 
+    /** @var Collection<int, Dimension> */
     public Collection $dimensions;
 
+    /** @var Collection<int, Metric> */
     public Collection $metrics;
 
+    /** @var Collection<int, DateRange> */
     public Collection $dateRanges;
 
     public string $dimensionsFilter;
@@ -46,45 +57,27 @@ class Analytics
     public function __construct()
     {
         $this->client = resolve(BetaAnalyticsDataClient::class);
-        $this->propertyID = config('analytics.property_id');
-        $this->dimensions = collect([]);
-        $this->metrics = collect([]);
-        $this->dateRanges = collect([]);
+
+        $propertyId = config('analytics.property_id');
+
+        if (! is_string($propertyId) || empty($propertyId)) {
+            throw new Exception('Property ID is not set.');
+        }
+
+        $this->propertyID = $propertyId;
+        $this->dimensions = new Collection();
+        $this->metrics = new Collection();
+        $this->dateRanges = new Collection();
     }
 
-    public static function query(): Analytics
+    public static function query(): self
     {
-        return new Analytics();
+        return resolve(Analytics::class);
     }
 
     public function getClient(): BetaAnalyticsDataClient
     {
         return $this->client;
-    }
-
-    /****************************************
-     * Pre-Built Reports and Queries
-     ****************************************/
-
-    /**
-     * return a collection of the top events for the last 30 days
-     * along with the count of each event, ordered in descending order
-     */
-    public static function getTopEvents()
-    {
-        $query = Analytics::query();
-        $query->setMetrics(function (Metrics $metric) {
-            return $metric->eventCount();
-        })->setDimensions(function (Dimensions $dimension) {
-            return $dimension->eventName();
-        })->forPeriod(
-            Period::create(
-                CarbonImmutable::now()->subDays(30),
-                CarbonImmutable::now()
-            )
-        );
-
-        return $query->run();
     }
 
     /****************************************
@@ -99,7 +92,7 @@ class Analytics
      * @param  callable  $callback
      * @return $this
      */
-    public function setMetrics(callable $callback)
+    public function setMetrics(callable $callback): static
     {
         $metrics = $callback(new Metrics());
         $this->metrics = $metrics->getMetrics();
@@ -115,7 +108,7 @@ class Analytics
      * @param  callable  $callback
      * @return $this
      */
-    public function setDimensions(callable $callback)
+    public function setDimensions(callable $callback): static
     {
         $dimensions = $callback(new Dimensions());
         $this->dimensions = $dimensions->getDimensions();
@@ -161,7 +154,7 @@ class Analytics
         return $this;
     }
 
-    public function forPeriod(Period $period)
+    public function forPeriod(Period $period): static
     {
         $this->dateRanges->push($period->getDateRanges());
 
@@ -172,12 +165,24 @@ class Analytics
      * Process and Run Query
      ****************************************/
 
-    public function run()
+    /**
+     * @return Collection<int, RunReportResponse>
+     *
+     * @throws ApiException
+     */
+    public function run(): Collection
     {
-        return $this->buildQueryArray();
+        $requestArgs = $this->buildQueryArray();
+
+        $results = $this->client->runReport($requestArgs);
+
+        return self::toCollection($results);
     }
 
-    private function buildQueryArray()
+    /**
+     * @return array{property: string, dateRanges: DateRange[], dimensions: Dimension[], metrics: Metric[]}
+     */
+    private function buildQueryArray(): array
     {
         $dimensions = collect(['dimensions' => $this->dimensions]);
         $metrics = collect(['metrics' => $this->metrics]);
@@ -193,14 +198,21 @@ class Analytics
         $request = $request->merge($resource);
         //get the last error message from json
         //ddd($request->toArray());
-        $results = $this->client->runReport($request->toArray());
 
-        return self::toCollection($results);
+        /** @var array{property: string, dateRanges: DateRange[], dimensions: Dimension[], metrics: Metric[]} $requestArgs */
+        $requestArgs = $request->toArray();
+
+        return $requestArgs;
     }
 
     //TODO: clean up the data structure of $results, convert to collection
-    private static function toCollection($results)
+
+    /**
+     * @param  RunReportResponse  $results
+     * @return Collection<int, RunReportResponse>
+     */
+    private function toCollection(RunReportResponse $results): Collection
     {
-        return $results;
+        return new Collection([$results]);
     }
 }
