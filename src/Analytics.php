@@ -203,8 +203,6 @@ class Analytics
     //TODO: clean up the data structure of $results, convert to collection
     private static function toCollection($results)
     {
-        dump($results);
-
         return $results;
     }
 }
