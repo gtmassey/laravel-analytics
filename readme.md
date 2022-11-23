@@ -13,8 +13,8 @@ Build Google Analytics queries in Laravel with ease.
 
 Via Composer
 
-``` bash
-$ composer require garrettmassey/analytics
+```SHELL
+composer require garrettmassey/analytics
 ```
 
 ## Setup
@@ -35,7 +35,7 @@ Make sure you have Google Analytics Data API enabled. NOTE: this is NOT the same
 
 //PIC
 
-Once enabled, select the Google Analytics Data API from the list of APIs, and click the Credentials tab. 
+Once enabled, select the Google Analytics Data API from the list of APIs, and click the Credentials tab.
 
 //PIC
 
@@ -51,7 +51,54 @@ Once the service account is created, add a new key to the service account. Selec
 
 Once the key is created, download the JSON file and save it somewhere safe. You will need this file to use this package. If you lose this file, you will have to create a new service account. Google does not let you re-issue keys.
 
-Move the `JSON` key file to your project's `root/analyticsAPI` directory. Name the file `credentials.json`. 
+You can use these credentials in several ways:
+
+### As ENV value (default)
+This is ideal setup if you're using only one service account for your application.
+
+Specify the path to the JSON file in your .env file:
+```dotenv
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
+```
+
+### As a separate JSON file
+If you have multiple service accounts, you can instruct this package to use a specific one:
+
+```dotenv
+ANALYTICS_CREDENTIALS_USE_ENV=false
+ANALYTICS_CREDENTIALS_FILE=/path/to/credentials.json
+```
+
+### As a JSON string
+If you don't want to store the credentials in a file, you can specify the JSON string directly in your .env file:
+
+```dotenv
+ANALYTICS_CREDENTIALS_USE_ENV=false
+ANALYTICS_CREDENTIALS_JSON="{type: service_account, project_id: ...}"
+```
+
+### As separate values
+You can also specify the credentials as separate values in your .env file:
+
+```dotenv
+ANALYTICS_CREDENTIALS_USE_ENV=false
+ANALYTICS_CREDENTIALS_TYPE=service_account
+ANALYTICS_CREDENTIALS_PROJECT_ID=...
+ANALYTICS_CREDENTIALS_PRIVATE_KEY_ID=...
+ANALYTICS_CREDENTIALS_PRIVATE_KEY=...
+ANALYTICS_CREDENTIALS_CLIENT_EMAIL=...
+ANALYTICS_CREDENTIALS_CLIENT_ID=...
+ANALYTICS_CREDENTIALS_AUTH_URI=...
+ANALYTICS_CREDENTIALS_TOKEN_URI=...
+ANALYTICS_CREDENTIALS_AUTH_PROVIDER_X509_CERT_URL=...
+ANALYTICS_CREDENTIALS_CLIENT_X509_CERT_URL=...
+```
+
+> **Warning**
+> Package will always prioritize `GOOGLE_APPLICATION_CREDENTIALS` env value over other options. If you want to use a separate service account, make sure to set `ANALYTICS_CREDENTIALS_USE_ENV=false`.
+
+
+Move the `JSON` key file to your project's `root/analyticsAPI` directory. Name the file `credentials.json`.
 
 //PIC
 
@@ -61,7 +108,7 @@ Finally, open Google Analytics, and copy the property ID for the property you wa
 
 Set the property ID in your `.env` file, along with the year type (either fiscal or calendar).
 
-``` bash
+```dotenv
 ANALYTICS_YEAR_TYPE="fiscal|calendar"
 ANALYTICS_PROPERTY_ID="XXXXXXXXX"
 ```
@@ -76,11 +123,11 @@ Once installation is complete, you can run Google Analytics Data API queries in 
 
 All Google Analytics Data API queries require a date range to be run. Use the `Period` or `Quarter` classes to generate a period of time for the query.
 
-You can use two approaches to add query parameters to the request. 
+You can use two approaches to add query parameters to the request.
 
 ### 1. Callbacks
-``` php
-use GarrettMassey\Analytics\Facades\Analytics;
+```php
+use GarrettMassey\Analytics\Analytics;
 use GarrettMassey\Analytics\Period;
 
 $period = Period::create(
@@ -99,7 +146,7 @@ $report->setMetrics(function ($q) {
 This will return a collection of rows with additional fields for the metrics and dimensions.
 
 ### 2. Arrays
-``` php
+```php
 use GarrettMassey\Analytics\Facades\Analytics;
 use GarrettMassey\Analytics\Period;
 
@@ -121,7 +168,7 @@ This will return the same collection as the callback example. The two methods ex
 ### Provided Methods:
 
 #### getTopEvents()
-``` php
+```php
 $report = Analytics::getTopEvents();
 ```
 
@@ -140,8 +187,8 @@ To Be Completed
 
 TODO: write tests
 
-``` bash
-$ composer test
+```bash
+composer test
 ```
 
 ## Contributing

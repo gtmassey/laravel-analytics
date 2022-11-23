@@ -6,6 +6,7 @@ use Carbon\CarbonImmutable;
 use GarrettMassey\Analytics\Parameters\Dimensions;
 use GarrettMassey\Analytics\Parameters\Metrics;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
+use Google\Auth\CredentialsLoader;
 use Illuminate\Support\Collection;
 
 class Analytics {
@@ -30,7 +31,6 @@ class Analytics {
 
 	public function __construct()
 	{
-		putenv('GOOGLE_APPLICATION_CREDENTIALS=' . config('analytics.credentials_path'));
 		$this->client = resolve(BetaAnalyticsDataClient::class);
 		$this->propertyID = config('analytics.property_id');
 		$this->dimensions = collect([]);
@@ -40,7 +40,7 @@ class Analytics {
 		return $this;
 	}
 
-	public static function query()
+	public static function query(): Analytics
 	{
 		return new Analytics();
 	}
