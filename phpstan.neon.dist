@@ -1,14 +1,12 @@
 includes:
     - phpstan-baseline.neon
-
 parameters:
     level: 4
     paths:
         - src
         - config
-        - database
+        - tests # optional
     tmpDir: build/phpstan
-    checkOctaneCompatibility: true
-    checkModelProperties: true
-    checkMissingIterableValueType: false
 
+    ignoreErrors:
+            - '#Call to an undefined method Mockery\\ExpectationInterface|Mockery\\HigherOrderMessage::with\(\).#'

@@ -8,6 +8,7 @@ use Google\Analytics\Data\V1beta\DateRange;
 class Period
 {
     public CarbonImmutable $startDate;
+
     public CarbonImmutable $endDate;
 
     public function __construct(CarbonImmutable $startDate, CarbonImmutable $endDate)
