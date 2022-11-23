@@ -22,8 +22,11 @@
     },
     "require-dev": {
         "brianium/paratest": "^6.6",
+        "laravel/pint": "^1.2",
         "nunomaduro/collision": "^6.2",
         "orchestra/testbench": "^7.13",
+        "phpstan/phpstan": "^1.9",
+        "phpstan/phpstan-mockery": "^1.1",
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {

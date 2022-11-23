@@ -3,21 +3,38 @@
 namespace GarrettMassey\Analytics\Exceptions;
 
 use DateTimeInterface;
+use Throwable;
 
-class InvalidPeriodException extends \Exception
+final class InvalidPeriodException extends \Exception
 {
-    public static function startDateCannotBeAfterEndDate(DateTimeInterface $startDate, DateTimeInterface $endDate): InvalidPeriodException
-    {
-        return new static("Start date `{$startDate->format('Y-m-d')}` cannot be after end date `{$endDate->format('Y-m-d')}`.");
+    public function __construct(
+        string $message = '',
+        int $code = 0,
+        ?Throwable $previous = null
+    ) {
+        parent::__construct($message, $code, $previous);
+    }
+
+    public static function startDateCannotBeAfterEndDate(
+        DateTimeInterface $startDate,
+        DateTimeInterface $endDate
+    ): InvalidPeriodException {
+        $message = "Start date `{$startDate->format('Y-m-d')}` cannot be after end date `{$endDate->format('Y-m-d')}`.";
+
+        return new static($message);
     }
 
     public static function startDateCannotBeInTheFuture(DateTimeInterface $startDate): InvalidPeriodException
     {
-        return new static("Start date `{$startDate->format('Y-m-d')}` cannot be in the future.");
+        $message = "Start date `{$startDate->format('Y-m-d')}` cannot be in the future.";
+
+        return new static($message);
     }
 
     public static function endDateCannotBeInTheFuture(DateTimeInterface $endDate): InvalidPeriodException
     {
-        return new static("End date `{$endDate->format('Y-m-d')}` cannot be in the future.");
+        $message = "End date `{$endDate->format('Y-m-d')}` cannot be in the future.";
+
+        return new static($message);
     }
 }
