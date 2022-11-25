@@ -12,6 +12,7 @@ use Google\Analytics\Data\V1beta\RunReportResponse;
 use Google\ApiCore\ApiException;
 use Mockery;
 use Mockery\MockInterface;
+use Spatie\LaravelData\Exceptions\InvalidDataCollectionOperation;
 
 class AnalyticsTest extends TestCase
 {
@@ -59,12 +60,63 @@ class AnalyticsTest extends TestCase
 
     /**
      * @throws ApiException
+     * @throws InvalidDataCollectionOperation
      */
     public function test_get_top_events(): void
     {
         CarbonImmutable::setTestNow(CarbonImmutable::create(2022, 11, 21));
 
-        $this->mock(BetaAnalyticsDataClient::class, function (MockInterface $mock) {
+        $responseMock = $this->mock(RunReportResponse::class, function (MockInterface $mock) {
+            $mock->shouldReceive('serializeToJsonString')
+                ->once()
+                ->andReturn(json_encode([
+                    'dimensionHeaders' => [
+                        [
+                            'name' => 'eventName',
+                        ],
+                    ],
+                    'metricHeaders' => [
+                        [
+                            'name' => 'eventCount',
+                            'type' => 'TYPE_INTEGER',
+                        ],
+                    ],
+                    'rows' => [
+                        [
+                            'dimensionValues' => [
+                                [
+                                    'value' => 'testEvent1',
+                                ],
+                            ],
+                            'metricValues' => [
+                                [
+                                    'value' => '222',
+                                ],
+                            ],
+                        ],
+                        [
+                            'dimensionValues' => [
+                                [
+                                    'value' => 'testEvent2',
+                                ],
+                            ],
+                            'metricValues' => [
+                                [
+                                    'value' => '111',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'rowCount' => 2,
+                    'metadata' => [
+                        'currencyCode' => 'USD',
+                        'timeZone' => 'UTC',
+                    ],
+                    'kind' => 'analyticsData#runReport',
+                ]));
+        });
+
+        $this->mock(BetaAnalyticsDataClient::class, function (MockInterface $mock) use ($responseMock) {
             $mock->shouldReceive('runReport')
                 ->with(Mockery::on(function (array $reportRequest) {
                     /** @var array{property: string, dateRanges: DateRange[], dimensions: Dimension[], metrics: Metric[]} $reportRequest */
@@ -83,10 +135,25 @@ class AnalyticsTest extends TestCase
                     return true;
                 }))
                 ->once()
-                ->andReturn(new RunReportResponse());
+                ->andReturn($responseMock);
         });
 
-        //TODO: assert response
-        Analytics::getTopEvents();
+        $responseData = Analytics::getTopEvents();
+
+        $this->assertEquals(2, $responseData->rowCount);
+        $this->assertCount(2, $responseData->rows);
+
+        $this->assertEquals('eventName', $responseData->dimensionHeaders->first()?->name);
+        $this->assertEquals('eventCount', $responseData->metricHeaders->first()?->name);
+        $this->assertEquals('TYPE_INTEGER', $responseData->metricHeaders->first()?->type);
+
+        $this->assertEquals('testEvent1', $responseData->rows->first()?->dimensionValues->first()?->value);
+        $this->assertEquals('testEvent2', $responseData->rows->offsetGet(1)->dimensionValues->first()?->value);
+        $this->assertEquals(222, $responseData->rows->first()?->metricValues->first()?->value);
+        $this->assertEquals(111, $responseData->rows->offsetGet(1)->metricValues->first()?->value);
+
+        $this->assertEquals('USD', $responseData->metadata->currencyCode);
+        $this->assertEquals('UTC', $responseData->metadata->timeZone);
+        $this->assertEquals('analyticsData#runReport', $responseData->kind);
     }
 }

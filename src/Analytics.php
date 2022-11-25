@@ -6,10 +6,12 @@ use Exception;
 use GarrettMassey\Analytics\Parameters\Dimensions;
 use GarrettMassey\Analytics\Parameters\Metrics;
 use GarrettMassey\Analytics\Reports\Reports;
+use GarrettMassey\Analytics\Response\ResponseData;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
 use Google\Analytics\Data\V1beta\Metric;
+use Google\Analytics\Data\V1beta\MetricAggregation;
 use Google\Analytics\Data\V1beta\RunReportResponse;
 use Google\ApiCore\ApiException;
 use Illuminate\Support\Collection;
@@ -166,17 +168,15 @@ class Analytics
      ****************************************/
 
     /**
-     * @return Collection<int, RunReportResponse>
-     *
      * @throws ApiException
      */
-    public function run(): Collection
+    public function run(): ResponseData
     {
         $requestArgs = $this->buildQueryArray();
 
-        $results = $this->client->runReport($requestArgs);
+        $reportResponse = $this->client->runReport($requestArgs);
 
-        return self::toCollection($results);
+        return $this->toResponse($reportResponse);
     }
 
     /**
@@ -196,6 +196,8 @@ class Analytics
         );
         $request = collect(['property' => 'properties/'.$this->propertyID]);
         $request = $request->merge($resource);
+//        $request->offsetSet('metricAggregations', [MetricAggregation::TOTAL]);
+//        $request->offsetSet('returnPropertyQuota', true);
         //get the last error message from json
         //ddd($request->toArray());
 
@@ -205,14 +207,12 @@ class Analytics
         return $requestArgs;
     }
 
-    //TODO: clean up the data structure of $results, convert to collection
-
-    /**
-     * @param  RunReportResponse  $results
-     * @return Collection<int, RunReportResponse>
-     */
-    private function toCollection(RunReportResponse $results): Collection
+    private function toResponse(RunReportResponse $reportResponse): ResponseData
     {
-        return new Collection([$results]);
+        $json = $reportResponse->serializeToJsonString();
+
+        $report = json_decode($json, true);
+
+        return ResponseData::from($report);
     }
 }
