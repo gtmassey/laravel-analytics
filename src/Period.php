@@ -14,7 +14,7 @@ class Period
     public CarbonImmutable $endDate;
 
     /**
-     * @var null|Closure(): Period
+     * @var (Closure(): Period)|null
      */
     private static ?Closure $defaultPeriodClosure = null;
 
@@ -38,6 +38,10 @@ class Period
         );
     }
 
+    /**
+     * @param (Closure(): Period)|null $periodClosure
+     * @return void
+     */
     public static function setDefaultPeriodClosure(?Closure $periodClosure = null): void
     {
         self::$defaultPeriodClosure = $periodClosure;
