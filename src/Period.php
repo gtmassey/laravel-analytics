@@ -7,7 +7,6 @@ use Carbon\CarbonInterface;
 use Closure;
 use Google\Analytics\Data\V1beta\DateRange;
 
-#[AllowDynamicProperties]
 class Period
 {
     public CarbonImmutable $startDate;
