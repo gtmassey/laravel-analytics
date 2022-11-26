@@ -7,6 +7,7 @@ use Carbon\CarbonInterface;
 use Closure;
 use Google\Analytics\Data\V1beta\DateRange;
 
+
 class Period
 {
     public CarbonImmutable $startDate;
@@ -16,14 +17,19 @@ class Period
     /**
      * @var (Closure(): Period)|null
      */
-    public static ?Closure $defaultPeriodClosure = null;
+    private static ?Closure $defaultPeriodClosure = null;
 
-    public static int $startOfWeek = CarbonInterface::MONDAY;
+    private static int $startOfWeek = CarbonInterface::MONDAY;
 
     public function __construct(CarbonImmutable $startDate, CarbonImmutable $endDate)
     {
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+    }
+
+    public function __set(string $name, mixed $value): void
+    {
+        $this->properties[$name] = $value;
     }
 
     public static function defaultPeriod(): self
