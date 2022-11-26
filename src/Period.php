@@ -26,6 +26,10 @@ class Period
         $this->endDate = $endDate;
     }
 
+    public function __set(string $name, mixed $value): void {
+        $this->{$name} = $value;
+    }
+
     public static function defaultPeriod(): self
     {
         if (self::$defaultPeriodClosure !== null) {
