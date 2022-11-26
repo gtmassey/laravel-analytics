@@ -5,6 +5,7 @@ namespace GarrettMassey\Analytics\Tests;
 use Carbon\CarbonImmutable;
 use GarrettMassey\Analytics\Analytics;
 use GarrettMassey\Analytics\Reports\Reports;
+use GarrettMassey\Analytics\Response\ResponseData;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
@@ -21,7 +22,71 @@ class ReportTest extends TestCase
         foreach ($reportMethods as $reportMethod) {
             CarbonImmutable::setTestNow(CarbonImmutable::create(2022, 11, 21));
 
-            $this->mock(BetaAnalyticsDataClient::class, function (MockInterface $mock) {
+            $responseMock = $this->mock(RunReportResponse::class, function (MockInterface $mock) {
+                $mock->shouldReceive('serializeToJsonString')
+                    ->once()
+                    ->andReturn(json_encode([
+                        'dimensionHeaders' => [
+                            [
+                                'name' => 'eventName',
+                            ],
+                        ],
+                        'metricHeaders' => [
+                            [
+                                'name' => 'eventCount',
+                                'type' => 'TYPE_INTEGER',
+                            ],
+                        ],
+                        'rows' => [
+                            [
+                                'dimensionValues' => [
+                                    [
+                                        'value' => 'testEvent1',
+                                    ],
+                                ],
+                                'metricValues' => [
+                                    [
+                                        'value' => '222',
+                                    ],
+                                ],
+                            ],
+                            [
+                                'dimensionValues' => [
+                                    [
+                                        'value' => 'testEvent2',
+                                    ],
+                                ],
+                                'metricValues' => [
+                                    [
+                                        'value' => '111',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'totals' => [
+                            [
+                                'dimensionValues' => [
+                                    [
+                                        'value' => 'RESERVED_TOTAL',
+                                    ],
+                                ],
+                                'metricValues' => [
+                                    [
+                                        'value' => '333',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'rowCount' => 2,
+                        'metadata' => [
+                            'currencyCode' => 'USD',
+                            'timeZone' => 'UTC',
+                        ],
+                        'kind' => 'analyticsData#runReport',
+                    ]));
+            });
+
+            $this->mock(BetaAnalyticsDataClient::class, function (MockInterface $mock) use ($responseMock) {
                 $mock->shouldReceive('runReport')
                     ->with(Mockery::on(function (array $reportRequest) {
                         /** @var array{property: string, dateRanges: DateRange[], dimensions: Dimension[], metrics: Metric[]} $reportRequest */
@@ -32,16 +97,18 @@ class ReportTest extends TestCase
                         $this->assertEquals('2022-11-21', $reportRequest['dateRanges'][0]->getEndDate());
 
                         $this->assertCount(1, $reportRequest['dimensions']);
+                        $this->assertEquals('eventName', $reportRequest['dimensions'][0]->getName());
 
                         $this->assertCount(1, $reportRequest['metrics']);
+                        $this->assertEquals('eventCount', $reportRequest['metrics'][0]->getName());
 
                         return true;
                     }))
                     ->once()
-                    ->andReturn(new RunReportResponse());
+                    ->andReturn($responseMock);
             });
 
-            Analytics::$reportMethod();
+            $this->assertInstanceOf(ResponseData::class, Analytics::$reportMethod());
         }
     }
 }

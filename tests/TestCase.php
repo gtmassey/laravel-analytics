@@ -6,6 +6,7 @@ use Exception;
 use GarrettMassey\Analytics\AnalyticsServiceProvider;
 use Illuminate\Support\Facades\Storage;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\LaravelData\LaravelDataServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -13,6 +14,7 @@ class TestCase extends Orchestra
     {
         return [
             AnalyticsServiceProvider::class,
+            LaravelDataServiceProvider::class,
         ];
     }
 
