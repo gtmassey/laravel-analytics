@@ -26,7 +26,8 @@ class Period
         $this->endDate = $endDate;
     }
 
-    public function __set(string $name, mixed $value): void {
+    public function __set(string $name, mixed $value): void
+    {
         $this->{$name} = $value;
     }
 
