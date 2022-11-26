@@ -17,9 +17,9 @@ class Period
     /**
      * @var (Closure(): Period)|null
      */
-    private static ?Closure $defaultPeriodClosure = null;
+    public static ?Closure $defaultPeriodClosure = null;
 
-    private static int $startOfWeek = CarbonInterface::MONDAY;
+    public static int $startOfWeek = CarbonInterface::MONDAY;
 
     public function __construct(CarbonImmutable $startDate, CarbonImmutable $endDate)
     {
