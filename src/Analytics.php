@@ -158,7 +158,7 @@ class Analytics
 
     public function forPeriod(Period $period): static
     {
-        $this->dateRanges->push($period->getDateRanges());
+        $this->dateRanges->push($period->getDateRange());
 
         return $this;
     }
