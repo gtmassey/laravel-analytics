@@ -5,6 +5,7 @@ namespace GarrettMassey\Analytics;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 use Closure;
+use GarrettMassey\Analytics\Exceptions\InvalidPeriodException;
 use Google\Analytics\Data\V1beta\DateRange;
 
 class Period
@@ -39,7 +40,7 @@ class Period
     }
 
     /**
-     * @param (Closure(): Period)|null $periodClosure
+     * @param    (Closure(): Period)|null    $periodClosure
      * @return void
      */
     public static function setDefaultPeriodClosure(?Closure $periodClosure = null): void
@@ -153,7 +154,7 @@ class Period
         );
     }
 
-    public static function lastQuarter(): self
+    public static function previousQuarter(): self
     {
         return new Period(
             startDate: $startOfQuarter = CarbonImmutable::today()->subQuarterNoOverflow()->startOfQuarter(),
@@ -161,12 +162,165 @@ class Period
         );
     }
 
-    public static function lastQuarters(int $quarters): self
+    /**
+     * @throws InvalidPeriodException
+     */
+    public static function specificQuarter(int $year, int $quarter): self
     {
-        return new Period(
-            startDate: CarbonImmutable::today()->subQuartersNoOverflow($quarters)->startOfQuarter(),
-            endDate: CarbonImmutable::today()->startOfQuarter()->subDay(),
-        );
+        //first, determine if the year type is calendar or fiscal
+        $yearType = config('analytics.year_type');
+
+        return match ($yearType) {
+            'calendar' => self::specificCalendarQuarter($year, $quarter),
+            'fiscal' => self::specificFiscalQuarter($year, $quarter),
+            default => throw InvalidPeriodException::invalidYearType($yearType),
+        };
+    }
+
+    /**
+     * @throws InvalidPeriodException
+     */
+    public static function specificFiscalQuarter(int $year, int $quarter): self
+    {
+        $yearType = config('analytics.year_type');
+        $today = CarbonImmutable::today();
+        $thisYear = CarbonImmutable::today()->year;
+		//for fiscal quarters, the year starts on july 1 and ends on june 30 of the NEXT year
+		$startOfFiscalYear = CarbonImmutable::create($year, 7, 1);
+		$endOfFiscalYear = CarbonImmutable::create($year + 1, 6, 30);
+        switch ($quarter) {
+            case 1:
+				//q1 = jul 1 - sept 30
+                $startDate = CarbonImmutable::create($year, 7, 1);
+				$endDate = CarbonImmutable::create($year, 9, 30);
+				//if $today is between $startDate and $endDate, call thisQuarter()
+				if ($today->between($startDate, $endDate)) {
+					return self::thisQuarter();
+				} else {
+					//if today is before startDate, throw exception
+					if ($today->isBefore($startDate)) {
+						throw InvalidPeriodException::invalidQuarter($quarter);
+					} else {
+						return new Period($startDate, $endDate);
+					}
+				}
+            case 2:
+                //q2 = oct 1 - dec 31
+				$startDate = CarbonImmutable::create($year, 10, 1);
+				$endDate = CarbonImmutable::create($year, 12, 31);
+				//if $today is between $startDate and $endDate, call thisQuarter()
+				if ($today->between($startDate, $endDate)) {
+					return self::thisQuarter();
+				} else {
+					//if today is before startDate, throw exception
+					if ($today->isBefore($startDate)) {
+						throw InvalidPeriodException::invalidQuarter($quarter);
+					} else {
+						return new Period($startDate, $endDate);
+					}
+				}
+            case 3:
+				//q3 = jan 1 - mar 31
+				$startDate = CarbonImmutable::create($year + 1, 1, 1);
+				$endDate = CarbonImmutable::create($year + 1, 3, 31);
+				//if today is before jan 1, throw exception
+				if ($today->isBefore($startDate)) {
+					throw InvalidPeriodException::invalidQuarter($quarter);
+				} else {
+					return new Period($startDate, $endDate);
+				}
+
+            case 4:
+                //q4 = apr 1 - jun 30
+				$startDate = CarbonImmutable::create($year + 1, 4, 1);
+				$endDate = CarbonImmutable::create($year + 1, 6, 30);
+				//if today is before apr 1, throw exception
+				if ($today->isBefore($startDate)) {
+					throw InvalidPeriodException::invalidQuarter($quarter);
+				} else {
+					return new Period($startDate, $endDate);
+				}
+			default:
+				throw InvalidPeriodException::invalidQuarter($quarter);
+		}
+	}
+
+    /**
+     * @throws InvalidPeriodException
+     */
+    public static function specificCalendarQuarter(int $year, int $quarter): self
+    {
+        $yearType = config('analytics.year_type');
+        $today = CarbonImmutable::today();
+        $thisYear = CarbonImmutable::today()->year;
+        if ($year > $thisYear) {
+            throw InvalidPeriodException::cannotGetFutureQuarter($quarter);
+        } else {
+            switch ($quarter) {
+                case 1:
+                    //q1 = january 1 - March 31
+                    //if today is before March 31st but after jan 1st, call thisQuarter()
+                    $startDate = CarbonImmutable::create($year, 1, 1);
+                    $endDate = CarbonImmutable::create($year, 3, 31);
+                    if ($today->isBetween($startDate, $endDate)) {
+                        return self::thisQuarter();
+                    } else {
+                        //if today is before jan 1, throw exception
+                        if ($today->isBefore($startDate)) {
+                            throw InvalidPeriodException::cannotGetFutureQuarter($quarter);
+                        } else {
+                            return new Period($startDate, $endDate);
+                        }
+                    }
+                case 2:
+                    //q2 = april 1 - june 30
+                    //if today is before june 30th but after april 1st, call thisQuarter()
+                    $startDate = CarbonImmutable::create($year, 4, 1);
+                    $endDate = CarbonImmutable::create($year, 6, 30);
+                    if ($today->isBetween($startDate, $endDate)) {
+                        return self::thisQuarter();
+                    } else {
+                        //if today is before april 1, throw exception
+                        if ($today->isBefore($startDate)) {
+                            throw InvalidPeriodException::cannotGetFutureQuarter($quarter);
+                        } else {
+                            return new Period($startDate, $endDate);
+                        }
+                    }
+                case 3:
+                    //q3 = july 1 - september 30
+                    //if today is before september 30th but after july 1st, call thisQuarter()
+                    $startDate = CarbonImmutable::create($year, 7, 1);
+                    $endDate = CarbonImmutable::create($year, 9, 30);
+                    if ($today->isBetween($startDate, $endDate)) {
+                        return self::thisQuarter();
+                    } else {
+                        //if today is before july 1, throw exception
+                        if ($today->isBefore($startDate)) {
+                            throw InvalidPeriodException::cannotGetFutureQuarter($quarter);
+                        } else {
+                            return new Period($startDate, $endDate);
+                        }
+                    }
+                case 4:
+                    //q4 = october 1 - december 31
+                    //if today is before december 31st but after october 1st, call thisQuarter()
+                    $startDate = CarbonImmutable::create($year, 10, 1);
+                    $endDate = CarbonImmutable::create($year, 12, 31);
+                    if ($today->isBetween($startDate, $endDate)) {
+                        return self::thisQuarter();
+                    } else {
+                        //if today is before october 1, throw exception
+                        if ($today->isBefore($startDate)) {
+                            throw InvalidPeriodException::cannotGetFutureQuarter($quarter);
+                        } else {
+                            return new Period($startDate, $endDate);
+                        }
+                    }
+                default:
+                    throw InvalidPeriodException::invalidQuarter($quarter);
+            }
+        }
     }
 
     public static function thisYear(): self
@@ -190,8 +344,9 @@ class Period
         );
     }
 
-    public static function lastYears(int $years): self
-    {
+    public static function lastYears(
+        int $years
+    ): self {
         return new Period(
             startDate: CarbonImmutable::today()->subYears($years)->startOfYear(),
             endDate: CarbonImmutable::today()->startOfYear()->subDay(),
