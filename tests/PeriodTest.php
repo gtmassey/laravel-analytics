@@ -278,33 +278,33 @@ class PeriodTest extends TestCase
         $this->assertEquals('2019-12-31', $period->endDate->toDateString());
     }
 
-	public function test_current_calendar_quarter(): void
-	{
-		CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
+    public function test_current_calendar_quarter(): void
+    {
+        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
 
-		$period = Period::thisQuarter();
+        $period = Period::thisQuarter();
 
-		$dateRange = $period->getDateRange();
+        $dateRange = $period->getDateRange();
 
-		$this->assertInstanceOf(DateRange::class, $dateRange);
+        $this->assertInstanceOf(DateRange::class, $dateRange);
 
-		$this->assertEquals('2022-10-01', $dateRange->getStartDate());
-		$this->assertEquals('2022-11-24', $dateRange->getEndDate());
-	}
+        $this->assertEquals('2022-10-01', $dateRange->getStartDate());
+        $this->assertEquals('2022-11-24', $dateRange->getEndDate());
+    }
 
-	public function test_current_calendar_quarter_excluding_today(): void
-	{
-		CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
+    public function test_current_calendar_quarter_excluding_today(): void
+    {
+        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
 
-		$period = Period::thisQuarterExcludingToday();
+        $period = Period::thisQuarterExcludingToday();
 
-		$dateRange = $period->getDateRange();
+        $dateRange = $period->getDateRange();
 
-		$this->assertInstanceOf(DateRange::class, $dateRange);
+        $this->assertInstanceOf(DateRange::class, $dateRange);
 
-		$this->assertEquals('2022-10-01', $dateRange->getStartDate());
-		$this->assertEquals('2022-11-23', $dateRange->getEndDate());
-	}
+        $this->assertEquals('2022-10-01', $dateRange->getStartDate());
+        $this->assertEquals('2022-11-23', $dateRange->getEndDate());
+    }
 
     public function test_get_date_ranges(): void
     {
