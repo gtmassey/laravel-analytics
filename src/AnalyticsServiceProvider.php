@@ -52,7 +52,7 @@ class AnalyticsServiceProvider extends PackageServiceProvider
 
         $fileContents = @file_get_contents($file);
 
-        if ($fileContents === FALSE) {
+        if ($fileContents === false) {
             throw new InvalidArgumentException('The credentials file could not be read.');
         }
 

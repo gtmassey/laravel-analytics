@@ -17,7 +17,6 @@ use Spatie\LaravelData\Exceptions\InvalidDataCollectionOperation;
 
 class AnalyticsTest extends TestCase
 {
-
     public function test_client_init_with_default_credentials_env(): void
     {
         putenv('GOOGLE_APPLICATION_CREDENTIALS='.storage_path('/framework/testing/disks/testing-storage/test-credentials.json'));
@@ -60,13 +59,13 @@ class AnalyticsTest extends TestCase
         $this->assertInstanceOf(BetaAnalyticsDataClient::class, Analytics::query()->getClient());
     }
 
-	public function test_default_constructor(): void
-	{
-		config()->set('analytics.credentials.file');
-		config()->set('analytics.credentials.json', json_encode($this->credentials()));
+    public function test_default_constructor(): void
+    {
+        config()->set('analytics.credentials.file');
+        config()->set('analytics.credentials.json', json_encode($this->credentials()));
 
-		$this->assertInstanceOf(Analytics::class, new Analytics());
-	}
+        $this->assertInstanceOf(Analytics::class, new Analytics());
+    }
 
     /**
      * @throws ApiException
@@ -167,98 +166,96 @@ class AnalyticsTest extends TestCase
         $this->assertEquals('analyticsData#runReport', $responseData->kind);
     }
 
-	public function test_property_string_is_empty_exception(): void
-	{
-		config()->set('analytics.credentials.file');
+    public function test_property_string_is_empty_exception(): void
+    {
+        config()->set('analytics.credentials.file');
         config()->set('analytics.credentials.json', json_encode($this->credentials()));
-		config()->set('analytics.property_id', null);
+        config()->set('analytics.property_id', null);
 
+        $this->expectException(\Exception::class);
 
-		$this->expectException(\Exception::class);
+        Analytics::query();
+    }
 
-		Analytics::query();
-	}
-
-	public function test_property_string_is_not_string_exception(): void
-	{
-		config()->set('analytics.credentials.file');
+    public function test_property_string_is_not_string_exception(): void
+    {
+        config()->set('analytics.credentials.file');
         config()->set('analytics.credentials.json', json_encode($this->credentials()));
-		config()->set('analytics.property_id', 1234);
+        config()->set('analytics.property_id', 1234);
 
+        $this->expectException(\Exception::class);
 
-		$this->expectException(\Exception::class);
+        Analytics::query();
+    }
 
-		Analytics::query();
-	}
+    public function test_credentials_file_invalid_argument_exception(): void
+    {
+        config()->set('analytics.credentials.file', null);
 
-	public function test_credentials_file_invalid_argument_exception(): void
-	{
-		config()->set('analytics.credentials.file', null);
+        $this->expectException(InvalidArgumentException::class);
 
-		$this->expectException(InvalidArgumentException::class);
+        Analytics::query();
+    }
 
-		Analytics::query();
-	}
+    public function test_credentials_file_invalid_argument_exception_not_string(): void
+    {
+        config()->set('analytics.credentials.file', 1234);
 
-	public function test_credentials_file_invalid_argument_exception_not_string(): void
-	{
-		config()->set('analytics.credentials.file', 1234);
+        $this->expectException(InvalidArgumentException::class);
 
-		$this->expectException(InvalidArgumentException::class);
+        Analytics::query();
+    }
 
-		Analytics::query();
-	}
+    public function test_credentials_file_could_not_be_read_exception(): void
+    {
+        config()->set('analytics.credentials.file', 'invalid-file.json');
 
-	public function test_credentials_file_could_not_be_read_exception(): void
-	{
-		config()->set('analytics.credentials.file', 'invalid-file.json');
+        $this->expectException(InvalidArgumentException::class);
 
-		$this->expectException(InvalidArgumentException::class);
+        Analytics::query();
+    }
 
-		Analytics::query();
-	}
+    public function test_credentials_file_could_not_be_parsed(): void
+    {
+        //create temporary file with invalid json
+        $filename = tempnam(sys_get_temp_dir(), 'test');
+        file_put_contents($filename, 'invalid json');
 
-	public function test_credentials_file_could_not_be_parsed(): void
-	{
-		//create temporary file with invalid json
-		$filename = tempnam(sys_get_temp_dir(), 'test');
-		file_put_contents($filename, 'invalid json');
+        //set the config to use the temporary file
+        config()->set('analytics.credentials.file', $filename);
 
-		//set the config to use the temporary file
-		config()->set('analytics.credentials.file', $filename);
+        $this->expectException(InvalidArgumentException::class);
 
-		$this->expectException(InvalidArgumentException::class);
+        Analytics::query();
+    }
 
-		Analytics::query();
-	}
+    public function test_credentials_json_exception(): void
+    {
+        config()->set('analytics.credentials.file');
+        config()->set('analytics.credentials.json', null);
 
-	public function test_credentials_json_exception(): void
-	{
-		config()->set('analytics.credentials.file');
-		config()->set('analytics.credentials.json', null);
+        $this->expectException(InvalidArgumentException::class);
 
-		$this->expectException(InvalidArgumentException::class);
+        Analytics::query();
+    }
 
-		Analytics::query();
-	}
+    public function test_credentials_json_exception_json_decode(): void
+    {
+        config()->set('analytics.credentials.file');
+        config()->set('analytics.credentials.json', 'invalid json');
 
-	public function test_credentials_json_exception_json_decode(): void
-	{
-		config()->set('analytics.credentials.file');
-		config()->set('analytics.credentials.json', 'invalid json');
+        $this->expectException(InvalidArgumentException::class);
 
-		$this->expectException(InvalidArgumentException::class);
+        Analytics::query();
+    }
 
-		Analytics::query();
-	}
+    public function test_credentials_json_exception_empty_json(): void
+    {
+        config()->set('analytics.credentials.file');
+        config()->set('analytics.credentials.json', json_encode([]));
 
-	public function test_credentials_json_exception_empty_json(): void
-	{
-		config()->set('analytics.credentials.file');
-		config()->set('analytics.credentials.json', json_encode([]));
+        $this->expectException(InvalidArgumentException::class);
 
-		$this->expectException(InvalidArgumentException::class);
-
-		Analytics::query();
-	}
+        Analytics::query();
+    }
 }
