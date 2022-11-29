@@ -5,7 +5,6 @@ namespace GarrettMassey\Analytics;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 use Closure;
-use GarrettMassey\Analytics\Exceptions\InvalidPeriodException;
 use Google\Analytics\Data\V1beta\DateRange;
 
 class Period
@@ -162,13 +161,13 @@ class Period
         );
     }
 
-	public static function lastQuarters(int $n): self
-	{
-		return new Period(
-			startDate: CarbonImmutable::today()->subQuartersNoOverflow($n)->startOfQuarter(),
-			endDate: CarbonImmutable::today()->startOfQuarter()->subDay(),
-		);
-	}
+    public static function lastQuarters(int $n): self
+    {
+        return new Period(
+            startDate: CarbonImmutable::today()->subQuartersNoOverflow($n)->startOfQuarter(),
+            endDate: CarbonImmutable::today()->startOfQuarter()->subDay(),
+        );
+    }
 
     public static function thisYear(): self
     {
