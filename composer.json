@@ -32,7 +32,8 @@
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-mockery": "^1.1",
         "phpstan/phpstan-phpunit": "^1.2.2",
-        "phpunit/phpunit": "^9.5.26"
+        "phpunit/phpunit": "^9.5.26",
+        "rregeer/phpunit-coverage-check": "^0.3.1"
     },
     "autoload": {
         "psr-4": {
