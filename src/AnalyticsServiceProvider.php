@@ -2,7 +2,6 @@
 
 namespace GarrettMassey\Analytics;
 
-use GarrettMassey\Analytics\Commands\AnalyticsCommand;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use InvalidArgumentException;
 use Spatie\LaravelPackageTools\Package;
