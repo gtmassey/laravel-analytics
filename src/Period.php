@@ -165,7 +165,7 @@ class Period
     /**
      * @throws InvalidPeriodException
      */
-    public static function specificQuarter(int $year, int $quarter): self
+    public static function getQuarter(int $year, int $quarter): self
     {
         //first, determine if the year type is calendar or fiscal
         $yearType = config('analytics.year_type');
@@ -243,6 +243,20 @@ class Period
             default:
                 throw InvalidPeriodException::invalidQuarter($quarter);
         }
+    }
+
+    public static function previousQuarterNDays(): self
+    {
+        //return a new period for the previous quarter where the end date
+        //is n days into the previous quarter, and where n is the number of days
+        //into the current quarter.
+        $today = CarbonImmutable::today();
+        $startOfQuarter = CarbonImmutable::today()->startOfQuarter();
+        $diff = $today->diffInDays($startOfQuarter);
+        return new Period(
+            startDate: CarbonImmutable::create($startOfQuarter->subQuarterNoOverflow()->startOfQuarter()),
+            endDate: CarbonImmutable::create($startOfQuarter->subQuarterNoOverflow()->startOfQuarter()->addDays($diff)),
+        );
     }
 
     /**
