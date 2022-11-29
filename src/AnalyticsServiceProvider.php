@@ -50,7 +50,7 @@ class AnalyticsServiceProvider extends PackageServiceProvider
             throw new InvalidArgumentException('The credentials file path must be a non-empty string.');
         }
 
-        $fileContents = file_get_contents($file);
+        $fileContents = @file_get_contents($file);
 
         if ($fileContents === false) {
             throw new InvalidArgumentException('The credentials file could not be read.');

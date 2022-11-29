@@ -119,43 +119,11 @@ class Analytics
     }
 
     /**
-     * Ability to add multiple metrics at a time in an array format
-     * for example:
-     * $query->metrics(['totalUsers', 'newUsers']);
+     * Add a date range to the query, required for most queries
      *
-     * @param  array  $metrics
+     * @param  Period  $period
      * @return $this
      */
-    public function metrics(array $metrics): static
-    {
-        $metricObj = new Metrics();
-        foreach ($metrics as $metric) {
-            $metricObj->$metric();
-        }
-        $this->metrics = $metricObj->getMetrics();
-
-        return $this;
-    }
-
-    /**
-     * Ability to add multiple metrics at a time in an array format
-     * for example:
-     * $query->metrics(['totalUsers', 'newUsers']);
-     *
-     * @param  array  $dimensions
-     * @return $this
-     */
-    public function dimensions(array $dimensions): static
-    {
-        $dimensionsObj = new Dimensions();
-        foreach ($dimensions as $dimension) {
-            $dimensionsObj->$dimension();
-        }
-        $this->dimensions = $dimensionsObj->getDimensions();
-
-        return $this;
-    }
-
     public function forPeriod(Period $period): static
     {
         $this->dateRanges->push($period->getDateRange());
