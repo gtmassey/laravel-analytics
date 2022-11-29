@@ -279,142 +279,45 @@ class PeriodTest extends TestCase
         $this->assertEquals('2019-12-31', $period->endDate->toDateString());
     }
 
-    public function test_current_calendar_quarter(): void
-    {
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
+    public function test_this_quarter(): void
+	{
+		CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-10'));
 
-        $period = Period::thisQuarter();
+		$period = Period::thisQuarter();
 
-        $dateRange = $period->getDateRange();
+		$this->assertEquals('2022-10-01', $period->startDate->toDateString());
+		$this->assertEquals('2022-11-10', $period->endDate->toDateString());
+	}
 
-        $this->assertInstanceOf(DateRange::class, $dateRange);
+	public function test_this_quarter_excluding_today(): void
+	{
+		CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-10'));
 
-        $this->assertEquals('2022-10-01', $dateRange->getStartDate());
-        $this->assertEquals('2022-11-24', $dateRange->getEndDate());
-    }
+		$period = Period::thisQuarterExcludingToday();
 
-    public function test_current_calendar_quarter_excluding_today(): void
-    {
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
+		$this->assertEquals('2022-10-01', $period->startDate->toDateString());
+		$this->assertEquals('2022-11-09', $period->endDate->toDateString());
+	}
 
-        $period = Period::thisQuarterExcludingToday();
+	public function test_last_quarter(): void
+	{
+		CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-10'));
 
-        $dateRange = $period->getDateRange();
+		$period = Period::lastQuarter();
 
-        $this->assertInstanceOf(DateRange::class, $dateRange);
+		$this->assertEquals('2022-07-01', $period->startDate->toDateString());
+		$this->assertEquals('2022-09-30', $period->endDate->toDateString());
+	}
 
-        $this->assertEquals('2022-10-01', $dateRange->getStartDate());
-        $this->assertEquals('2022-11-23', $dateRange->getEndDate());
-    }
+	public function test_last_quarters(): void
+	{
+		CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-10'));
 
-    public function test_previous_quarter(): void
-    {
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
+		$period = Period::lastQuarters(2);
 
-        $period = Period::previousQuarter();
-
-        $dateRange = $period->getDateRange();
-
-        $this->assertInstanceOf(DateRange::class, $dateRange);
-
-        $this->assertEquals('2022-07-01', $dateRange->getStartDate());
-        $this->assertEquals('2022-09-30', $dateRange->getEndDate());
-    }
-
-    public function test_get_quarter_fiscal_year(): void
-    {
-        //set the analytics config year_type to 'fiscal'
-        config(['analytics.year_type' => 'fiscal']);
-
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
-
-        $period = Period::getQuarter(2022, 2);
-
-        $dateRange = $period->getDateRange();
-
-        $this->assertInstanceOf(DateRange::class, $dateRange);
-
-        $this->assertEquals('2022-10-01', $dateRange->getStartDate());
-        $this->assertEquals('2022-11-24', $dateRange->getEndDate());
-    }
-
-    public function test_get_future_quarter_fiscal_year(): void
-    {
-        config(['analytics.year_type' => 'fiscal']);
-
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
-
-        //assert that an exception is thrown
-        $this->expectException(InvalidPeriodException::class);
-
-        //this should throw an exception, because FY Q3 is in the future given
-        //a test date of 2022-11-24 (FY Q3 starts 2023-01-01)
-        $period = Period::getQuarter(2022, 3);
-    }
-
-    public function test_get_quarter_calendar_year(): void
-    {
-        //set the analytics config year_type to 'calendar'
-        config(['analytics.year_type' => 'calendar']);
-
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
-
-        $period = Period::getQuarter(2022, 1);
-
-        $dateRange = $period->getDateRange();
-
-        $this->assertInstanceOf(DateRange::class, $dateRange);
-
-        $this->assertEquals('2022-01-01', $dateRange->getStartDate());
-        $this->assertEquals('2022-03-31', $dateRange->getEndDate());
-
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-02-03'));
-
-        $period = Period::getQuarter(2022, 1);
-
-        $dateRange = $period->getDateRange();
-
-        $this->assertInstanceOf(DateRange::class, $dateRange);
-
-        $this->assertEquals('2022-01-01', $dateRange->getStartDate());
-        $this->assertEquals('2022-02-03', $dateRange->getEndDate());
-    }
-
-    public function test_get_future_quarter_calendar_year(): void
-    {
-        config(['analytics.year_type' => 'calendar']);
-
-        //this date is in Q2 of calendar year 2022
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-05-05'));
-
-        //assert that an exception is thrown
-        $this->expectException(InvalidPeriodException::class);
-
-        //this should throw an exception, because Q4 is in the future given
-        //a test date of 2022-05-05 (Q4 starts 2022-10-01)
-        $period = Period::getQuarter(2022, 4);
-    }
-
-    public function test_get_previous_quarter_n_days(): void
-    {
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-10-02'));
-
-        $quarter = Period::thisQuarter();
-
-        $thisQuarterDates = $quarter->getDateRange();
-
-        $previousQuarterNDays = Period::previousQuarterNDays();
-
-        $previousQuarterDates = $previousQuarterNDays->getDateRange();
-
-        $this->assertInstanceOf(DateRange::class, $thisQuarterDates);
-        $this->assertInstanceOf(DateRange::class, $previousQuarterDates);
-
-        $this->assertEquals('2022-10-01', $thisQuarterDates->getStartDate());
-        $this->assertEquals('2022-10-02', $thisQuarterDates->getEndDate());
-        $this->assertEquals('2022-07-01', $previousQuarterDates->getStartDate());
-        $this->assertEquals('2022-07-02', $previousQuarterDates->getEndDate());
-    }
+		$this->assertEquals('2022-04-01', $period->startDate->toDateString());
+		$this->assertEquals('2022-09-30', $period->endDate->toDateString());
+	}
 
     public function test_get_date_ranges(): void
     {
