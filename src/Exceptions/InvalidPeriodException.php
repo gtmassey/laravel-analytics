@@ -38,7 +38,7 @@ final class InvalidPeriodException extends \Exception
         return new static($message);
     }
 
-    public static function invalidYearType(string $yearType): InvalidPeriodException
+    public static function invalidYearType(mixed $yearType): InvalidPeriodException
     {
         $message = 'Year type '.$yearType.' is not a valid year type. $yearType must be either "calendar" or "fiscal".';
 
