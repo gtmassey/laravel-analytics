@@ -24,14 +24,14 @@ final class InvalidPeriodException extends \Exception
         return new static($message);
     }
 
-    public static function cannotGetFutureQuarter($quarter): InvalidPeriodException
+    public static function cannotGetFutureQuarter(int $quarter): InvalidPeriodException
     {
         $message = 'Q'.$quarter.' is in the future. Cannot get future quarters.';
 
         return new static($message);
     }
 
-    public static function invalidQuarter($quarter): InvalidPeriodException
+    public static function invalidQuarter(int $quarter): InvalidPeriodException
     {
         $message = 'Q'.$quarter.' is not a valid quarter. $quarter must be between 1 and 4.';
 
