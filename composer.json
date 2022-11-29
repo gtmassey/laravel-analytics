@@ -48,7 +48,7 @@
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
         "analyze": "vendor/bin/phpstan analyse",
-        "test": "./vendor/bin/testbench package:test --parallel",
+        "test": "./vendor/bin/testbench package:test --parallel && ./vendor/bin/coverage-check build/logs/clover.xml 90",
         "pint": "./vendor/bin/pint"
     },
     "config": {

@@ -19,8 +19,7 @@ class AnalyticsServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('analytics')
-            ->hasConfigFile('analytics')
-            ->hasCommand(AnalyticsCommand::class);
+            ->hasConfigFile('analytics');
 
         $this->app->bind(BetaAnalyticsDataClient::class, function () {
             $credentials = $this->parseCredentials();
