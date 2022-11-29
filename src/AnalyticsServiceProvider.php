@@ -2,7 +2,6 @@
 
 namespace GarrettMassey\Analytics;
 
-use GarrettMassey\Analytics\Commands\AnalyticsCommand;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use InvalidArgumentException;
 use Spatie\LaravelPackageTools\Package;
@@ -19,8 +18,7 @@ class AnalyticsServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('analytics')
-            ->hasConfigFile('analytics')
-            ->hasCommand(AnalyticsCommand::class);
+            ->hasConfigFile('analytics');
 
         $this->app->bind(BetaAnalyticsDataClient::class, function () {
             $credentials = $this->parseCredentials();

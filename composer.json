@@ -32,7 +32,8 @@
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-mockery": "^1.1",
         "phpstan/phpstan-phpunit": "^1.2.2",
-        "phpunit/phpunit": "^9.5.26"
+        "phpunit/phpunit": "^9.5.26",
+        "rregeer/phpunit-coverage-check": "^0.3.1"
     },
     "autoload": {
         "psr-4": {
@@ -47,7 +48,7 @@
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
         "analyze": "vendor/bin/phpstan analyse",
-        "test": "./vendor/bin/testbench package:test --parallel",
+        "test": "./vendor/bin/testbench package:test --parallel && ./vendor/bin/coverage-check build/logs/clover.xml 90",
         "pint": "./vendor/bin/pint"
     },
     "config": {

@@ -52,3 +52,6 @@ jobs:
 
             - name: Execute tests
               run: vendor/bin/phpunit
+
+            - name: Check coverage
+              run: vendor/bin/coverage-check build/logs/clover.xml 90
