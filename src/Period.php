@@ -253,6 +253,7 @@ class Period
         $today = CarbonImmutable::today();
         $startOfQuarter = CarbonImmutable::today()->startOfQuarter();
         $diff = $today->diffInDays($startOfQuarter);
+
         return new Period(
             startDate: CarbonImmutable::create($startOfQuarter->subQuarterNoOverflow()->startOfQuarter()),
             endDate: CarbonImmutable::create($startOfQuarter->subQuarterNoOverflow()->startOfQuarter()->addDays($diff)),
