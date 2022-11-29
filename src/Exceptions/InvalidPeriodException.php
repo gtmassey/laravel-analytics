@@ -24,16 +24,23 @@ final class InvalidPeriodException extends \Exception
         return new static($message);
     }
 
-    public static function startDateCannotBeInTheFuture(DateTimeInterface $startDate): InvalidPeriodException
+    public static function cannotGetFutureQuarter(int $quarter): InvalidPeriodException
     {
-        $message = "Start date `{$startDate->format('Y-m-d')}` cannot be in the future.";
+        $message = 'Q'.$quarter.' is in the future. Cannot get future quarters.';
 
         return new static($message);
     }
 
-    public static function endDateCannotBeInTheFuture(DateTimeInterface $endDate): InvalidPeriodException
+    public static function invalidQuarter(int $quarter): InvalidPeriodException
     {
-        $message = "End date `{$endDate->format('Y-m-d')}` cannot be in the future.";
+        $message = 'Q'.$quarter.' is not a valid quarter. $quarter must be between 1 and 4.';
+
+        return new static($message);
+    }
+
+    public static function invalidYearType(mixed $yearType): InvalidPeriodException
+    {
+        $message = 'Year type '.$yearType.' is not a valid year type. $yearType must be either "calendar" or "fiscal".';
 
         return new static($message);
     }

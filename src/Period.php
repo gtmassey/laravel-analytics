@@ -39,7 +39,7 @@ class Period
     }
 
     /**
-     * @param (Closure(): Period)|null $periodClosure
+     * @param    (Closure(): Period)|null    $periodClosure
      * @return void
      */
     public static function setDefaultPeriodClosure(?Closure $periodClosure = null): void
@@ -161,10 +161,10 @@ class Period
         );
     }
 
-    public static function lastQuarters(int $quarters): self
+    public static function lastQuarters(int $n): self
     {
         return new Period(
-            startDate: CarbonImmutable::today()->subQuartersNoOverflow($quarters)->startOfQuarter(),
+            startDate: CarbonImmutable::today()->subQuartersNoOverflow($n)->startOfQuarter(),
             endDate: CarbonImmutable::today()->startOfQuarter()->subDay(),
         );
     }
@@ -190,8 +190,9 @@ class Period
         );
     }
 
-    public static function lastYears(int $years): self
-    {
+    public static function lastYears(
+        int $years
+    ): self {
         return new Period(
             startDate: CarbonImmutable::today()->subYears($years)->startOfYear(),
             endDate: CarbonImmutable::today()->startOfYear()->subDay(),

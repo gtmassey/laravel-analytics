@@ -231,53 +231,6 @@ class PeriodTest extends TestCase
         $this->assertEquals('2022-02-28', $period->endDate->toDateString());
     }
 
-    public function test_this_quarter(): void
-    {
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
-
-        $period = Period::thisQuarter();
-
-        $this->assertEquals('2022-10-01', $period->startDate->toDateString());
-        $this->assertEquals('2022-11-24', $period->endDate->toDateString());
-    }
-
-    public function test_this_quarter_excluding_today(): void
-    {
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-24'));
-
-        $period = Period::thisQuarterExcludingToday();
-
-        $this->assertEquals('2022-10-01', $period->startDate->toDateString());
-        $this->assertEquals('2022-11-23', $period->endDate->toDateString());
-
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-10-01'));
-
-        $period = Period::thisQuarterExcludingToday();
-
-        $this->assertEquals('2022-10-01', $period->startDate->toDateString());
-        $this->assertEquals('2022-10-01', $period->endDate->toDateString());
-    }
-
-    public function test_last_quarter(): void
-    {
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-09-30'));
-
-        $period = Period::lastQuarter();
-
-        $this->assertEquals('2022-04-01', $period->startDate->toDateString());
-        $this->assertEquals('2022-06-30', $period->endDate->toDateString());
-    }
-
-    public function test_last_quarters(): void
-    {
-        CarbonImmutable::setTestNow(CarbonImmutable::parse('2021-12-31'));
-
-        $period = Period::lastQuarters(2);
-
-        $this->assertEquals('2021-04-01', $period->startDate->toDateString());
-        $this->assertEquals('2021-09-30', $period->endDate->toDateString());
-    }
-
     public function test_this_year(): void
     {
         CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-10-10'));
@@ -323,6 +276,46 @@ class PeriodTest extends TestCase
 
         $this->assertEquals('2018-01-01', $period->startDate->toDateString());
         $this->assertEquals('2019-12-31', $period->endDate->toDateString());
+    }
+
+    public function test_this_quarter(): void
+    {
+        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-10'));
+
+        $period = Period::thisQuarter();
+
+        $this->assertEquals('2022-10-01', $period->startDate->toDateString());
+        $this->assertEquals('2022-11-10', $period->endDate->toDateString());
+    }
+
+    public function test_this_quarter_excluding_today(): void
+    {
+        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-10'));
+
+        $period = Period::thisQuarterExcludingToday();
+
+        $this->assertEquals('2022-10-01', $period->startDate->toDateString());
+        $this->assertEquals('2022-11-09', $period->endDate->toDateString());
+    }
+
+    public function test_last_quarter(): void
+    {
+        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-10'));
+
+        $period = Period::lastQuarter();
+
+        $this->assertEquals('2022-07-01', $period->startDate->toDateString());
+        $this->assertEquals('2022-09-30', $period->endDate->toDateString());
+    }
+
+    public function test_last_quarters(): void
+    {
+        CarbonImmutable::setTestNow(CarbonImmutable::parse('2022-11-10'));
+
+        $period = Period::lastQuarters(2);
+
+        $this->assertEquals('2022-04-01', $period->startDate->toDateString());
+        $this->assertEquals('2022-09-30', $period->endDate->toDateString());
     }
 
     public function test_get_date_ranges(): void
