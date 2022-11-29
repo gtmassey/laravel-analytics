@@ -118,13 +118,12 @@ class Analytics
         return $this;
     }
 
-	/**
-	 * Add a date range to the query, required for most queries
-	 *
-	 * @param    Period    $period
-	 *
-	 * @return $this
-	 */
+    /**
+     * Add a date range to the query, required for most queries
+     *
+     * @param  Period  $period
+     * @return $this
+     */
     public function forPeriod(Period $period): static
     {
         $this->dateRanges->push($period->getDateRange());
