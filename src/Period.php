@@ -180,7 +180,7 @@ class Period
     /**
      * @throws InvalidPeriodException
      */
-    public static function specificFiscalQuarter(int $year, int $quarter): self
+    private static function specificFiscalQuarter(int $year, int $quarter): self
     {
         $yearType = config('analytics.year_type');
         $today = CarbonImmutable::today();
@@ -262,7 +262,7 @@ class Period
     /**
      * @throws InvalidPeriodException
      */
-    public static function specificCalendarQuarter(int $year, int $quarter): self
+    private static function specificCalendarQuarter(int $year, int $quarter): self
     {
         $yearType = config('analytics.year_type');
         $today = CarbonImmutable::today();
