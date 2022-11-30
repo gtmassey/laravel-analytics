@@ -195,8 +195,12 @@ If you discover any security related issues, please email contact@garrettmassey.
 
 ## Credits
 
-- [Garrett Massey][https://www.garrettmassey.net/]
+- [Garrett Massey](https://www.garrettmassey.net/)
 - [All Contributors][link-contributors]
+
+Special thanks to [Plytas](https://github.com/Plytas) for their early and significant contributions to the project. Without their help setting things up and their willingness to teach me new tools and techniques, this project would be dead in its tracks.
+
+And a huge thanks to the team over at [Spatie](https://github.com/spatie) for their continued contributions to the open source community! Some of their work is used in this project, and I have used their packages as a foundation for projects for years.
 
 ## License
 
