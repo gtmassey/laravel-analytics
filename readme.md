@@ -13,16 +13,15 @@ Build Google Analytics queries in Laravel with ease.
 
 * [Installation](#instal)
 * [Setup](#setup)
-    * As ENV file (default)
-    * Separate JSON File
-    * JSON String
-    * Separate Values
-
-* Usage
-    * Query Builder
-    * Default Reports
-* Changelog
-* Testing
+    * [As ENV file (default)](#env)
+    * [Separate JSON File](#json)
+    * [JSON String](#jsonString)
+    * [Separate Values](#vals)
+* [Usage](#usage)
+    * [Query Builder](#querybuilder)
+    * [Default Reports](#defaultreports)
+* [Changelog](#changelog)
+* [#Testing](#testing)
 
 ## <a name="instal">Installation</a>
 
@@ -80,7 +79,7 @@ Once the key is created, download the JSON file and save it somewhere safe. You 
 
 You can use these credentials in several ways:
 
-### As ENV value (default)
+### <a name="env">As ENV value (default)</a>
 This is ideal setup if you're using only one service account for your application.
 
 Specify the path to the JSON file in your .env file:
@@ -88,7 +87,7 @@ Specify the path to the JSON file in your .env file:
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
 ```
 
-### As a separate JSON file
+### <a name="json">As a separate JSON file</a>
 If you have multiple service accounts, you can instruct this package to use a specific one:
 
 ```dotenv
@@ -96,7 +95,7 @@ ANALYTICS_CREDENTIALS_USE_ENV=false
 ANALYTICS_CREDENTIALS_FILE=/path/to/credentials.json
 ```
 
-### As a JSON string
+### <a name="jsonString">As a JSON string</a>
 If you don't want to store the credentials in a file, you can specify the JSON string directly in your .env file:
 
 ```dotenv
@@ -104,7 +103,7 @@ ANALYTICS_CREDENTIALS_USE_ENV=false
 ANALYTICS_CREDENTIALS_JSON="{type: service_account, project_id: ...}"
 ```
 
-### As separate values
+### <a name="vals">As separate values</a>
 You can also specify the credentials as separate values in your .env file:
 
 ```dotenv
@@ -142,7 +141,7 @@ Once installation is complete, you can run Google Analytics Data API queries in 
 
 All Google Analytics Data API queries require a date range to be run. Use the `Period` or `Quarter` classes to generate a period of time for the query.
 
-### Query Builder:
+### <a name="querybuilder">Query Builder:</a>
 ```php
 use GarrettMassey\Analytics\Analytics;
 use GarrettMassey\Analytics\Period;
@@ -160,7 +159,7 @@ $report->setMetrics(function ($q) {
 })->forPeriod($period)->run();
 ```
 
-### Default Reports:
+### <a name="defaultreports">Default Reports:</a>
 
 #### getTopEvents()
 ```php
@@ -174,11 +173,11 @@ example output:
 
 ```
 
-## Change log
+## <a name="changelog">Change log</a>
 
 To Be Completed
 
-## Testing
+## <a name="testing">Testing</a>
 
 TODO: write tests
 
