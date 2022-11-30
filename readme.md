@@ -25,29 +25,41 @@ If you do not have a project set up on Google Cloud Platform, visit [console.clo
 
 Once you have a project, make sure you have selected that project in the top left corner of the console.
 
-//PIC
+![Screen Shot 2022-11-30 at 2 22 35 PM](https://user-images.githubusercontent.com/109831143/204912891-624b9403-12f4-484a-8d12-368d8b56a805.png)
 
 Select APIs & Services from the quick access cards on the dashboard.
 
-//PIC
+![Screen Shot 2022-11-30 at 2 22 54 PM](https://user-images.githubusercontent.com/109831143/204912927-8acb75be-f92e-451c-8e06-cae33430425a.png)
 
-Make sure you have Google Analytics Data API enabled. NOTE: this is NOT the same API as Google Analytics API. The Data API is the required API for this package.
+Make sure you have Google Analytics Data API enabled. NOTE: this is NOT the same API as Google Analytics API. The Data API is the required API for this package. If you do not have the Google Analytics Data API enabled, you can add it to your Cloud Console account by clicking "enable APIs and Services"
 
-//PIC
+![Screen Shot 2022-11-30 at 2 23 25 PM](https://user-images.githubusercontent.com/109831143/204913094-e8967a6b-fed8-43c1-afbc-fafa3c6d0907.png)
+
+You can search for the Google Analytics Data API and enable it through the Google API Library
+
+![Screen Shot 2022-11-30 at 2 24 09 PM](https://user-images.githubusercontent.com/109831143/204913299-365425cb-b71e-41fe-aa55-fbefcb7c6b6f.png)
+
+![Screen Shot 2022-11-30 at 2 24 21 PM](https://user-images.githubusercontent.com/109831143/204913340-17655e94-8233-404d-9c29-ed100273453c.png)
 
 Once enabled, select the Google Analytics Data API from the list of APIs, and click the Credentials tab.
 
-//PIC
+![Screen Shot 2022-11-30 at 2 24 48 PM](https://user-images.githubusercontent.com/109831143/204913379-d751a05f-5884-4f8e-a952-845312f1cad5.png)
+
+If you already have a service account set up with this API, you can skip the next step.
 
 Click the Create Credentials button, and select Service Account.
 
-//PIC
+![Screen Shot 2022-11-30 at 2 26 24 PM](https://user-images.githubusercontent.com/109831143/204913480-2eaa83e4-f786-4815-9848-d533587d0a51.png)
 
 Select the role you want to assign to the service account. For this package, the minimum role is the Viewer role.
 
-//PIC
+Once your service account has been created, click on the account to go to the IAM & Admin section of Google Cloud Console.
 
-Once the service account is created, add a new key to the service account. Select JSON as the key type.
+In the Service Accounts section of the IAM & Admin page, select the appropriate service account, and create a new JSON key for the account:
+
+![Screen Shot 2022-11-30 at 2 27 01 PM](https://user-images.githubusercontent.com/109831143/204913731-8907f7ec-17ad-453e-8721-7098d71e3ab9.png)
+
+![Screen Shot 2022-11-30 at 2 27 14 PM](https://user-images.githubusercontent.com/109831143/204913810-41a9739b-fdb9-4500-8e81-aaf083bb873c.png)
 
 Once the key is created, download the JSON file and save it somewhere safe. You will need this file to use this package. If you lose this file, you will have to create a new service account. Google does not let you re-issue keys.
 
@@ -97,20 +109,15 @@ ANALYTICS_CREDENTIALS_CLIENT_X509_CERT_URL=...
 > **Warning**
 > Package will always prioritize `GOOGLE_APPLICATION_CREDENTIALS` env value over other options. If you want to use a separate service account, make sure to set `ANALYTICS_CREDENTIALS_USE_ENV=false`.
 
-//PIC
-
 Finally, open Google Analytics, and copy the property ID for the property you want to query. You will need this ID to use this package.
 
-//PIC
+![Screen Shot 2022-11-30 at 2 40 42 PM](https://user-images.githubusercontent.com/109831143/204914645-385e0b5c-f248-4dad-b99c-2064f5ca8be6.png)
 
-Set the property ID in your `.env` file, along with the year type (either fiscal or calendar).
+Set the property ID in your `.env` file.
 
 ```dotenv
-ANALYTICS_YEAR_TYPE="fiscal|calendar"
 ANALYTICS_PROPERTY_ID="XXXXXXXXX"
 ```
-
-where the year type is whether you consider Quarter 1 to be January-March (calendar) or July-September (fiscal).
 
 Now you're ready to start!
 
@@ -139,28 +146,6 @@ $report->setMetrics(function ($q) {
     $q->pagePath();
 })->forPeriod($period)->run();
 ```
-
-This will return a collection of rows with additional fields for the metrics and dimensions.
-
-### 2. Arrays
-```php
-use GarrettMassey\Analytics\Analytics;
-use GarrettMassey\Analytics\Period;
-
-$period = Period::create(
-    Carbon::create('2020', '01', '01'),
-    Carbon::create('2020', '01', '31')
-);
-
-$report = Analytics::query();
-$report->metrics([
-    'totalUsers'
-])->dimensions([
-    'pagePath'
-])->forPeriod($period)->run();
-```
-
-This will return the same collection as the callback example. The two methods exist as a way to help build different queries based on user preference.
 
 ### Provided Methods:
 
