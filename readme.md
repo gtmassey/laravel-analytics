@@ -9,7 +9,22 @@
 
 Build Google Analytics queries in Laravel with ease.
 
-## Installation
+**Table of Contents:**
+
+* [Installation](#instal)
+* [Setup](#setup)
+    * As ENV file (default)
+    * Separate JSON File
+    * JSON String
+    * Separate Values
+
+* Usage
+    * Query Builder
+    * Default Reports
+* Changelog
+* Testing
+
+## <a name="instal">Installation</a>
 
 Via Composer
 
@@ -17,7 +32,7 @@ Via Composer
 composer require garrettmassey/analytics
 ```
 
-## Setup
+## <a name="setup">Setup</a>
 
 To use this package, you must have a Google Cloud Service Accounts Credential.
 
@@ -127,9 +142,7 @@ Once installation is complete, you can run Google Analytics Data API queries in 
 
 All Google Analytics Data API queries require a date range to be run. Use the `Period` or `Quarter` classes to generate a period of time for the query.
 
-You can use two approaches to add query parameters to the request.
-
-### 1. Callbacks
+### Query Builder:
 ```php
 use GarrettMassey\Analytics\Analytics;
 use GarrettMassey\Analytics\Period;
@@ -147,7 +160,7 @@ $report->setMetrics(function ($q) {
 })->forPeriod($period)->run();
 ```
 
-### Provided Methods:
+### Default Reports:
 
 #### getTopEvents()
 ```php
