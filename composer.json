@@ -23,10 +23,10 @@
         "spatie/laravel-package-tools": "^1.13"
     },
     "require-dev": {
-        "laravel/pint": "^1.2",
+        "laravel/pint": "^1.2.1",
         "nunomaduro/collision": "^6.3.1",
         "nunomaduro/larastan": "^2.2.9",
-        "orchestra/testbench": "^7.14",
+        "orchestra/testbench": "^7.15",
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-mockery": "^1.1",
