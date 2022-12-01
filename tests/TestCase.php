@@ -4,7 +4,6 @@ namespace GarrettMassey\Analytics\Tests;
 
 use Exception;
 use GarrettMassey\Analytics\AnalyticsServiceProvider;
-use Illuminate\Support\Facades\Storage;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\LaravelData\LaravelDataServiceProvider;
 
@@ -23,19 +22,8 @@ class TestCase extends Orchestra
      */
     public function getEnvironmentSetUp($app)
     {
-        $disk = Storage::fake('testing-storage');
-
-        $encodedCredentials = json_encode($this->credentials());
-
-        if (! $encodedCredentials) {
-            throw new Exception('Failed to encode credentials');
-        }
-
-        $disk->put('test-credentials.json', $encodedCredentials);
-        $credentialsFile = storage_path('/framework/testing/disks/testing-storage/test-credentials.json');
-
         config()->set('analytics.property_id', 'test123');
-        config()->set('analytics.credentials.file', $credentialsFile);
+        config()->set('analytics.credentials.array', $this->credentials());
     }
 
     protected function credentials(): array

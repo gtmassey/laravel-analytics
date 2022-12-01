@@ -23,7 +23,6 @@
         "spatie/laravel-package-tools": "^1.13"
     },
     "require-dev": {
-        "brianium/paratest": "^6.6.5",
         "laravel/pint": "^1.2",
         "nunomaduro/collision": "^6.3.1",
         "nunomaduro/larastan": "^2.2.9",
@@ -48,7 +47,7 @@
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
         "analyze": "vendor/bin/phpstan analyse --xdebug",
-        "test": "./vendor/bin/testbench package:test --parallel && ./vendor/bin/coverage-check build/logs/clover.xml 95",
+        "test": "./vendor/bin/testbench package:test && ./vendor/bin/coverage-check build/logs/clover.xml 95",
         "pint": "./vendor/bin/pint"
     },
     "config": {
