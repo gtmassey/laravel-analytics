@@ -20,7 +20,7 @@ Build Google Analytics queries in Laravel with ease.
     * [Query Builder](#querybuilder)
     * [Default Reports](#defaultreports)
 * [Changelog](#changelog)
-* [#Testing](#testing)
+* [Testing](#testing)
 
 ## <a name="instal">Installation</a>
 
