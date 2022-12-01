@@ -178,11 +178,13 @@ To Be Completed
 
 ## <a name="testing">Testing</a>
 
-TODO: write tests
+To run tests, run:
 
 ```bash
 composer test
 ```
+
+Note that this command also runs code coverage analysis.
 
 ## Contributing
 
