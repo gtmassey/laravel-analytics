@@ -9,7 +9,7 @@ use Spatie\LaravelData\DataCollection;
 class ResponseData extends Data
 {
     /**
-     * @param  DataCollection<int, DimensionHeader>  $dimensionHeaders
+     * @param  DataCollection<int, DimensionHeader>|null  $dimensionHeaders
      * @param  DataCollection<int, MetricHeader>  $metricHeaders
      * @param  DataCollection<int, Row>  $rows
      * @param  DataCollection<int, Total>|null  $totals
@@ -20,7 +20,7 @@ class ResponseData extends Data
      */
     public function __construct(
         #[DataCollectionOf(DimensionHeader::class)]
-        public DataCollection $dimensionHeaders,
+        public DataCollection|null $dimensionHeaders,
         #[DataCollectionOf(MetricHeader::class)]
         public DataCollection $metricHeaders,
         #[DataCollectionOf(Row::class)]
