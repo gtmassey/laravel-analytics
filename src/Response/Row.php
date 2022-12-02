@@ -14,7 +14,7 @@ class Row extends Data
      */
     public function __construct(
         #[DataCollectionOf(DimensionValue::class)]
-        public DataCollection|null $dimensionValues,
+        public ?DataCollection $dimensionValues,
         #[DataCollectionOf(MetricValue::class)]
         public DataCollection $metricValues,
     ) {

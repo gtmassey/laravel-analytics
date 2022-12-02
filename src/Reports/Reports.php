@@ -52,17 +52,14 @@ trait Reports
      */
     public static function getUserEngagement(?Period $period = null): ResponseData
     {
-        //get the average session duration
-        //get the number of sessions that lasted longer than 10 seconds, or had > 2 pageviews
-        //get the number of sessions per user
-        //get the total number of sessions
         return Analytics::query()
-            ->setMetrics(function (Metrics $metric) {
-                return $metric->averageSessionDuration()
-                    ->engagedSessions()
-                    ->sessionsPerUser()
-                    ->sessions();
-            })->forPeriod($period ?? Period::defaultPeriod())
+            ->setMetrics(fn (Metrics $metric) => $metric
+                ->averageSessionDuration()
+                ->engagedSessions()
+                ->sessionsPerUser()
+                ->sessions()
+            )
+            ->forPeriod($period ?? Period::defaultPeriod())
             ->run();
     }
 }

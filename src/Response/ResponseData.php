@@ -20,7 +20,7 @@ class ResponseData extends Data
      */
     public function __construct(
         #[DataCollectionOf(DimensionHeader::class)]
-        public DataCollection|null $dimensionHeaders,
+        public ?DataCollection $dimensionHeaders,
         #[DataCollectionOf(MetricHeader::class)]
         public DataCollection $metricHeaders,
         #[DataCollectionOf(Row::class)]
