@@ -5,6 +5,10 @@ on:
     paths:
       - '**.php'
 
+concurrency:
+    group: build-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
 jobs:
   php-code-styling:
     runs-on: ubuntu-latest
