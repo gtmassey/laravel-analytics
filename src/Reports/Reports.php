@@ -3,9 +3,9 @@
 namespace GarrettMassey\Analytics\Reports;
 
 use GarrettMassey\Analytics\Analytics;
-use GarrettMassey\Analytics\Parameters\Dimensions;
-use GarrettMassey\Analytics\Parameters\Metrics;
 use GarrettMassey\Analytics\Period;
+use GarrettMassey\Analytics\Request\Dimensions;
+use GarrettMassey\Analytics\Request\Metrics;
 use GarrettMassey\Analytics\Response\ResponseData;
 use Google\ApiCore\ApiException;
 

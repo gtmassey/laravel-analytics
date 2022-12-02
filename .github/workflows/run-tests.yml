@@ -1,14 +1,10 @@
-name: run-tests
+name: Tests
 
 on:
     push:
         branches: [main]
     pull_request:
         branches: [main]
-
-concurrency:
-    group: build-${{ github.event.pull_request.number || github.ref }}
-    cancel-in-progress: true
 
 jobs:
     test:
@@ -54,4 +50,4 @@ jobs:
               run: vendor/bin/phpunit
 
             - name: Check coverage
-              run: vendor/bin/coverage-check build/logs/clover.xml 95
+              run: vendor/bin/coverage-check build/logs/clover.xml 100

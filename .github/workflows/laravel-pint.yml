@@ -1,9 +1,10 @@
 name: Run Laravel Pint
 
 on:
-  push:
-    paths:
-      - '**.php'
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
 
 jobs:
   php-code-styling:

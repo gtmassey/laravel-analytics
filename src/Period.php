@@ -20,10 +20,10 @@ class Period
 
     private static int $startOfWeek = CarbonInterface::MONDAY;
 
-    public function __construct(CarbonImmutable $startDate, CarbonImmutable $endDate)
+    public function __construct(CarbonInterface $startDate, CarbonInterface $endDate)
     {
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
+        $this->startDate = $startDate->toImmutable();
+        $this->endDate = $endDate->toImmutable();
     }
 
     public static function defaultPeriod(): self
@@ -57,7 +57,7 @@ class Period
         self::$startOfWeek = $startOfWeek;
     }
 
-    public static function create(CarbonImmutable $startDate, CarbonImmutable $endDate): self
+    public static function create(CarbonInterface $startDate, CarbonInterface $endDate): self
     {
         return new Period($startDate, $endDate);
     }
