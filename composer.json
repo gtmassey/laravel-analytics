@@ -9,10 +9,11 @@
             "role": "Creator"
         }
     ],
-    "homepage": "https://github.com/gtmassey/Analytics",
+    "homepage": "https://github.com/gtmassey/laravel-analytics/",
     "keywords": [
         "Laravel",
-        "Analytics"
+        "Analytics",
+	"Google Analytics"
     ],
     "require": {
 		"php": "^8.1",
