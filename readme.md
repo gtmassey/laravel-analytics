@@ -271,7 +271,7 @@ Note that this command also runs code coverage analysis.
 
 ## Contributing
 
-Check out [the contributing guide](../contributing.md)
+Check out [the contributing guide](contributing.md)
 
 ## Security
 
