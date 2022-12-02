@@ -373,7 +373,7 @@ class ReportTest extends TestCase
                     $this->assertEquals('engagedSessions', $reportRequest['metrics'][1]->getName());
                     $this->assertEquals('sessionsPerUser', $reportRequest['metrics'][2]->getName());
                     $this->assertEquals('sessions', $reportRequest['metrics'][3]->getName());
-
+                    //empty commit
                     return true;
                 }))
                 ->once()
