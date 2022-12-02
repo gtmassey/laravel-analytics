@@ -264,7 +264,7 @@ This method returns a `ResponseData` object without dimensions. The query only c
 
 ## <a name="changelog">Change log</a>
 
-To Be Completed
+Read [CHANGELOG.md](changelog.md)
 
 ## <a name="testing">Testing</a>
 
