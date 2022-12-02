@@ -1,9 +1,10 @@
 name: Run Laravel Pint
 
 on:
-  push:
-    paths:
-      - '**.php'
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
 
 concurrency:
     group: build-${{ github.event.pull_request.number || github.ref }}
