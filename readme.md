@@ -29,7 +29,7 @@ Methods currently return an instance of `GarrettMassey\Analytics\Response\Respon
 Via Composer
 
 ```SHELL
-composer require garrettmassey/analytics
+composer require garrettmassey/laravel-analytics
 ```
 
 ## <a name="setup">Setup</a>
