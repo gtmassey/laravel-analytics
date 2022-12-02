@@ -142,27 +142,27 @@ All Google Analytics Data API queries require a date range to be run. Use the `P
 
 ### <a name="querybuilder">Query Builder:</a>
 ```php
+use GarrettMassey\Analytics\Request\Dimensions;
+use GarrettMassey\Analytics\Request\Metrics;
 use GarrettMassey\Analytics\Analytics;
 use GarrettMassey\Analytics\Period;
-use GarrettMassey\Analytics\Request\Metrics;
-use GarrettMassey\Analytics\Request\Dimensions;
-
-$period = Period::create(
-    Carbon::create('2020', '01', '01'),
-    Carbon::create('2020', '01', '31')
-);
+use Carbon\Carbon;
 
 $report = Analytics::query()
-    ->setMetrics(fn(Metrics $metrics) => $metrics
-        ->totalUsers()
-        ->sessions()
-    )
-    ->setDimensions(fn(Dimensions $dimensions) => $dimensions
-        ->pagePath()
-    )
-    ->forPeriod($period)
-    ->withTotals()
-    ->run();
+     ->setMetrics(function (Metrics $metrics) {
+         return $metrics->active1DayUsers()
+             ->active7DayUsers()
+             ->active28DayUsers();
+     })->forPeriod(Period::defaultPeriod())
+     ->run();
+
+ $report2 = Analytics::query()
+     ->setMetrics(function (Metrics $metrics) {
+         return $metrics->sessions();
+     })->setDimensions(function (Dimensions $dimensions) {
+         return $dimensions->pageTitle();
+     })->forPeriod(Period::create(Carbon::now()->subDays(30), Carbon::now()))
+     ->run();
 ```
 
 ### <a name="defaultreports">Default Reports:</a>
