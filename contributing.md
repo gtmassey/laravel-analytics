@@ -4,12 +4,15 @@ Contributions are welcome and will be fully credited.
 
 Contributions are accepted via Pull Requests on [Github](https://github.com/garrettmassey/analytics).
 
+Your pull request cannot be merged unless it passes existing tests, and meets the code coverage requirements set by the repo.
+
 # Things you could do
 If you want to contribute but do not know where to start, this list provides some starting points.
-- Add license text
-- Remove rewriteRules.php
 - Set up TravisCI, StyleCI, ScrutinizerCI
-- Write a comprehensive ReadMe
+- Consider backwards compatability with Laravel 6 & 7, and PHP7.4 +
+- Suggest new pre-built queries and reports!
+- Contribute when the Google Analytics Data API leaves beta
+
 
 ## Pull Requests
 
