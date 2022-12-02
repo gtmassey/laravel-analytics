@@ -228,7 +228,7 @@ class AnalyticsTest extends TestCase
                         'tokensPerProjectPerHour' => [
                             'consumed' => 9,
                             'remaining' => 1231,
-                        ]
+                        ],
                     ],
                     'kind' => 'analyticsData#runReport',
                 ]));
