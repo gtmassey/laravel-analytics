@@ -164,8 +164,8 @@ class Analytics
         );
         $request = collect(['property' => 'properties/'.$this->propertyID]);
         $request = $request->merge($resource);
-//        $request->offsetSet('metricAggregations', [MetricAggregation::TOTAL]);
-//        $request->offsetSet('returnPropertyQuota', true);
+        //$request->offsetSet('metricAggregations', [MetricAggregation::TOTAL]);
+        //$request->offsetSet('returnPropertyQuota', true);
         //get the last error message from json
         //ddd($request->toArray());
 

@@ -211,6 +211,9 @@ class ReportTest extends TestCase
         $this->assertInstanceOf(ResponseData::class, Analytics::getUserAcquisitionOverview());
     }
 
+    /**
+     * @throws \Google\ApiCore\ApiException
+     */
     public function test_get_top_pages(): void
     {
         CarbonImmutable::setTestNow(CarbonImmutable::create(2022, 11, 21));
