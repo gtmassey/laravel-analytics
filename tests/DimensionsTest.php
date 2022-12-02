@@ -3,7 +3,7 @@
 namespace GarrettMassey\Analytics\Tests;
 
 use Closure;
-use GarrettMassey\Analytics\Parameters\Dimensions;
+use GarrettMassey\Analytics\Request\Dimensions;
 use Generator;
 use Google\Analytics\Data\V1beta\Dimension;
 use Illuminate\Support\Collection;

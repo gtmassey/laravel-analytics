@@ -2,7 +2,6 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
-[![Build Status][ico-travis]][link-travis]
 
 ### This project is not ready for use and is still in development. Access to the repository is limited until an alpha or beta version is available.
 
@@ -138,24 +137,31 @@ Now you're ready to start!
 
 Once installation is complete, you can run Google Analytics Data API queries in your application.
 
-All Google Analytics Data API queries require a date range to be run. Use the `Period` or `Quarter` classes to generate a period of time for the query.
+All Google Analytics Data API queries require a date range to be run. Use the `Period` class to generate a period of time for the query.
 
 ### <a name="querybuilder">Query Builder:</a>
 ```php
 use GarrettMassey\Analytics\Analytics;
 use GarrettMassey\Analytics\Period;
+use GarrettMassey\Analytics\Request\Metrics;
+use GarrettMassey\Analytics\Request\Dimensions;
 
 $period = Period::create(
     Carbon::create('2020', '01', '01'),
     Carbon::create('2020', '01', '31')
 );
 
-$report = Analytics::query();
-$report->setMetrics(function ($q) {
-    $q->totalUsers();
-})->setDimensions(function ($q) {
-    $q->pagePath();
-})->forPeriod($period)->run();
+$report = Analytics::query()
+    ->setMetrics(fn(Metrics $metrics) => $metrics
+        ->totalUsers()
+        ->sessions()
+    )
+    ->setDimensions(fn(Dimensions $dimensions) => $dimensions
+        ->pagePath()
+    )
+    ->forPeriod($period)
+    ->withTotals()
+    ->run();
 ```
 
 ### <a name="defaultreports">Default Reports:</a>
@@ -292,10 +298,8 @@ MIT. Please see the [license file](license.md) for more information.
 
 [ico-version]: https://img.shields.io/packagist/v/garrettmassey/analytics.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/garrettmassey/analytics.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/garrettmassey/analytics/master.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/garrettmassey/analytics
 [link-downloads]: https://packagist.org/packages/garrettmassey/analytics
-[link-travis]: https://travis-ci.org/garrettmassey/analytics
 [link-author]: https://github.com/gtmassey
 [link-contributors]: ../../contributors

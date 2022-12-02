@@ -3,7 +3,7 @@
 namespace GarrettMassey\Analytics\Tests;
 
 use Closure;
-use GarrettMassey\Analytics\Parameters\Metrics;
+use GarrettMassey\Analytics\Request\Metrics;
 use Generator;
 use Google\Analytics\Data\V1beta\Metric;
 use Illuminate\Support\Collection;

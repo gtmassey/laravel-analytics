@@ -2,6 +2,7 @@
 
 namespace GarrettMassey\Analytics\Response;
 
+use Google\Analytics\Data\V1beta\RunReportResponse;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
@@ -32,5 +33,14 @@ class ResponseData extends Data
         public ?PropertyQuota $propertyQuota,
         public string $kind,
     ) {
+    }
+
+    public static function fromReportResponse(RunReportResponse $reportResponse): static
+    {
+        $json = $reportResponse->serializeToJsonString();
+
+        $report = json_decode($json, true);
+
+        return self::from($report);
     }
 }

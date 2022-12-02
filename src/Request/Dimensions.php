@@ -1,6 +1,6 @@
 <?php
 
-namespace GarrettMassey\Analytics\Parameters;
+namespace GarrettMassey\Analytics\Request;
 
 use Google\Analytics\Data\V1beta\Dimension;
 use Illuminate\Support\Collection;
