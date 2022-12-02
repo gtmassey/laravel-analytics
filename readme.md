@@ -165,12 +165,95 @@ $report->setMetrics(function ($q) {
 $report = Analytics::getTopEvents();
 ```
 
-this method returns a collection of the top 10 events in the last 30 days, ordered by event count in descending order.
+This method returns the top events for the given period. It accepts a `Period` object as an optional parameter.
+
+If a `Period` object is not passed, it will use the default period set in `Period::defaultPeriod()`.
+
+The method will return an instance of `GarrettMassey\Analytics\Response\ResponseData`, which contains `DimensionHeaders`, `MetricHeaders`, `Rows`, and additional metadata.
 
 example output:
+```bash
+GarrettMassey\Analytics\Response\ResponseData {
+  +dimensionHeaders: Spatie\LaravelData\DataCollection {
+    +items: array:1 [
+      0 => GarrettMassey\Analytics\Response\DimensionHeader {
+        +name: "eventName"
+      }
+    ]
+  }
+  +metricHeaders: Spatie\LaravelData\DataCollection {
+    +items: array:1 [
+      0 => GarrettMassey\Analytics\Response\MetricHeader {
+        +name: "eventCount"
+        +type: "TYPE_INTEGER"
+      }
+    ]
+  }
+  +rows: Spatie\LaravelData\DataCollection {
+    +items: array:6 [
+      0 => GarrettMassey\Analytics\Response\Row {
+        +dimensionValues: Spatie\LaravelData\DataCollection {
+          +items: array:1 [
+            0 => GarrettMassey\Analytics\Response\DimensionValue {
+              +value: "page_view"
+            }
+          ]
+        }
+        +metricValues: Spatie\LaravelData\DataCollection {
+          +items: array:1 [
+            0 => GarrettMassey\Analytics\Response\MetricValue {
+              +value: "1510"
+            }
+          ]
+        }
+      }
+      1 => GarrettMassey\Analytics\Response\Row {}
+      2 => GarrettMassey\Analytics\Response\Row {}
+      3 => GarrettMassey\Analytics\Response\Row {}
+      4 => GarrettMassey\Analytics\Response\Row {}
+      5 => GarrettMassey\Analytics\Response\Row {}
+    ]
+  }
+  +totals: null
+  +rowCount: 6
+  +metadata: GarrettMassey\Analytics\Response\Metadata {}
+  +propertyQuota: null
+  +kind: "analyticsData#runReport"
+}
 ```
 
+#### getTopPages()
+
+```php
+$report = Analytics::getTopPages();
 ```
+
+This method returns the top pages for the given period. It accepts a `Period` object as an optional parameter.
+
+The pages along with the sessions for that page are listed in the `Rows` property of the response.
+
+#### getUserAcquisitionOverview()
+
+```php
+$report = Analytics::getUserAcquisitionOverview();
+```
+
+This method returns the user acquisition overview for the given period. It accepts a `Period` object as an optional parameter.
+
+The method will return a `ResponseData` object with the number of sessions by the session's primary acquisition source. Primary acquisition sources are either "direct", "Referral", "Organic Search", and "Organic Social".
+
+#### getUserEngagement()
+
+```php
+$report = Analytics::getUserEngagement();
+```
+
+This method returns a `ResponseData` object without dimensions. The query only contains metrics. The `ResponseData` object will contain:
+
+* average session duration, in seconds
+* number of engaged sessions
+* number of sessions per user
+* total number of sessions
 
 ## <a name="changelog">Change log</a>
 
