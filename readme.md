@@ -6,7 +6,9 @@
 
 ### This project is not ready for use and is still in development. Access to the repository is limited until an alpha or beta version is available.
 
-Build Google Analytics queries in Laravel with ease.
+Build Google Analytics Data API queries in Laravel with ease!
+
+Methods currently return an instance of `GarrettMassey\Analytics\Response\ResponseData`, containing the dimension and metric headers, and results in `rows`.
 
 **Table of Contents:**
 
