@@ -20,7 +20,7 @@ Build Google Analytics queries in Laravel with ease.
     * [Query Builder](#querybuilder)
     * [Default Reports](#defaultreports)
 * [Changelog](#changelog)
-* [#Testing](#testing)
+* [Testing](#testing)
 
 ## <a name="instal">Installation</a>
 
@@ -178,11 +178,13 @@ To Be Completed
 
 ## <a name="testing">Testing</a>
 
-TODO: write tests
+To run tests, run:
 
 ```bash
 composer test
 ```
+
+Note that this command also runs code coverage analysis.
 
 ## Contributing
 
