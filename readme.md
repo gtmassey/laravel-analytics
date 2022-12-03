@@ -29,7 +29,7 @@ Methods currently return an instance of `Gtmassey\LaravelAnalytics\ResponseData`
 Via Composer
 
 ```SHELL
-composer require garrettmassey/laravel-analytics
+composer require gtmassey\laravel-analytics
 ```
 
 ## <a name="setup">Setup</a>
@@ -144,10 +144,10 @@ All Google Analytics Data API queries require a date range to be run. Use the `P
 
 ### <a name="querybuilder">Query Builder:</a>
 ```php
-use GarrettMassey\Analytics\Request\Dimensions;
-use GarrettMassey\Analytics\Request\Metrics;
-use GarrettMassey\Analytics\Analytics;
-use GarrettMassey\Analytics\Period;
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\LaravelAnalytics\Period;
 use Carbon\Carbon;
 
 $report = Analytics::query()
@@ -182,17 +182,17 @@ The method will return an instance of `Gtmassey\LaravelAnalytics\Response\Respon
 
 example output:
 ```bash
-GarrettMassey\Analytics\Response\ResponseData {
+Gtmassey\LaravelAnalytics\Response\ResponseData {
   +dimensionHeaders: Spatie\LaravelData\DataCollection {
     +items: array:1 [
-      0 => GarrettMassey\Analytics\Response\DimensionHeader {
+      0 => Gtmassey\LaravelAnalytics\Response\DimensionHeader {
         +name: "eventName"
       }
     ]
   }
   +metricHeaders: Spatie\LaravelData\DataCollection {
     +items: array:1 [
-      0 => GarrettMassey\Analytics\Response\MetricHeader {
+      0 => Gtmassey\LaravelAnalytics\Response\MetricHeader {
         +name: "eventCount"
         +type: "TYPE_INTEGER"
       }
@@ -200,32 +200,32 @@ GarrettMassey\Analytics\Response\ResponseData {
   }
   +rows: Spatie\LaravelData\DataCollection {
     +items: array:6 [
-      0 => GarrettMassey\Analytics\Response\Row {
+      0 => Gtmassey\LaravelAnalytics\Response\Row {
         +dimensionValues: Spatie\LaravelData\DataCollection {
           +items: array:1 [
-            0 => GarrettMassey\Analytics\Response\DimensionValue {
+            0 => Gtmassey\LaravelAnalytics\Response\DimensionValue {
               +value: "page_view"
             }
           ]
         }
         +metricValues: Spatie\LaravelData\DataCollection {
           +items: array:1 [
-            0 => GarrettMassey\Analytics\Response\MetricValue {
+            0 => Gtmassey\LaravelAnalytics\Response\MetricValue {
               +value: "1510"
             }
           ]
         }
       }
-      1 => GarrettMassey\Analytics\Response\Row {}
-      2 => GarrettMassey\Analytics\Response\Row {}
-      3 => GarrettMassey\Analytics\Response\Row {}
-      4 => GarrettMassey\Analytics\Response\Row {}
-      5 => GarrettMassey\Analytics\Response\Row {}
+      1 => Gtmassey\LaravelAnalytics\Response\Row {}
+      2 => Gtmassey\LaravelAnalytics\Response\Row {}
+      3 => Gtmassey\LaravelAnalytics\Response\Row {}
+      4 => Gtmassey\LaravelAnalytics\Response\Row {}
+      5 => Gtmassey\LaravelAnalytics\Response\Row {}
     ]
   }
   +totals: null
   +rowCount: 6
-  +metadata: GarrettMassey\Analytics\Response\Metadata {}
+  +metadata: Gtmassey\LaravelAnalytics\Response\Metadata {}
   +propertyQuota: null
   +kind: "analyticsData#runReport"
 }
