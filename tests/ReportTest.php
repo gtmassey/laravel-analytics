@@ -1,17 +1,17 @@
 <?php
 
-namespace GarrettMassey\Analytics\Tests;
+namespace Gtmassey\LaravelAnalytics\Tests;
 
 use Carbon\CarbonImmutable;
 use Closure;
-use GarrettMassey\Analytics\Analytics;
-use GarrettMassey\Analytics\Response\ResponseData;
 use Generator;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
 use Google\Analytics\Data\V1beta\Metric;
 use Google\Analytics\Data\V1beta\RunReportResponse;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\LaravelAnalytics\Response\ResponseData;
 use Mockery;
 use Mockery\MockInterface;
 

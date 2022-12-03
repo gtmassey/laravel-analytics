@@ -8,7 +8,7 @@
 
 Build Google Analytics Data API queries in Laravel with ease!
 
-Methods currently return an instance of `GarrettMassey\Analytics\Response\ResponseData`, containing the dimension and metric headers, and results in `rows`.
+Methods currently return an instance of `Gtmassey\LaravelAnalytics\ResponseData`, containing the dimension and metric headers, and results in `rows`.
 
 **Table of Contents:**
 
@@ -178,7 +178,7 @@ This method returns the top events for the given period. It accepts a `Period` o
 
 If a `Period` object is not passed, it will use the default period set in `Period::defaultPeriod()`.
 
-The method will return an instance of `GarrettMassey\Analytics\Response\ResponseData`, which contains `DimensionHeaders`, `MetricHeaders`, `Rows`, and additional metadata.
+The method will return an instance of `Gtmassey\LaravelAnalytics\Response\ResponseData`, which contains `DimensionHeaders`, `MetricHeaders`, `Rows`, and additional metadata.
 
 example output:
 ```bash

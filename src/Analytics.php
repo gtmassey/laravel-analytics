@@ -1,16 +1,16 @@
 <?php
 
-namespace GarrettMassey\Analytics;
+namespace Gtmassey\LaravelAnalytics;
 
 use Closure;
-use GarrettMassey\Analytics\Exceptions\InvalidPropertyIdException;
-use GarrettMassey\Analytics\Reports\Reports;
-use GarrettMassey\Analytics\Request\Dimensions;
-use GarrettMassey\Analytics\Request\Metrics;
-use GarrettMassey\Analytics\Request\RequestData;
-use GarrettMassey\Analytics\Response\ResponseData;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use Google\ApiCore\ApiException;
+use Gtmassey\LaravelAnalytics\Exceptions\InvalidPropertyIdException;
+use Gtmassey\LaravelAnalytics\Reports\Reports;
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use Gtmassey\LaravelAnalytics\Request\RequestData;
+use Gtmassey\LaravelAnalytics\Response\ResponseData;
 
 class Analytics
 {

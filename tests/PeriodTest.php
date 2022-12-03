@@ -1,11 +1,11 @@
 <?php
 
-namespace GarrettMassey\Analytics\Tests;
+namespace Gtmassey\LaravelAnalytics\Tests;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
-use GarrettMassey\Analytics\Period;
 use Google\Analytics\Data\V1beta\DateRange;
+use Gtmassey\LaravelAnalytics\Period;
 
 class PeriodTest extends TestCase
 {

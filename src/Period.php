@@ -1,6 +1,6 @@
 <?php
 
-namespace GarrettMassey\Analytics;
+namespace Gtmassey\LaravelAnalytics;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;

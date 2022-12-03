@@ -1,13 +1,13 @@
 <?php
 
-namespace GarrettMassey\Analytics\Reports;
+namespace Gtmassey\LaravelAnalytics\Reports;
 
-use GarrettMassey\Analytics\Analytics;
-use GarrettMassey\Analytics\Period;
-use GarrettMassey\Analytics\Request\Dimensions;
-use GarrettMassey\Analytics\Request\Metrics;
-use GarrettMassey\Analytics\Response\ResponseData;
 use Google\ApiCore\ApiException;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\LaravelAnalytics\Period;
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use Gtmassey\LaravelAnalytics\Response\ResponseData;
 
 trait Reports
 {

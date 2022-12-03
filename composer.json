@@ -37,12 +37,12 @@
     },
     "autoload": {
         "psr-4": {
-            "GarrettMassey\\Analytics\\": "src/"
+            "Gtmassey\\LaravelAnalytics\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "GarrettMassey\\Analytics\\Tests\\": "tests"
+            "Gtmassey\\LaravelAnalytics\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -60,7 +60,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "gtmassey\\Analytics\\AnalyticsServiceProvider"
+                "Gtmassey\\LaravelAnalytics\\AnalyticsServiceProvider"
             ]
         }
     },

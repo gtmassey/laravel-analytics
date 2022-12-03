@@ -1,10 +1,10 @@
 <?php
 
-namespace GarrettMassey\Analytics;
+namespace Gtmassey\LaravelAnalytics;
 
-use GarrettMassey\Analytics\Exceptions\InvalidCredentialsArrayException;
-use GarrettMassey\Analytics\Exceptions\InvalidCredentialsFileException;
-use GarrettMassey\Analytics\Exceptions\InvalidCredentialsJsonStringException;
+use Gtmassey\LaravelAnalytics\Exceptions\InvalidCredentialsArrayException;
+use Gtmassey\LaravelAnalytics\Exceptions\InvalidCredentialsFileException;
+use Gtmassey\LaravelAnalytics\Exceptions\InvalidCredentialsJsonStringException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 
