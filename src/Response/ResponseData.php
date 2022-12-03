@@ -1,6 +1,6 @@
 <?php
 
-namespace GarrettMassey\Analytics\Response;
+namespace Gtmassey\LaravelAnalytics\Response;
 
 use Google\Analytics\Data\V1beta\RunReportResponse;
 use Spatie\LaravelData\Attributes\DataCollectionOf;

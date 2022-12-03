@@ -1,6 +1,6 @@
 <?php
 
-namespace GarrettMassey\Analytics\Response\Quotas;
+namespace Gtmassey\LaravelAnalytics\Response\Quotas;
 
 use Spatie\LaravelData\Data;
 

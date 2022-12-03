@@ -1,6 +1,6 @@
 <?php
 
-namespace GarrettMassey\Analytics\Request;
+namespace Gtmassey\LaravelAnalytics\Request;
 
 use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;

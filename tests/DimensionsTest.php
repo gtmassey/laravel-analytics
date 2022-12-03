@@ -1,11 +1,11 @@
 <?php
 
-namespace GarrettMassey\Analytics\Tests;
+namespace Gtmassey\LaravelAnalytics\Tests;
 
 use Closure;
-use GarrettMassey\Analytics\Request\Dimensions;
 use Generator;
 use Google\Analytics\Data\V1beta\Dimension;
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
 use Illuminate\Support\Collection;
 
 class DimensionsTest extends TestCase

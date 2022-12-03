@@ -1,9 +1,9 @@
 <?php
 
-namespace GarrettMassey\Analytics\Tests;
+namespace Gtmassey\LaravelAnalytics\Tests;
 
 use Exception;
-use GarrettMassey\Analytics\AnalyticsServiceProvider;
+use Gtmassey\LaravelAnalytics\AnalyticsServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\LaravelData\LaravelDataServiceProvider;
 

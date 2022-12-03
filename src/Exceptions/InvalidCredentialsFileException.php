@@ -1,6 +1,6 @@
 <?php
 
-namespace GarrettMassey\Analytics\Exceptions;
+namespace Gtmassey\LaravelAnalytics\Exceptions;
 
 use Exception;
 use Throwable;

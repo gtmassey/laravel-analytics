@@ -1,13 +1,13 @@
 <?php
 
-namespace GarrettMassey\Analytics\Response;
+namespace Gtmassey\LaravelAnalytics\Response;
 
-use GarrettMassey\Analytics\Response\Quotas\ConcurrentRequests;
-use GarrettMassey\Analytics\Response\Quotas\PotentiallyThresholdedRequestsPerHour;
-use GarrettMassey\Analytics\Response\Quotas\ServerErrorsPerProjectPerHour;
-use GarrettMassey\Analytics\Response\Quotas\TokensPerDay;
-use GarrettMassey\Analytics\Response\Quotas\TokensPerHour;
-use GarrettMassey\Analytics\Response\Quotas\TokensPerProjectPerHour;
+use Gtmassey\LaravelAnalytics\Response\Quotas\ConcurrentRequests;
+use Gtmassey\LaravelAnalytics\Response\Quotas\PotentiallyThresholdedRequestsPerHour;
+use Gtmassey\LaravelAnalytics\Response\Quotas\ServerErrorsPerProjectPerHour;
+use Gtmassey\LaravelAnalytics\Response\Quotas\TokensPerDay;
+use Gtmassey\LaravelAnalytics\Response\Quotas\TokensPerHour;
+use Gtmassey\LaravelAnalytics\Response\Quotas\TokensPerProjectPerHour;
 use Spatie\LaravelData\Data;
 
 class PropertyQuota extends Data

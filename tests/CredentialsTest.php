@@ -1,11 +1,11 @@
 <?php
 
-namespace GarrettMassey\Analytics\Tests;
+namespace Gtmassey\LaravelAnalytics\Tests;
 
-use GarrettMassey\Analytics\Credentials;
-use GarrettMassey\Analytics\Exceptions\InvalidCredentialsArrayException;
-use GarrettMassey\Analytics\Exceptions\InvalidCredentialsFileException;
-use GarrettMassey\Analytics\Exceptions\InvalidCredentialsJsonStringException;
+use Gtmassey\LaravelAnalytics\Credentials;
+use Gtmassey\LaravelAnalytics\Exceptions\InvalidCredentialsArrayException;
+use Gtmassey\LaravelAnalytics\Exceptions\InvalidCredentialsFileException;
+use Gtmassey\LaravelAnalytics\Exceptions\InvalidCredentialsJsonStringException;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace GarrettMassey\Analytics\Tests;
+namespace Gtmassey\LaravelAnalytics\Tests;
 
 use Closure;
-use GarrettMassey\Analytics\Request\Metrics;
 use Generator;
 use Google\Analytics\Data\V1beta\Metric;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
 use Illuminate\Support\Collection;
 
 class MetricsTest extends TestCase

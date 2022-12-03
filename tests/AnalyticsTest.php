@@ -1,20 +1,8 @@
 <?php
 
-namespace GarrettMassey\Analytics\Tests;
+namespace Gtmassey\LaravelAnalytics\Tests;
 
 use Carbon\CarbonImmutable;
-use GarrettMassey\Analytics\Analytics;
-use GarrettMassey\Analytics\Exceptions\InvalidPropertyIdException;
-use GarrettMassey\Analytics\Period;
-use GarrettMassey\Analytics\Request\Dimensions;
-use GarrettMassey\Analytics\Request\Metrics;
-use GarrettMassey\Analytics\Request\RequestData;
-use GarrettMassey\Analytics\Response\DimensionHeader;
-use GarrettMassey\Analytics\Response\MetricHeader;
-use GarrettMassey\Analytics\Response\PropertyQuota;
-use GarrettMassey\Analytics\Response\ResponseData;
-use GarrettMassey\Analytics\Response\Row;
-use GarrettMassey\Analytics\Response\Total;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
@@ -22,6 +10,18 @@ use Google\Analytics\Data\V1beta\Metric;
 use Google\Analytics\Data\V1beta\MetricAggregation;
 use Google\Analytics\Data\V1beta\RunReportResponse;
 use Google\ApiCore\ApiException;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\LaravelAnalytics\Exceptions\InvalidPropertyIdException;
+use Gtmassey\LaravelAnalytics\Period;
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use Gtmassey\LaravelAnalytics\Request\RequestData;
+use Gtmassey\LaravelAnalytics\Response\DimensionHeader;
+use Gtmassey\LaravelAnalytics\Response\MetricHeader;
+use Gtmassey\LaravelAnalytics\Response\PropertyQuota;
+use Gtmassey\LaravelAnalytics\Response\ResponseData;
+use Gtmassey\LaravelAnalytics\Response\Row;
+use Gtmassey\LaravelAnalytics\Response\Total;
 use Mockery;
 use Mockery\MockInterface;
 use ReflectionProperty;

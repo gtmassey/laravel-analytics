@@ -1,6 +1,6 @@
 <?php
 
-namespace GarrettMassey\Analytics;
+namespace Gtmassey\LaravelAnalytics;
 
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use Spatie\LaravelPackageTools\Package;
