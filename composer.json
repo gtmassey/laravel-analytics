@@ -1,5 +1,5 @@
 {
-    "name": "garrettmassey/analytics",
+    "name": "gtmassey/laravel-analytics",
     "description": "Create and run Google Analytics Data API queries in Laravel",
     "license": "MIT",
     "authors": [
@@ -60,7 +60,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "GarrettMassey\\Analytics\\AnalyticsServiceProvider"
+                "gtmassey\\Analytics\\AnalyticsServiceProvider"
             ]
         }
     },
