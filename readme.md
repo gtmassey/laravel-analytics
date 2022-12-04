@@ -2,7 +2,7 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
-[![Tests](https://github.com/gtmassey/Analytics/actions/workflows/run-tests.yml/badge.svg)](https://github.com/gtmassey/Analytics/actions/workflows/run-tests.yml)
+[![Tests][ico-tests]][link-tests]
 
 Build Google Analytics Data API queries in Laravel with ease!
 
@@ -297,10 +297,12 @@ And a huge thanks to the team over at [Spatie](https://github.com/spatie) for th
 
 MIT. Please see the [license file](license.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/garrettmassey/analytics.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/garrettmassey/analytics.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/gtmassey/laravel-analytics.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/gtmassey/laravel-analytics.svg?style=flat-square
+[ico-tests]: https://github.com/gtmassey/Analytics/actions/workflows/run-tests.yml/badge.svg
 
-[link-packagist]: https://packagist.org/packages/garrettmassey/analytics
-[link-downloads]: https://packagist.org/packages/garrettmassey/analytics
+[link-packagist]: https://packagist.org/packages/gtmassey/laravel-analytics
+[link-downloads]: https://packagist.org/packages/gtmassey/laravel-analytics
+[link-tests]: https://github.com/gtmassey/Analytics/actions/workflows/run-tests.yml
 [link-author]: https://github.com/gtmassey
 [link-contributors]: ../../contributors
