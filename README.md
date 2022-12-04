@@ -264,7 +264,7 @@ This method returns a `ResponseData` object without dimensions. The query only c
 
 ## <a name="changelog">Change log</a>
 
-Read [CHANGELOG.md](changelog.md)
+Read [CHANGELOG.md](CHANGELOG.md)
 
 ## <a name="testing">Testing</a>
 
@@ -278,7 +278,7 @@ Note that this command also runs code coverage analysis.
 
 ## Contributing
 
-Check out [the contributing guide](contributing.md)
+Check out [the contributing guide](CONTRIBUTING.md)
 
 ## Security
 
@@ -295,7 +295,7 @@ And a huge thanks to the team over at [Spatie](https://github.com/spatie) for th
 
 ## License
 
-MIT. Please see the [license file](license.md) for more information.
+MIT. Please see the [license file](LICENSE.md) for more information.
 
 [ico-version]: https://img.shields.io/packagist/v/gtmassey/laravel-analytics.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/gtmassey/laravel-analytics.svg?style=flat-square
