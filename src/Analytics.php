@@ -4,6 +4,7 @@ namespace Gtmassey\LaravelAnalytics;
 
 use Closure;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
+use Google\Analytics\Data\V1beta\DateRange;
 use Google\ApiCore\ApiException;
 use Gtmassey\LaravelAnalytics\Exceptions\InvalidPropertyIdException;
 use Gtmassey\LaravelAnalytics\Reports\Reports;
@@ -11,6 +12,7 @@ use Gtmassey\LaravelAnalytics\Request\Dimensions;
 use Gtmassey\LaravelAnalytics\Request\Metrics;
 use Gtmassey\LaravelAnalytics\Request\RequestData;
 use Gtmassey\LaravelAnalytics\Response\ResponseData;
+use Gtmassey\Period\Period;
 
 class Analytics
 {
@@ -78,7 +80,11 @@ class Analytics
 
     public function forPeriod(Period $period): static
     {
-        $this->requestData->dateRanges->push($period->getDateRange());
+        $dateRange = new DateRange([
+            'start_date' => $period->startDate->toDateString(),
+            'end_date' => $period->endDate->toDateString(),
+        ]);
+        $this->requestData->dateRanges->push($dateRange);
 
         return $this;
     }
