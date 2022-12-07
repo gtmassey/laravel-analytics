@@ -7,10 +7,10 @@ use Gtmassey\LaravelAnalytics\Request\Metrics;
 
 class CustomMetrics extends Metrics
 {
-	public function customMetric(): self
-	{
-		$this->metrics->push(new Metric(['name' => 'customMetric']));
+    public function customMetric(): self
+    {
+        $this->metrics->push(new Metric(['name' => 'customMetric']));
 
-		return $this;
-	}
+        return $this;
+    }
 }

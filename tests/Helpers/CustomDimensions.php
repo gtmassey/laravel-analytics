@@ -7,10 +7,10 @@ use Gtmassey\LaravelAnalytics\Request\Dimensions;
 
 class CustomDimensions extends Dimensions
 {
-	public function customDimension(): self
-	{
-		$this->dimensions->push(new Dimension(['name' => 'customDimension']));
+    public function customDimension(): self
+    {
+        $this->dimensions->push(new Dimension(['name' => 'customDimension']));
 
-		return $this;
-	}
+        return $this;
+    }
 }
