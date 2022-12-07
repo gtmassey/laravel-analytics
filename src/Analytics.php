@@ -54,7 +54,7 @@ class Analytics
      */
     public function setMetrics(Closure $callback): static
     {
-        $metrics = $callback(new Metrics());
+        $metrics = $callback(resolve(Metrics::class));
         $this->requestData->metrics->push(...$metrics->getMetrics());
 
         return $this;
@@ -70,7 +70,7 @@ class Analytics
      */
     public function setDimensions(Closure $callback): static
     {
-        $dimensions = $callback(new Dimensions());
+        $dimensions = $callback(resolve(Dimensions::class));
         $this->requestData->dimensions->push(...$dimensions->getDimensions());
 
         return $this;

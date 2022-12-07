@@ -22,6 +22,8 @@ use Gtmassey\LaravelAnalytics\Response\PropertyQuota;
 use Gtmassey\LaravelAnalytics\Response\ResponseData;
 use Gtmassey\LaravelAnalytics\Response\Row;
 use Gtmassey\LaravelAnalytics\Response\Total;
+use Gtmassey\LaravelAnalytics\Tests\Helpers\CustomDimensions;
+use Gtmassey\LaravelAnalytics\Tests\Helpers\CustomMetrics;
 use Mockery;
 use Mockery\MockInterface;
 use ReflectionProperty;
@@ -70,6 +72,25 @@ class AnalyticsTest extends TestCase
         $this->assertEquals(['sessions', 'bounceRate'], $requestMetrics);
     }
 
+	public function test_custom_metrics(): void
+	{
+		app()->bind(Metrics::class, CustomMetrics::class);
+
+		$analytics = Analytics::query()
+			->setMetrics(fn (CustomMetrics $metrics) => $metrics
+				->customMetric()
+				->sessions()
+			);
+
+		$this->assertInstanceOf(Analytics::class, $analytics);
+
+		/** @var RequestData $requestData */
+		$requestData = (new ReflectionProperty(Analytics::class, 'requestData'))->getValue($analytics);
+		$requestMetrics = $requestData->metrics->map(fn (Metric $metric) => $metric->getName())->toArray();
+
+		$this->assertEquals(['customMetric', 'sessions'], $requestMetrics);
+	}
+
     public function test_set_dimensions(): void
     {
         $analytics = Analytics::query()
@@ -85,6 +106,25 @@ class AnalyticsTest extends TestCase
 
         $this->assertEquals(['browser'], $requestDimensions);
     }
+
+	public function test_custom_dimensions(): void
+	{
+		app()->bind(Dimensions::class, CustomDimensions::class);
+
+		$analytics = Analytics::query()
+			->setDimensions(fn (CustomDimensions $dimensions) => $dimensions
+				->customDimension()
+				->browser()
+			);
+
+		$this->assertInstanceOf(Analytics::class, $analytics);
+
+		/** @var RequestData $requestData */
+		$requestData = (new ReflectionProperty(Analytics::class, 'requestData'))->getValue($analytics);
+		$requestDimensions = $requestData->dimensions->map(fn (Dimension $dimension) => $dimension->getName())->toArray();
+
+		$this->assertEquals(['customDimension', 'browser'], $requestDimensions);
+	}
 
     public function test_for_period(): void
     {

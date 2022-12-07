@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 class Dimensions
 {
     /** @var Collection<int, Dimension> */
-    private Collection $dimensions;
+    protected Collection $dimensions;
 
     public function __construct()
     {
