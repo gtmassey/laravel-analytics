@@ -4,10 +4,10 @@ namespace Gtmassey\LaravelAnalytics\Reports;
 
 use Google\ApiCore\ApiException;
 use Gtmassey\LaravelAnalytics\Analytics;
-use Gtmassey\LaravelAnalytics\Period;
 use Gtmassey\LaravelAnalytics\Request\Dimensions;
 use Gtmassey\LaravelAnalytics\Request\Metrics;
 use Gtmassey\LaravelAnalytics\Response\ResponseData;
+use Gtmassey\Period\Period;
 
 trait Reports
 {

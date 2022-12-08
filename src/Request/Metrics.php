@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 class Metrics
 {
     /** @var Collection<int, Metric> */
-    private Collection $metrics;
+    protected Collection $metrics;
 
     public function __construct()
     {

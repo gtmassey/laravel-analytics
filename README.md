@@ -18,6 +18,7 @@ Methods currently return an instance of `Gtmassey\LaravelAnalytics\ResponseData`
     * [Separate Values](#vals)
 * [Usage](#usage)
     * [Query Builder](#querybuilder)
+    * [Custom Metrics And Dimensions](#custommetrics)
     * [Default Reports](#defaultreports)
 * [Changelog](#changelog)
 * [Testing](#testing)
@@ -145,7 +146,7 @@ All Google Analytics Data API queries require a date range to be run. Use the `P
 use Gtmassey\LaravelAnalytics\Request\Dimensions;
 use Gtmassey\LaravelAnalytics\Request\Metrics;
 use Gtmassey\LaravelAnalytics\Analytics;
-use Gtmassey\LaravelAnalytics\Period;
+use Gtmassey\Period\Period;
 use Carbon\Carbon;
 
 $report = Analytics::query()
@@ -165,6 +166,60 @@ $report = Analytics::query()
      ->run();
 ```
 
+### <a name="custommetrics">Custom metrics and dimensions:</a>
+
+You are not limited to the metrics and dimensions provided by this package. You can use any custom metrics and dimensions you have created in Google Analytics.
+
+Create a new class that extends `Gtmassey\LaravelAnalytics\Request\CustomMetric` or `Gtmassey\LaravelAnalytics\Request\CustomDimension` and implement methods following this format:.
+
+```php
+namespace App\Analytics;
+
+use Google\Analytics\Data\V1beta\Metric;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+
+class CustomMetrics extends Metrics
+{
+    public function customMetric(): self
+    {
+        $this->metrics->push(new Metric(['name' => 'customEvent:parameter_name']));
+
+        return $this;
+    }
+}
+```
+
+Bind the class in your `AppServiceProvider`:
+
+```php
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use App\Analytics\CustomMetrics;
+//use Gtmassey\LaravelAnalytics\Request\Dimensions;
+//use App\Analytics\CustomDimensions;
+
+public function boot()
+{
+    $this->app->bind(Metrics::class, CustomMetrics::class);
+    //$this->app->bind(Dimensions::class, CustomDimensions::class);
+}
+```
+
+Now you can use the custom metric in your query:
+
+```php
+use App\Analytics\CustomMetrics;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\LaravelAnalytics\Period;
+
+$report = Analytics::query()
+     ->setMetrics(fn(CustomMetrics $metrics) => $metrics
+         ->customMetric()
+         ->sessions()
+     )
+     ->forPeriod(Period::defaultPeriod())
+     ->run();
+```
+
 ### <a name="defaultreports">Default Reports:</a>
 
 #### getTopEvents()
@@ -172,9 +227,9 @@ $report = Analytics::query()
 $report = Analytics::getTopEvents();
 ```
 
-This method returns the top events for the given period. It accepts a `Period` object as an optional parameter.
+This method returns the top events for the given period. It accepts a `Gtmassey\Period\Period` object as an optional parameter.
 
-If a `Period` object is not passed, it will use the default period set in `Period::defaultPeriod()`.
+If a `Gtmassey\Period\Period` object is not passed, it will use the default period set in `Gtmassey\Period\Period::defaultPeriod()`.
 
 The method will return an instance of `Gtmassey\LaravelAnalytics\Response\ResponseData`, which contains `DimensionHeaders`, `MetricHeaders`, `Rows`, and additional metadata.
 
@@ -235,7 +290,7 @@ Gtmassey\LaravelAnalytics\Response\ResponseData {
 $report = Analytics::getTopPages();
 ```
 
-This method returns the top pages for the given period. It accepts a `Period` object as an optional parameter.
+This method returns the top pages for the given period. It accepts a `Gtmassey\Period\Period` object as an optional parameter.
 
 The pages along with the sessions for that page are listed in the `Rows` property of the response.
 
@@ -245,7 +300,7 @@ The pages along with the sessions for that page are listed in the `Rows` propert
 $report = Analytics::getUserAcquisitionOverview();
 ```
 
-This method returns the user acquisition overview for the given period. It accepts a `Period` object as an optional parameter.
+This method returns the user acquisition overview for the given period. It accepts a `Gtmassey\Period\Period` object as an optional parameter.
 
 The method will return a `ResponseData` object with the number of sessions by the session's primary acquisition source. Primary acquisition sources are either "direct", "Referral", "Organic Search", and "Organic Social".
 
