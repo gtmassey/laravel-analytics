@@ -18,6 +18,7 @@ Methods currently return an instance of `Gtmassey\LaravelAnalytics\ResponseData`
     * [Separate Values](#vals)
 * [Usage](#usage)
     * [Query Builder](#querybuilder)
+    * [Custom Metrics And Dimensions](#custommetrics)
     * [Default Reports](#defaultreports)
 * [Changelog](#changelog)
 * [Testing](#testing)
@@ -162,6 +163,60 @@ $report = Analytics::query()
      })->setDimensions(function (Dimensions $dimensions) {
          return $dimensions->pageTitle();
      })->forPeriod(Period::create(Carbon::now()->subDays(30), Carbon::now()))
+     ->run();
+```
+
+### <a name="custommetrics">Custom metrics and dimensions:</a>
+
+You are not limited to the metrics and dimensions provided by this package. You can use any custom metrics and dimensions you have created in Google Analytics.
+
+Create a new class that extends `Gtmassey\LaravelAnalytics\Request\CustomMetric` or `Gtmassey\LaravelAnalytics\Request\CustomDimension` and implement methods following this format:.
+
+```php
+namespace App\Analytics;
+
+use Google\Analytics\Data\V1beta\Metric;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+
+class CustomMetrics extends Metrics
+{
+    public function customMetric(): self
+    {
+        $this->metrics->push(new Metric(['name' => 'customEvent:parameter_name']));
+
+        return $this;
+    }
+}
+```
+
+Bind the class in your `AppServiceProvider`:
+
+```php
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use App\Analytics\CustomMetrics;
+//use Gtmassey\LaravelAnalytics\Request\Dimensions;
+//use App\Analytics\CustomDimensions;
+
+public function boot()
+{
+    $this->app->bind(Metrics::class, CustomMetrics::class);
+    //$this->app->bind(Dimensions::class, CustomDimensions::class);
+}
+```
+
+Now you can use the custom metric in your query:
+
+```php
+use App\Analytics\CustomMetrics;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\LaravelAnalytics\Period;
+
+$report = Analytics::query()
+     ->setMetrics(fn(CustomMetrics $metrics) => $metrics
+         ->customMetric()
+         ->sessions()
+     )
+     ->forPeriod(Period::defaultPeriod())
      ->run();
 ```
 

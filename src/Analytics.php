@@ -42,21 +42,19 @@ class Analytics
         return resolve(Analytics::class);
     }
 
-    /****************************************
+    /***************************************
      * Query Builders
-     ****************************************/
+     ***************************************/
 
     /**
      * Ability to add metrics to the query using a callback method
      * for example:
      * $query->setMetrics(function (Metrics $metrics) { $metrics->sessions()->bounceRate(); });
-     *
-     * @param  Closure(Metrics): Metrics  $callback
-     * @return static
      */
     public function setMetrics(Closure $callback): static
     {
-        $metrics = $callback(new Metrics());
+        /** @var Metrics $metrics */
+        $metrics = $callback(resolve(Metrics::class));
         $this->requestData->metrics->push(...$metrics->getMetrics());
 
         return $this;
@@ -66,13 +64,11 @@ class Analytics
      * Ability to add dimensions to the query using a callback method
      * for example:
      * $query->setDimensions(function (Dimensions $dimensions) { $dimensions->pageTitle()->pagePath(); });
-     *
-     * @param  Closure(Dimensions): Dimensions  $callback
-     * @return $this
      */
     public function setDimensions(Closure $callback): static
     {
-        $dimensions = $callback(new Dimensions());
+        /** @var Dimensions $dimensions */
+        $dimensions = $callback(resolve(Dimensions::class));
         $this->requestData->dimensions->push(...$dimensions->getDimensions());
 
         return $this;
@@ -96,9 +92,9 @@ class Analytics
         return $this;
     }
 
-    /****************************************
+    /***************************************
      * Process and Run Query
-     ****************************************/
+     ***************************************/
 
     /**
      * @throws ApiException
