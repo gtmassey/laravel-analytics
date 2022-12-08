@@ -146,7 +146,7 @@ All Google Analytics Data API queries require a date range to be run. Use the `P
 use Gtmassey\LaravelAnalytics\Request\Dimensions;
 use Gtmassey\LaravelAnalytics\Request\Metrics;
 use Gtmassey\LaravelAnalytics\Analytics;
-use Gtmassey\LaravelAnalytics\Period;
+use Gtmassey\Period\Period;
 use Carbon\Carbon;
 
 $report = Analytics::query()
@@ -227,9 +227,9 @@ $report = Analytics::query()
 $report = Analytics::getTopEvents();
 ```
 
-This method returns the top events for the given period. It accepts a `Period` object as an optional parameter.
+This method returns the top events for the given period. It accepts a `Gtmassey\Period\Period` object as an optional parameter.
 
-If a `Period` object is not passed, it will use the default period set in `Period::defaultPeriod()`.
+If a `Gtmassey\Period\Period` object is not passed, it will use the default period set in `Gtmassey\Period\Period::defaultPeriod()`.
 
 The method will return an instance of `Gtmassey\LaravelAnalytics\Response\ResponseData`, which contains `DimensionHeaders`, `MetricHeaders`, `Rows`, and additional metadata.
 
@@ -290,7 +290,7 @@ Gtmassey\LaravelAnalytics\Response\ResponseData {
 $report = Analytics::getTopPages();
 ```
 
-This method returns the top pages for the given period. It accepts a `Period` object as an optional parameter.
+This method returns the top pages for the given period. It accepts a `Gtmassey\Period\Period` object as an optional parameter.
 
 The pages along with the sessions for that page are listed in the `Rows` property of the response.
 
@@ -300,7 +300,7 @@ The pages along with the sessions for that page are listed in the `Rows` propert
 $report = Analytics::getUserAcquisitionOverview();
 ```
 
-This method returns the user acquisition overview for the given period. It accepts a `Period` object as an optional parameter.
+This method returns the user acquisition overview for the given period. It accepts a `Gtmassey\Period\Period` object as an optional parameter.
 
 The method will return a `ResponseData` object with the number of sessions by the session's primary acquisition source. Primary acquisition sources are either "direct", "Referral", "Organic Search", and "Organic Social".
 
