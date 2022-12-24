@@ -155,6 +155,7 @@ $report = Analytics::query()
              ->active7DayUsers()
              ->active28DayUsers();
      })->forPeriod(Period::defaultPeriod())
+     ->limit(100)
      ->run();
 
  $report2 = Analytics::query()
@@ -163,6 +164,8 @@ $report = Analytics::query()
      })->setDimensions(function (Dimensions $dimensions) {
          return $dimensions->pageTitle();
      })->forPeriod(Period::create(Carbon::now()->subDays(30), Carbon::now()))
+     ->limit(100)
+     ->offset(100)
      ->run();
 ```
 

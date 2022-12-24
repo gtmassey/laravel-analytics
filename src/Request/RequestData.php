@@ -29,6 +29,10 @@ class RequestData extends Data
         public bool $returnPropertyQuota = true,
 
         public bool $useTotals = false,
+
+		public int $limit = 10_000,
+
+		public int $offset = 0,
     ) {
     }
 
@@ -42,6 +46,8 @@ class RequestData extends Data
             'metrics' => $this->metrics->unique()->all(),
             'returnPropertyQuota' => $this->returnPropertyQuota,
             'metricAggregations' => $this->useTotals ? [MetricAggregation::TOTAL] : [],
+			'limit' => $this->limit,
+			'offset' => $this->offset,
         ];
     }
 }
