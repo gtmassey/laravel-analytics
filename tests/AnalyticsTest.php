@@ -126,39 +126,39 @@ class AnalyticsTest extends TestCase
         $this->assertEquals(['customDimension', 'browser'], $requestDimensions);
     }
 
-	public function test_limit(): void
-	{
-		$analytics = Analytics::query()
-			->limit(5);
+    public function test_limit(): void
+    {
+        $analytics = Analytics::query()
+            ->limit(5);
 
-		$this->assertInstanceOf(Analytics::class, $analytics);
+        $this->assertInstanceOf(Analytics::class, $analytics);
 
-		/** @var RequestData $requestData */
-		$requestData = (new ReflectionProperty(Analytics::class, 'requestData'))->getValue($analytics);
+        /** @var RequestData $requestData */
+        $requestData = (new ReflectionProperty(Analytics::class, 'requestData'))->getValue($analytics);
 
-		$this->assertEquals(5, $requestData->limit);
+        $this->assertEquals(5, $requestData->limit);
 
-		$analytics->limit();
+        $analytics->limit();
 
-		$this->assertEquals(10_000, $requestData->limit);
-	}
+        $this->assertEquals(10_000, $requestData->limit);
+    }
 
-	public function test_offset(): void
-	{
-		$analytics = Analytics::query()
-			->offset(5);
+    public function test_offset(): void
+    {
+        $analytics = Analytics::query()
+            ->offset(5);
 
-		$this->assertInstanceOf(Analytics::class, $analytics);
+        $this->assertInstanceOf(Analytics::class, $analytics);
 
-		/** @var RequestData $requestData */
-		$requestData = (new ReflectionProperty(Analytics::class, 'requestData'))->getValue($analytics);
+        /** @var RequestData $requestData */
+        $requestData = (new ReflectionProperty(Analytics::class, 'requestData'))->getValue($analytics);
 
-		$this->assertEquals(5, $requestData->offset);
+        $this->assertEquals(5, $requestData->offset);
 
-		$analytics->offset();
+        $analytics->offset();
 
-		$this->assertEquals(0, $requestData->offset);
-	}
+        $this->assertEquals(0, $requestData->offset);
+    }
 
     public function test_for_period(): void
     {

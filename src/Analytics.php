@@ -92,19 +92,19 @@ class Analytics
         return $this;
     }
 
-	public function limit(int $limit = 10_000): static
-	{
-		$this->requestData->limit = $limit;
+    public function limit(int $limit = 10_000): static
+    {
+        $this->requestData->limit = $limit;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function offset(int $offset = 0): static
-	{
-		$this->requestData->offset = $offset;
+    public function offset(int $offset = 0): static
+    {
+        $this->requestData->offset = $offset;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /***************************************
      * Process and Run Query
