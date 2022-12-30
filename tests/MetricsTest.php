@@ -411,6 +411,7 @@ class MetricsTest extends TestCase
     /**
      * @param  Closure(Metrics): Metrics  $method
      * @param  string  $metric
+     *
      * @dataProvider metricProvider
      */
     public function test_predefined_metrics(Closure $method, string $metric): void

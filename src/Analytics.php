@@ -9,6 +9,7 @@ use Google\ApiCore\ApiException;
 use Gtmassey\LaravelAnalytics\Exceptions\InvalidPropertyIdException;
 use Gtmassey\LaravelAnalytics\Reports\Reports;
 use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpression;
 use Gtmassey\LaravelAnalytics\Request\Metrics;
 use Gtmassey\LaravelAnalytics\Request\RequestData;
 use Gtmassey\LaravelAnalytics\Response\ResponseData;
@@ -70,6 +71,28 @@ class Analytics
         /** @var Dimensions $dimensions */
         $dimensions = $callback(resolve(Dimensions::class));
         $this->requestData->dimensions->push(...$dimensions->getDimensions());
+
+        return $this;
+    }
+
+    /**
+     * @param  Closure(FilterExpression): FilterExpression  $callback
+     * @return static
+     */
+    public function dimensionFilter(Closure $callback): static
+    {
+        $this->requestData->dimensionFilter = $callback(new FilterExpression());
+
+        return $this;
+    }
+
+    /**
+     * @param  Closure(FilterExpression): FilterExpression  $callback
+     * @return static
+     */
+    public function metricFilter(Closure $callback): static
+    {
+        $this->requestData->metricFilter = $callback(new FilterExpression());
 
         return $this;
     }

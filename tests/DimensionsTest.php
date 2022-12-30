@@ -916,6 +916,7 @@ class DimensionsTest extends TestCase
     /**
      * @param  Closure(Dimensions): Dimensions  $method
      * @param  string  $dimension
+     *
      * @dataProvider dimensionProvider
      */
     public function test_predefined_dimensions(Closure $method, string $dimension): void

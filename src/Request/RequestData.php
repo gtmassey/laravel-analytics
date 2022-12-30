@@ -4,8 +4,10 @@ namespace Gtmassey\LaravelAnalytics\Request;
 
 use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
+use Google\Analytics\Data\V1beta\FilterExpression as BaseFilterExpression;
 use Google\Analytics\Data\V1beta\Metric;
 use Google\Analytics\Data\V1beta\MetricAggregation;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpression;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 
@@ -26,13 +28,17 @@ class RequestData extends Data
         /** @var Collection<int, Dimension> */
         public Collection $dimensions = new Collection(),
 
+        public ?FilterExpression $dimensionFilter = null,
+
+        public ?FilterExpression $metricFilter = null,
+
         public bool $returnPropertyQuota = true,
 
         public bool $useTotals = false,
     ) {
     }
 
-    /** @return array{property: string, dateRanges: DateRange[], dimensions: Dimension[], metrics: Metric[], returnPropertyQuota: bool, metricAggregations: int[]} */
+    /** @return array{property: string, dateRanges: DateRange[], dimensions: Dimension[], metrics: Metric[], dimensionFilter: BaseFilterExpression|null, returnPropertyQuota: bool, metricAggregations: int[]} */
     public function toArray(): array
     {
         return [
@@ -40,6 +46,8 @@ class RequestData extends Data
             'dateRanges' => $this->dateRanges->all(),
             'dimensions' => $this->dimensions->unique()->all(),
             'metrics' => $this->metrics->unique()->all(),
+            'dimensionFilter' => $this->dimensionFilter?->toRequest(),
+            'metricFilter' => $this->metricFilter?->toRequest(),
             'returnPropertyQuota' => $this->returnPropertyQuota,
             'metricAggregations' => $this->useTotals ? [MetricAggregation::TOTAL] : [],
         ];
