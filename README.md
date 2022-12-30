@@ -28,7 +28,7 @@ Methods currently return an instance of `Gtmassey\LaravelAnalytics\ResponseData`
 Via Composer
 
 ```SHELL
-composer require gtmassey\laravel-analytics
+composer require gtmassey/laravel-analytics
 ```
 
 ## <a name="setup">Setup</a>
