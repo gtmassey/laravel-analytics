@@ -18,8 +18,11 @@ Methods currently return an instance of `Gtmassey\LaravelAnalytics\ResponseData`
     * [Separate Values](#vals)
 * [Usage](#usage)
     * [Query Builder](#querybuilder)
-    * [Custom Metrics And Dimensions](#custommetrics)
+    * [Filtering](#filtering)
     * [Default Reports](#defaultreports)
+* [Extensibility](#extensibility)
+    * [Custom Metrics And Dimensions](#custommetrics)
+    * [Reusable Filters](#reusablefilters)
 * [Changelog](#changelog)
 * [Testing](#testing)
 
@@ -80,14 +83,17 @@ Once the key is created, download the JSON file and save it somewhere safe. You 
 You can use these credentials in several ways:
 
 ### <a name="env">As ENV value (default)</a>
+
 This is ideal setup if you're using only one service account for your application.
 
 Specify the path to the JSON file in your .env file:
+
 ```dotenv
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
 ```
 
 ### <a name="json">As a separate JSON file</a>
+
 If you have multiple service accounts, you can instruct this package to use a specific one:
 
 ```dotenv
@@ -96,6 +102,7 @@ ANALYTICS_CREDENTIALS_FILE=/path/to/credentials.json
 ```
 
 ### <a name="jsonString">As a JSON string</a>
+
 If you don't want to store the credentials in a file, you can specify the JSON string directly in your .env file:
 
 ```dotenv
@@ -104,6 +111,7 @@ ANALYTICS_CREDENTIALS_JSON="{type: service_account, project_id: ...}"
 ```
 
 ### <a name="vals">As separate values</a>
+
 You can also specify the credentials as separate values in your .env file:
 
 ```dotenv
@@ -142,6 +150,7 @@ Once installation is complete, you can run Google Analytics Data API queries in 
 All Google Analytics Data API queries require a date range to be run. Use the `Period` class to generate a period of time for the query.
 
 ### <a name="querybuilder">Query Builder:</a>
+
 ```php
 use Gtmassey\LaravelAnalytics\Request\Dimensions;
 use Gtmassey\LaravelAnalytics\Request\Metrics;
@@ -150,79 +159,234 @@ use Gtmassey\Period\Period;
 use Carbon\Carbon;
 
 $report = Analytics::query()
-     ->setMetrics(function (Metrics $metrics) {
-         return $metrics->active1DayUsers()
-             ->active7DayUsers()
-             ->active28DayUsers();
-     })->forPeriod(Period::defaultPeriod())
-     ->run();
+    ->setMetrics(fn(Metrics $metrics) => $metrics
+        ->active1DayUsers()
+        ->active7DayUsers()
+        ->active28DayUsers()
+    )
+    ->forPeriod(Period::defaultPeriod())
+    ->run();
 
- $report2 = Analytics::query()
-     ->setMetrics(function (Metrics $metrics) {
-         return $metrics->sessions();
-     })->setDimensions(function (Dimensions $dimensions) {
-         return $dimensions->pageTitle();
-     })->forPeriod(Period::create(Carbon::now()->subDays(30), Carbon::now()))
-     ->run();
+$report2 = Analytics::query()
+    ->setMetrics(fn(Metrics $metrics) => $metrics->sessions())
+    ->setDimensions(fn(Dimensions $dimensions) => $dimensions->pageTitle())
+    ->forPeriod(Period::create(Carbon::now()->subDays(30), Carbon::now()))
+    ->run();
 ```
 
-### <a name="custommetrics">Custom metrics and dimensions:</a>
+### <a name="filtering">Filtering:</a>
 
-You are not limited to the metrics and dimensions provided by this package. You can use any custom metrics and dimensions you have created in Google Analytics.
+Filtering closely follows [Google Analytics Data API documentation](https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/FilterExpression), but is built with a bit of convenience and fluid interface in mind. You can filter your query by using `dimensionFilter()` and `metricFilter()` methods. These methods accept a callback that receives an instance of `Gtmassey\LaravelAnalytics\Request\Filters\FilterExpression` class. The class provides a set of methods to build your filter:
 
-Create a new class that extends `Gtmassey\LaravelAnalytics\Request\CustomMetric` or `Gtmassey\LaravelAnalytics\Request\CustomDimension` and implement methods following this format:.
+* `filter()` - generic filter method that accepts a dimension or metric name and a `filter callback`
+* `filterDimension()` - filter method that accepts a dimension object via callback and a `filter callback`
+* `filterMetric()` - filter method that accepts a metric object via callback and a `filter callback`
+* `not()` - negates the filter
+* `andGroup()` - creates a group of filters that are combined with AND operator
+* `orGroup()` - creates a group of filters that are combined with OR operator
+
+You can check `Gtmassey\LaravelAnalytics\Request\Filters\Filter` [class](https://github.com/gtmassey/laravel-analytics/tree/main/src/Request/Filters/Filter) for a list of available `filter callback` methods.
+
+#### Examples:
+
+##### `filter()` method:
 
 ```php
-namespace App\Analytics;
-
-use Google\Analytics\Data\V1beta\Metric;
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Filters\Filter;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpression;
 use Gtmassey\LaravelAnalytics\Request\Metrics;
-
-class CustomMetrics extends Metrics
-{
-    public function customMetric(): self
-    {
-        $this->metrics->push(new Metric(['name' => 'customEvent:parameter_name']));
-
-        return $this;
-    }
-}
-```
-
-Bind the class in your `AppServiceProvider`:
-
-```php
-use Gtmassey\LaravelAnalytics\Request\Metrics;
-use App\Analytics\CustomMetrics;
-//use Gtmassey\LaravelAnalytics\Request\Dimensions;
-//use App\Analytics\CustomDimensions;
-
-public function boot()
-{
-    $this->app->bind(Metrics::class, CustomMetrics::class);
-    //$this->app->bind(Dimensions::class, CustomDimensions::class);
-}
-```
-
-Now you can use the custom metric in your query:
-
-```php
-use App\Analytics\CustomMetrics;
 use Gtmassey\LaravelAnalytics\Analytics;
-use Gtmassey\LaravelAnalytics\Period;
+use Gtmassey\Period\Period;
 
 $report = Analytics::query()
-     ->setMetrics(fn(CustomMetrics $metrics) => $metrics
-         ->customMetric()
-         ->sessions()
-     )
-     ->forPeriod(Period::defaultPeriod())
-     ->run();
+    ->setMetrics(fn(Metrics $metrics) => $metrics->sessions())
+    ->setDimensions(fn(Dimensions $dimensions) => $dimensions->pageTitle())
+    ->forPeriod(Period::defaultPeriod())
+    ->dimensionFilter(fn(FilterExpression $filterExpression) => $filterExpression
+        ->filter('pageTitle', fn(Filter $filter) => $filter->exact('Home'))
+    )
+    ->run();
+```
+
+##### `filterDimension()` method:
+
+Using this method you can utilize `Dimensions` class to fluently build your filter without having to know the exact dimension name that's used in the API.
+
+```php
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Filters\Filter;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpression;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\Period\Period;
+
+$report = Analytics::query()
+    ->setMetrics(fn(Metrics $metrics) => $metrics->sessions())
+    ->setDimensions(fn(Dimensions $dimensions) => $dimensions->pageTitle())
+    ->forPeriod(Period::defaultPeriod())
+    ->dimensionFilter(fn(FilterExpression $filterExpression) => $filterExpression
+        ->filterDimension(
+            dimensionsCallback: fn(Dimensions $dimensions) => $dimensions->pageTitle(),
+            filter: fn(Filter $filter) => $filter->exact('Home')
+        )
+    )
+    ->run();
+```
+
+##### `filterMetric()` method:
+
+Similar to `filterDimension()` method, you can use this method and utilize `Metrics` class to fluently build your filter without having to know the exact metric name that's used in the API.
+
+```php
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Filters\Filter;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpression;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\Period\Period;
+
+$report = Analytics::query()
+    ->setMetrics(fn(Metrics $metrics) => $metrics->sessions())
+    ->setDimensions(fn(Dimensions $dimensions) => $dimensions->pageTitle())
+    ->forPeriod(Period::defaultPeriod())
+    ->metricFilter(fn(FilterExpression $filterExpression) => $filterExpression
+        ->filterMetric(
+            metricsCallback: fn(Metrics $metrics) => $metrics->sessions(),
+            filter: fn(Filter $filter) => $filter->greaterThanInt(100)
+        )
+    )
+    ->run();
+```
+
+##### `not()` method:
+
+```php
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Filters\Filter;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpression;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\Period\Period;
+
+$report = Analytics::query()
+    ->setMetrics(fn(Metrics $metrics) => $metrics->sessions())
+    ->setDimensions(fn(Dimensions $dimensions) => $dimensions->pageTitle())
+    ->forPeriod(Period::defaultPeriod())
+    ->dimensionFilter(fn(FilterExpression $filterExpression) => $filterExpression
+        ->not(fn(FilterExpression $filterExpression) => $filterExpression
+            ->filter('pageTitle', fn(Filter $filter) => $filter
+                 ->exact('Home')
+            )
+        )
+    )
+    ->run();
+```
+
+##### `andGroup()` method:
+
+```php
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Filters\Filter;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpression;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpressionList;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\Period\Period;
+
+$report = Analytics::query()
+    ->setMetrics(fn(Metrics $metrics) => $metrics->sessions())
+    ->setDimensions(fn(Dimensions $dimensions) => $dimensions->deviceCategory()->browser())
+    ->forPeriod(Period::defaultPeriod())
+    ->dimensionFilter(fn(FilterExpression $filterExpression) => $filterExpression
+        ->andGroup(fn(FilterExpressionList $filterExpressionList) => $filterExpressionList
+            ->filter('deviceCategory', fn(Filter $filter) => $filter
+                ->exact('Mobile')
+			)
+            ->filter('browser', fn(Filter $filter) => $filter
+                ->exact('Chrome')
+            )
+        )
+    )
+    ->run();
+```
+
+##### `orGroup()` method:
+
+```php
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Filters\Filter;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpression;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpressionList;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\Period\Period;
+
+$report = Analytics::query()
+    ->setMetrics(fn(Metrics $metrics) => $metrics->sessions())
+    ->setDimensions(fn(Dimensions $dimensions) => $dimensions->browser())
+    ->forPeriod(Period::defaultPeriod())
+    ->dimensionFilter(fn(FilterExpression $filterExpression) => $filterExpression
+        ->orGroup(fn(FilterExpressionList $filterExpressionList) => $filterExpressionList
+            ->filter('browser', fn(Filter $filter) => $filter
+                ->exact('Firefox')
+            )
+            ->filter('browser', fn(Filter $filter) => $filter
+                ->exact('Chrome')
+            )
+        )
+    )
+    ->run();
+```
+
+##### Advanced example:
+
+You can mix all of the above methods to build a complex filter expression.
+
+```php
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Filters\Filter;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpression;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpressionList;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\Period\Period;
+
+$report = Analytics::query()
+    ->setMetrics(fn(Metrics $metrics) => $metrics->sessions()->screenPageViews())
+    ->setDimensions(fn(Dimensions $dimensions) => $dimensions->browser()->deviceCategory())
+    ->forPeriod(Period::defaultPeriod())
+    ->dimensionFilter(fn(FilterExpression $filterExpression) => $filterExpression
+        ->andGroup(fn(FilterExpressionList $filterExpressionList) => $filterExpressionList
+            ->filter('browser', fn(Filter $filter) => $filter
+                ->contains('safari')
+            )
+            ->not(fn(FilterExpression $filterExpression) => $filterExpression
+                ->filterDimension(
+                    dimensionsCallback: fn(Dimensions $dimensions) => $dimensions->deviceCategory(),
+                    filter: fn(Filter $filter) => $filter->contains('mobile')
+                )
+            )
+        )
+    )
+    ->metricFilter(fn(FilterExpression $filterExpression) => $filterExpression
+        ->orGroup(fn(FilterExpressionList $filterExpressionList) => $filterExpressionList
+            ->filter('sessions', fn(Filter $filter) => $filter
+                ->greaterThanInt(200)
+            )
+            ->filterMetric(
+                metricsCallback: fn(Metrics $metrics) => $metrics->sessions(),
+                filter: fn(Filter $filter) => $filter->lessThanInt(100)
+            )
+        )
+    )
+    ->run();
 ```
 
 ### <a name="defaultreports">Default Reports:</a>
 
 #### getTopEvents()
+
 ```php
 $report = Analytics::getTopEvents();
 ```
@@ -234,6 +398,7 @@ If a `Gtmassey\Period\Period` object is not passed, it will use the default peri
 The method will return an instance of `Gtmassey\LaravelAnalytics\Response\ResponseData`, which contains `DimensionHeaders`, `MetricHeaders`, `Rows`, and additional metadata.
 
 example output:
+
 ```bash
 Gtmassey\LaravelAnalytics\Response\ResponseData {
   +dimensionHeaders: Spatie\LaravelData\DataCollection {
@@ -316,6 +481,118 @@ This method returns a `ResponseData` object without dimensions. The query only c
 * number of engaged sessions
 * number of sessions per user
 * total number of sessions
+
+## <a name=extensibility>Extensibility:</a>
+
+### <a name="custommetrics">Custom metrics and dimensions:</a>
+
+You are not limited to the metrics and dimensions provided by this package. You can use any custom metrics and dimensions you have created in Google Analytics.
+
+Create a new class that extends `Gtmassey\LaravelAnalytics\Request\CustomMetric` or `Gtmassey\LaravelAnalytics\Request\CustomDimension` and implement methods following this format:.
+
+```php
+namespace App\Analytics;
+
+use Google\Analytics\Data\V1beta\Metric;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+
+class CustomMetrics extends Metrics
+{
+    public function customMetric(): self
+    {
+        $this->metrics->push(new Metric(['name' => 'customEvent:parameter_name']));
+
+        return $this;
+    }
+}
+```
+
+Bind the class in your `AppServiceProvider`:
+
+```php
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+use App\Analytics\CustomMetrics;
+//use Gtmassey\LaravelAnalytics\Request\Dimensions;
+//use App\Analytics\CustomDimensions;
+
+public function boot()
+{
+    $this->app->bind(Metrics::class, CustomMetrics::class);
+    //$this->app->bind(Dimensions::class, CustomDimensions::class);
+}
+```
+
+Now you can use the custom metric in your query:
+
+```php
+use App\Analytics\CustomMetrics;
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\LaravelAnalytics\Period;
+
+$report = Analytics::query()
+     ->setMetrics(fn(CustomMetrics $metrics) => $metrics
+         ->customMetric()
+         ->sessions()
+     )
+     ->forPeriod(Period::defaultPeriod())
+     ->run();
+```
+
+### <a name="reusablefilters">Reusable filters:</a>
+
+You can create reusable filters to use in your queries. Create a new class that extends `Gtmassey\LaravelAnalytics\Analytics` and implement methods following this format:
+
+```php
+namespace App\Analytics;
+
+use Gtmassey\LaravelAnalytics\Analytics;
+use Gtmassey\LaravelAnalytics\Request\Filters\Filter;
+use Gtmassey\LaravelAnalytics\Request\Filters\FilterExpression;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+
+class CustomAnalytics extends Analytics
+{
+    public function onlySessionsAbove(int $count): static
+    {
+        $this->metricFilter(fn(FilterExpression $filterExpression) => $filterExpression
+            ->filterMetric(
+                metricsCallback: fn(Metrics $metrics) => $metrics->sessions(),
+                filter: fn(Filter $filter) => $filter->greaterThanInt($count),
+            )
+        );
+
+        return $this;
+    }
+}
+```
+
+Bind the class in your `AppServiceProvider`:
+
+```php
+use Gtmassey\LaravelAnalytics\Analytics;
+use App\Analytics\CustomAnalytics;
+
+public function boot()
+{
+    $this->app->bind(Analytics::class, CustomAnalytics::class);
+}
+```
+
+Now you can use the custom filter in your query:
+
+```php
+use App\Analytics\CustomAnalytics;
+use Gtmassey\LaravelAnalytics\Period;
+use Gtmassey\LaravelAnalytics\Request\Dimensions;
+use Gtmassey\LaravelAnalytics\Request\Metrics;
+
+$report = CustomAnalytics::query()
+    ->setMetrics(fn(Metrics $metrics) => $metrics->sessions())
+    ->setDimensions(fn(Dimensions $dimensions) => $dimensions->browser())
+    ->forPeriod(Period::defaultPeriod())
+    ->onlySessionsAbove(100)
+    ->run();
+```
 
 ## <a name="changelog">Change log</a>
 
