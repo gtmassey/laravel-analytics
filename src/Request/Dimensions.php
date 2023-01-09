@@ -20,6 +20,11 @@ class Dimensions
         return $this->dimensions->count();
     }
 
+    public function first(): ?Dimension
+    {
+        return $this->dimensions->first();
+    }
+
     /**
      * @return Collection<int, Dimension>
      */

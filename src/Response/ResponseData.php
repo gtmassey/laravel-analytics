@@ -41,6 +41,6 @@ class ResponseData extends Data
 
         $report = json_decode($json, true);
 
-        return self::from($report);
+        return self::from($report + ['rows' => new DataCollection(Row::class, []), 'rowCount' => 0]);
     }
 }

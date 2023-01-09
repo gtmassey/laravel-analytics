@@ -20,6 +20,11 @@ class Metrics
         return $this->metrics->count();
     }
 
+    public function first(): ?Metric
+    {
+        return $this->metrics->first();
+    }
+
     /**
      * @return Collection<int, Metric>
      */
