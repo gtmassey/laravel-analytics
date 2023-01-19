@@ -26,9 +26,11 @@ class Analytics
     /**
      * @throws InvalidPropertyIdException
      */
-    public function __construct()
+    public function __construct($propertyId = null)
     {
-        $propertyId = config('analytics.property_id');
+        if ($propertyId == null) {
+            $propertyId = config('analytics.property_id');
+        }
 
         if (! is_string($propertyId) || empty($propertyId)) {
             throw InvalidPropertyIdException::invalidPropertyId();
@@ -38,10 +40,10 @@ class Analytics
         $this->requestData = new RequestData(propertyId: $propertyId);
     }
 
-    public static function query(): static
+    public static function query($propertyId=null): static
     {
         /** @var static $analytics */
-        $analytics = resolve(Analytics::class);
+        $analytics = resolve(Analytics::class, ['propertyId' => $propertyId]);
 
         return $analytics;
     }
