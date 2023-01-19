@@ -26,7 +26,7 @@ class Analytics
     /**
      * @throws InvalidPropertyIdException
      */
-    public function __construct($propertyId = null)
+    public function __construct(?string $propertyId = null)
     {
         if ($propertyId == null) {
             $propertyId = config('analytics.property_id');
@@ -40,7 +40,7 @@ class Analytics
         $this->requestData = new RequestData(propertyId: $propertyId);
     }
 
-    public static function query($propertyId=null): static
+    public static function query(?string $propertyId=null): static
     {
         /** @var static $analytics */
         $analytics = resolve(Analytics::class, ['propertyId' => $propertyId]);
