@@ -28,9 +28,7 @@ class Analytics
      */
     public function __construct(?string $propertyId = null)
     {
-        if ($propertyId == null) {
-            $propertyId = config('analytics.property_id');
-        }
+        $propertyId ??= config('analytics.property_id');
 
         if (! is_string($propertyId) || empty($propertyId)) {
             throw InvalidPropertyIdException::invalidPropertyId();
