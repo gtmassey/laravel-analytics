@@ -11,7 +11,6 @@ class AndGroup implements FilterExpressionContract
 
     /**
      * @param  Closure(FilterExpressionList): FilterExpressionList  $expression
-     * @param  FilterExpressionField  $field
      */
     public function __construct(
         Closure $expression,

@@ -35,6 +35,19 @@ class AnalyticsTest extends TestCase
         $this->assertInstanceOf(Analytics::class, new Analytics());
     }
 
+    public function test_constructor_with_propertyid(): void
+    {
+        config()->set('analytics.property_id', 'def');
+        $newPropertyId = 'abc';
+        $analytics = new Analytics($newPropertyId);
+        $this->assertInstanceOf(Analytics::class, $analytics);
+
+        /** @var RequestData $requestData */
+        $requestData = (new ReflectionProperty(Analytics::class, 'requestData'))->getValue($analytics);
+
+        $this->assertEquals($newPropertyId, $requestData->propertyId);
+    }
+
     public function test_property_string_is_empty_exception(): void
     {
         config()->offsetUnset('analytics.property_id');

@@ -14,7 +14,6 @@ class FilterExpression
 
     /**
      * @param  Closure(FilterExpressionList): FilterExpressionList  $filterExpressionList
-     * @return static
      */
     public function andGroup(Closure $filterExpressionList): static
     {
@@ -25,7 +24,6 @@ class FilterExpression
 
     /**
      * @param  Closure(FilterExpressionList): FilterExpressionList  $filterExpressionList
-     * @return static
      */
     public function orGroup(Closure $filterExpressionList): static
     {
@@ -36,7 +34,6 @@ class FilterExpression
 
     /**
      * @param  Closure(FilterExpression): FilterExpression  $filterExpression
-     * @return static
      */
     public function not(Closure $filterExpression): static
     {
@@ -46,9 +43,7 @@ class FilterExpression
     }
 
     /**
-     * @param  string  $dimension
      * @param  Closure(Filter): Filter  $filter
-     * @return static
      */
     public function filter(string $dimension, Closure $filter): static
     {
@@ -58,9 +53,7 @@ class FilterExpression
     }
 
     /**
-     * @param  Closure  $dimensionsCallback
      * @param  Closure(Filter): Filter  $filter
-     * @return static
      *
      * @throws InvalidFilterException
      */
@@ -79,9 +72,7 @@ class FilterExpression
     }
 
     /**
-     * @param  Closure  $metricsCallback
      * @param  Closure(Filter): Filter  $filter
-     * @return static
      *
      * @throws InvalidFilterException
      */

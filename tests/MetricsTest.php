@@ -410,7 +410,6 @@ class MetricsTest extends TestCase
 
     /**
      * @param  Closure(Metrics): Metrics  $method
-     * @param  string  $metric
      *
      * @dataProvider metricProvider
      */

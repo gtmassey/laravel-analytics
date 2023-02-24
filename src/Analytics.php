@@ -26,9 +26,9 @@ class Analytics
     /**
      * @throws InvalidPropertyIdException
      */
-    public function __construct()
+    public function __construct(?string $propertyId = null)
     {
-        $propertyId = config('analytics.property_id');
+        $propertyId ??= config('analytics.property_id');
 
         if (! is_string($propertyId) || empty($propertyId)) {
             throw InvalidPropertyIdException::invalidPropertyId();
@@ -38,10 +38,10 @@ class Analytics
         $this->requestData = new RequestData(propertyId: $propertyId);
     }
 
-    public static function query(): static
+    public static function query(?string $propertyId = null): static
     {
         /** @var static $analytics */
-        $analytics = resolve(Analytics::class);
+        $analytics = resolve(Analytics::class, ['propertyId' => $propertyId]);
 
         return $analytics;
     }
@@ -80,7 +80,6 @@ class Analytics
 
     /**
      * @param  Closure(FilterExpression): FilterExpression  $callback
-     * @return static
      */
     public function dimensionFilter(Closure $callback): static
     {
@@ -91,7 +90,6 @@ class Analytics
 
     /**
      * @param  Closure(FilterExpression): FilterExpression  $callback
-     * @return static
      */
     public function metricFilter(Closure $callback): static
     {

@@ -11,7 +11,6 @@ class NotExpression implements FilterExpressionContract
 
     /**
      * @param  Closure(FilterExpression): FilterExpression  $expression
-     * @param  FilterExpressionField  $field
      */
     public function __construct(
         Closure $expression,

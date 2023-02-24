@@ -915,7 +915,6 @@ class DimensionsTest extends TestCase
 
     /**
      * @param  Closure(Dimensions): Dimensions  $method
-     * @param  string  $dimension
      *
      * @dataProvider dimensionProvider
      */
