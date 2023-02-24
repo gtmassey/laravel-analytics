@@ -38,7 +38,7 @@ class Analytics
         $this->requestData = new RequestData(propertyId: $propertyId);
     }
 
-    public static function query(?string $propertyId=null): static
+    public static function query(?string $propertyId = null): static
     {
         /** @var static $analytics */
         $analytics = resolve(Analytics::class, ['propertyId' => $propertyId]);
