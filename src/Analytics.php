@@ -80,7 +80,6 @@ class Analytics
 
     /**
      * @param  Closure(FilterExpression): FilterExpression  $callback
-     * @return static
      */
     public function dimensionFilter(Closure $callback): static
     {
@@ -91,7 +90,6 @@ class Analytics
 
     /**
      * @param  Closure(FilterExpression): FilterExpression  $callback
-     * @return static
      */
     public function metricFilter(Closure $callback): static
     {

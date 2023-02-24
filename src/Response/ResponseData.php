@@ -14,10 +14,6 @@ class ResponseData extends Data
      * @param  DataCollection<int, MetricHeader>  $metricHeaders
      * @param  DataCollection<int, Row>  $rows
      * @param  DataCollection<int, Total>|null  $totals
-     * @param  int  $rowCount
-     * @param  Metadata  $metadata
-     * @param  PropertyQuota|null  $propertyQuota
-     * @param  string  $kind
      */
     public function __construct(
         #[DataCollectionOf(DimensionHeader::class)]

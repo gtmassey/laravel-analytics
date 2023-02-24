@@ -34,6 +34,7 @@ class AnalyticsTest extends TestCase
     {
         $this->assertInstanceOf(Analytics::class, new Analytics());
     }
+
     public function test_constructor_with_propertyid(): void
     {
         config()->set('analytics.property_id', 'def');
