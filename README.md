@@ -405,9 +405,9 @@ use Gtmassey\LaravelAnalytics\Analytics;
 use Gtmassey\Period\Period;
 
 $report = Analytics::query()
-	->setMetrics(fn(Metrics $metrics) => $metrics->sessions())
-	->setDimensions(fn(Dimensions $dimensions) => $dimensions->browser())
-	->forPeriod(Period::defaultPeriod())
+    ->setMetrics(fn(Metrics $metrics) => $metrics->sessions())
+    ->setDimensions(fn(Dimensions $dimensions) => $dimensions->browser())
+    ->forPeriod(Period::defaultPeriod())
     ->setOrderBys(fn(OrderBy $orderBy) => $orderBy
     	// Order by sessions in descending order
         ->metricDesc(
@@ -449,7 +449,7 @@ $report = Analytics::query()
             dimensionsCallback: fn(Dimensions $dimensions) => $dimensions->pageTitle(),
         )
     )
-	->run();
+    ->run();
 ```
 
 ### <a name="defaultreports">Default Reports:</a>
